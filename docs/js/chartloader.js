@@ -204,6 +204,7 @@ $(function() {
             }
         } catch (e) {
             alert("Please check your date input!");
+            filterButton.prop('disabled', false);
             console.error(e);
         }
     });

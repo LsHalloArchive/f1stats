@@ -1,0 +1,13 @@
+#chart-container {
+    position: relative;
+    max-height: 60%;
+}
+
+#complete-chart-container {
+    width: 80%;
+    margin: auto;
+}
+
+#header {
+    font-size: 3em;
+}

@@ -5,9 +5,6 @@
     bottom: 0;
 }
 
-body, html {
-    height: 100%;
-}
 
 input.datepicker {
     text-align: center;
@@ -31,9 +28,13 @@ input.datepicker {
 }
 
 #content {
+    margin: auto;
     width: 80%;
     height: 80%;
-    margin: auto;
+}
+
+#toolbar {
+    margin-top: 1.4em;
 }
 
 #complete-chart-container {

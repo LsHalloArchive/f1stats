@@ -9,6 +9,27 @@ body, html {
     height: 100%;
 }
 
+input.datepicker {
+    text-align: center;
+    background-color: #fff !important;
+}
+
+.font {
+    font-size: 1.2em;
+}
+
+.vert-middle {
+    vertical-align: middle;
+}
+
+.outline {
+    margin-left: .6em;
+    padding: .25em;
+    border-radius: .6em;
+    /*box-shadow: .2em .2em .5em rgba(0, 0, 0, .2);*/
+    border: 1px solid rgba(0,0,0,.2);
+}
+
 #content {
     width: 80%;
     height: 80%;

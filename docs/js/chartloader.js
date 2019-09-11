@@ -104,6 +104,7 @@ function showTable(from, to) {
                     hidden: !lineChart.isDatasetVisible(2),
                 }]
             };
+            showPoints($('#togglePoints').prop('checked'));
             lineChart.update();
         } else {
             lineChart = new Chart(ctx, {
@@ -114,34 +115,45 @@ function showTable(from, to) {
                         data: dataListF1,
                         borderColor: "rgb(235, 55, 55)",
                         backgroundColor: "rgb(235, 55, 55)",
-                        fill: false
+                        fill: false,
+                        pointRadius: 0
                     },
-                        {
-                            label: 'r/formula1point5',
-                            data: dataListF1_5,
-                            borderColor: "rgb(235,63,199)",
-                            backgroundColor: "rgb(235,63,199)",
-                            fill: false,
-                            hidden: true
-                        },
-                        {
-                            label: 'r/f1feederseries',
-                            data: dataListF1Feeder,
-                            borderColor: "rgb(235,129,0)",
-                            backgroundColor: "rgb(235,129,0)",
-                            fill: false,
-                            hidden: true
-                        }]
+                    {
+                        label: 'r/formula1point5',
+                        data: dataListF1_5,
+                        borderColor: "rgb(235,63,199)",
+                        backgroundColor: "rgb(235,63,199)",
+                        fill: false,
+                        hidden: true,
+                        pointRadius: 0
+                    },
+                    {
+                        label: 'r/f1feederseries',
+                        data: dataListF1Feeder,
+                        borderColor: "rgb(235,129,0)",
+                        backgroundColor: "rgb(235,129,0)",
+                        fill: false,
+                        hidden: true,
+                        pointRadius: 0
+                    }]
                 },
                 options: options
             });
+
+            $('.datepicker').flatpickr({
+                minDate: new Date(Math.min(findMinimum(dataListF1), findMinimum(dataListF1_5), findMinimum(dataListF1Feeder))),
+                maxDate: new Date(Math.max(findMaximum(dataListF1), findMaximum(dataListF1_5), findMaximum(dataListF1Feeder)) + 86400000),
+                enableTime: true,
+                dateFormat: "d/m/Y H:i",
+                time_24hr: true
+            });
         }
 
-        $('.datepicker').datepicker({
+        /*$('.datepicker').datepicker({
             format: "dd/mm/yyyy",
             startDate: new Date(Math.min(findMinimum(dataListF1), findMinimum(dataListF1_5), findMinimum(dataListF1Feeder))),
             endDate: new Date(Math.max(findMaximum(dataListF1), findMaximum(dataListF1_5), findMaximum(dataListF1Feeder)) + 86400000),
-        });
+        });*/
 
         filterButton.prop('disabled', false);
     }
@@ -186,17 +198,38 @@ function findMaximum(list) {
     return max;
 }
 
+function showPoints(show) {
+    if(lineChart !== undefined) {
+        let datasets = lineChart.data.datasets;
+
+        if(show) {
+            for(let i = 0; i < datasets.length; i++) {
+                datasets[i].pointRadius = 3;
+            }
+        } else {
+            for(let i = 0; i < datasets.length; i++) {
+                datasets[i].pointRadius = 0;
+            }
+        }
+        lineChart.update();
+    }
+}
+
 $(function() {
     let today = new Date();
-    let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
-    $('#datepicker-from').attr('placeholder', yesterday.toLocaleDateString());
+    let lastWeek = new Date(new Date().setDate(new Date().getDate() - 7));
+    $('#datepicker-from').attr('placeholder', lastWeek.toLocaleDateString());
     $('#datepicker-to').attr('placeholder', today.toLocaleDateString());
+
+    $('#togglePoints').click(function () {
+        showPoints(this.checked);
+    });
 
     filterButton.click(function() {
         filterButton.prop('disabled', true);
         try {
-            let from = moment($('#datepicker-from').val(), "DD/MM/YYYY").toDate();
-            let to = moment($('#datepicker-to').val(), "DD/MM/YYYY").toDate();
+            let from = moment($('#datepicker-from').val(), "DD/MM/YYYY HH:mm").toDate();
+            let to = moment($('#datepicker-to').val(), "DD/MM/YYYY HH:mm").toDate();
             if(from < to) {
                 showTable(from / 1000, to / 1000);
             } else {
@@ -209,5 +242,5 @@ $(function() {
         }
     });
 
-    showTable();
+    showTable(Math.round(lastWeek.getTime()/1000), Math.round(today.getTime()/1000));
 });

@@ -14,11 +14,27 @@
         <div id="content">
                 <p id="header" class="head">Welcome to my crude statistics page</p>
                 <div id="toolbar">
-                    Show data from
-                    <input class="datepicker" id="datepicker-from">
-                    to
-                    <input class="datepicker" id="datepicker-to">
-                    <button id="apply-filter-button" type="button" class="btn btn-primary">Apply</button>
+                <div class="form-inline">
+                    <div class="input-group mb-2 mr-sm-2">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">From</div>
+                        </div>
+                        <label class="sr-only" for="datepicker-from">From</label>
+                        <input type="text" class="form-control datepicker" id="datepicker-from">
+                        <div class="input-group-prepend">
+                            <div class="input-group-text">To</div>
+                        </div>
+                        <label class="sr-only" for="datepicker-to">To</label>
+                        <input type="text" class="form-control datepicker" id="datepicker-to">
+                    </div>
+                    <button type="button" id="apply-filter-button" class="btn btn-primary mb-2">Apply</button>
+
+                    <div class="form-check mb-2 ml-sm-4">
+                        <input class="form-check-input" type="checkbox" id="togglePoints">
+                        <label class="form-check-label" for="togglePoints">
+                            Show data points
+                        </label>
+                    </div>
                 </div>
             <div id="complete-chart-container">
                 <div id="chart-container">
@@ -30,13 +46,13 @@
     <footer>
         <script src="js/jquery.min.js"></script>
         <script src="js/bootstrap.bundle.min.js"></script>
-        <script src="js/bootstrap-datepicker.min.js"></script>
         <script src="js/chart.bundle.min.js"></script>
         <script src="js/moment.js"></script>
+        <script src="js/flatpickr.min.js"></script>
         <script src="js/chartloader.js"></script>
         <link rel="stylesheet" href="css/bootstrap.min.css"/>
-        <link rel="stylesheet" href="css/bootstrap-datepicker3.min.css"/>
         <link rel="stylesheet" href="css/chart.min.css"/>
+        <link rel="stylesheet" href="css/flatpickr.min.css"/>
         <link rel="stylesheet" href="css/custom.css"/>
     </footer>
 </html>

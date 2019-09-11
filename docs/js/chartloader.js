@@ -1,4 +1,4 @@
-let mainDataUrls = ['https://cors-anywhere.herokuapp.com/https://f1stats.4lima.de/getData.php', 'https://cors-anywhere.herokuapp.com/https://f1stats.4lima.de/getData.php?from=$from&to=$to'];
+let mainDataUrls = ['https://f1stats.4lima.de/getData.php', 'https://f1stats.4lima.de/getData.php?from=$from&to=$to'];
 let backupDataUrls = ['https://lshallo.eu/f1stats/getData.php', 'https://lshallo.eu/f1stats/getData.php?from=$from&to=$to'];
 let dataUrls = [mainDataUrls[0], mainDataUrls[1]];
 let lineChart = undefined;

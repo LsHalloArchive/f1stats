@@ -1,11 +1,24 @@
 #chart-container {
     position: relative;
-    max-height: 60%;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+}
+
+body, html {
+    height: 100%;
+}
+
+#content {
+    width: 80%;
+    height: 80%;
+    margin: auto;
 }
 
 #complete-chart-container {
-    width: 80%;
+    height: 100%;
     margin: auto;
+    display: flex;
 }
 
 #header {

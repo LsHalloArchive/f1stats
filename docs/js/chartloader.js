@@ -74,7 +74,8 @@ function showTable(from, to) {
                     distribution: 'linear'
                 }]
             },
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
+            responsive: true,
         };
         if(lineChart !== undefined) {
             lineChart.data =  {

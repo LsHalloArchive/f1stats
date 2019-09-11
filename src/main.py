@@ -62,4 +62,6 @@ if __name__ == "__main__":
             print(repr(exception))
 
         time_post = time.time()
-        time.sleep(60 - (time_post - time_pre))
+        run_time = time_post - time_pre
+        run_time = run_time if run_time < 60 else 60
+        time.sleep(60 - run_time)

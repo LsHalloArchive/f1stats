@@ -168,15 +168,19 @@ function showTable(from, to) {
                 $('#export-xls').off('click', '#export-json', exportXlsHandler);
             }
             exportXlsHandler = $("#export-xls").on('click',function() {
+                let pre = new Date();
                 for(let i in xlsData) {
-                    xlsData[i][0] = xlsData[i][0] / 86400 + 25569;
+                    xlsData[i][0] = new Date(xlsData[i][0] * 1000);
+                    xlsData[i][1] = parseInt(xlsData[i][1]);
+                    xlsData[i][2] = parseInt(xlsData[i][2]);
+                    xlsData[i][3] = parseInt(xlsData[i][3]);
                 }
                 xlsData.unshift(["date", "formula1", "formula1point5", "f1feederseries"]);
                 let workbook = XLSX.utils.book_new();
                 let worksheet = XLSX.utils.aoa_to_sheet(xlsData);
                 XLSX.utils.book_append_sheet(workbook, worksheet,"formula1 Stats");
                 XLSX.writeFile(workbook, "formula1Stats.xlsx", {'cellDates': true});
-                alert("You will manually need to change the format of the first column to date (with time) so you can work with the data.");
+                console.log("Excel conversion took " + (new Date().getTime() - pre.getTime()) + "ms");
             });
         }
 

@@ -152,13 +152,13 @@ function showTable(from, to) {
         }
 
         $("#export-json").on('click',function() {
-                $("<a />", {
-                    "download": "data.json",
-                    "href" : "data:application/json," + encodeURIComponent(JSON.stringify(datasets))
-                }).appendTo("body").on('click', function() {
-                    $(this).remove()
-                })[0].click();
-            });
+            $("<a />", {
+                "download": "data.json",
+                "href" : "data:application/json," + encodeURIComponent(JSON.stringify(datasets))
+            }).appendTo("body").on('click', function() {
+                $(this).remove()
+            })[0].click();
+        });
 
         filterButton.prop('disabled', false);
     }

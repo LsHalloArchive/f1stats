@@ -41,6 +41,7 @@ if __name__ == "__main__":
                    'user_count_' + subreddit_names[2]: users[subreddit_names[2]]
                    })
 
+        """
         # Insert into remote db
         try:
             send_to_mysql(config['mysql.lima']['host'],
@@ -57,6 +58,17 @@ if __name__ == "__main__":
                           config['mysql.ac']['user'],
                           config['mysql.ac']['password'],
                           config['mysql.ac']['database'],
+                          users)
+        except Exception as exception:
+            print(repr(exception))
+        """
+
+        # Insert into remote backup backup db
+        try:
+            send_to_mysql(config['mysql.x10']['host'],
+                          config['mysql.x10']['user'],
+                          config['mysql.x10']['password'],
+                          config['mysql.x10']['database'],
                           users)
         except Exception as exception:
             print(repr(exception))

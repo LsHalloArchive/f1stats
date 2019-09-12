@@ -3,13 +3,14 @@ let backupDataUrls = ['https://lshallo.eu/f1stats/getData.php', 'https://lshallo
 let dataUrls = [mainDataUrls[0], mainDataUrls[1]];
 let lineChart = undefined;
 let filterButton = $('#apply-filter-button');
+let datasets = {};
 
 function showTable(from, to) {
     if(from === undefined || to === undefined) {
         $.get({
             url: dataUrls[0],
             success: function(data) {
-                chartCallback($.parseJSON(data));
+                chartCallback(JSON.parse(data));
             },
             error: function(error) {
                 switchUrls();
@@ -19,7 +20,7 @@ function showTable(from, to) {
         $.get({
             url: dataUrls[1].replace('$from', from).replace('$to', to),
             success: function(data) {
-                chartCallback($.parseJSON(data));
+                chartCallback(JSON.parse(data));
             },
             error: function(error) {
                 switchUrls(from, to);
@@ -52,6 +53,7 @@ function showTable(from, to) {
                 }
             );
         }
+        datasets = {'r/formula1': dataListF1, 'r/formula1point5': dataListF1_5, 'r/f1feederseries': dataListF1Feeder};
 
         let ctx = $('#chart');
         let options = {
@@ -142,18 +144,21 @@ function showTable(from, to) {
 
             $('.datepicker').flatpickr({
                 minDate: new Date(Math.min(findMinimum(dataListF1), findMinimum(dataListF1_5), findMinimum(dataListF1Feeder))),
-                maxDate: new Date(Math.max(findMaximum(dataListF1), findMaximum(dataListF1_5), findMaximum(dataListF1Feeder)) + 86400000),
+                maxDate: new Date(Math.max(findMaximum(dataListF1), findMaximum(dataListF1_5), findMaximum(dataListF1Feeder))),
                 enableTime: true,
                 dateFormat: "d/m/Y H:i",
                 time_24hr: true
             });
         }
 
-        /*$('.datepicker').datepicker({
-            format: "dd/mm/yyyy",
-            startDate: new Date(Math.min(findMinimum(dataListF1), findMinimum(dataListF1_5), findMinimum(dataListF1Feeder))),
-            endDate: new Date(Math.max(findMaximum(dataListF1), findMaximum(dataListF1_5), findMaximum(dataListF1Feeder)) + 86400000),
-        });*/
+        $("#export-json").on('click',function() {
+                $("<a />", {
+                    "download": "data.json",
+                    "href" : "data:application/json," + encodeURIComponent(JSON.stringify(datasets))
+                }).appendTo("body").on('click', function() {
+                    $(this).remove()
+                })[0].click();
+            });
 
         filterButton.prop('disabled', false);
     }
@@ -217,15 +222,15 @@ function showPoints(show) {
 
 $(function() {
     let today = new Date();
-    let lastWeek = new Date(new Date().setDate(new Date().getDate() - 7));
-    $('#datepicker-from').attr('placeholder', lastWeek.toLocaleDateString());
-    $('#datepicker-to').attr('placeholder', today.toLocaleDateString());
+    let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+    $('#datepicker-from').val(yesterday.toLocaleDateString() + ' ' + yesterday.toLocaleTimeString());
+    $('#datepicker-to').val(today.toLocaleDateString() + ' ' + today.toLocaleTimeString());
 
-    $('#togglePoints').click(function () {
+    $('#togglePoints').on('click',function () {
         showPoints(this.checked);
     });
 
-    filterButton.click(function() {
+    filterButton.on('click', function() {
         filterButton.prop('disabled', true);
         try {
             let from = moment($('#datepicker-from').val(), "DD/MM/YYYY HH:mm").toDate();
@@ -242,5 +247,5 @@ $(function() {
         }
     });
 
-    showTable(Math.round(lastWeek.getTime()/1000), Math.round(today.getTime()/1000));
+    showTable(Math.round(yesterday.getTime()/1000), Math.round(today.getTime()/1000));
 });

@@ -1,6 +1,6 @@
-let mainDataUrls = ['https://f1stats.4lima.de/getData.php', 'https://f1stats.4lima.de/getData.php?from=$from&to=$to'];
-let backupDataUrls = ['https://lshallo.eu/f1stats/getData.php', 'https://lshallo.eu/f1stats/getData.php?from=$from&to=$to'];
-let dataUrls = [mainDataUrls[0], mainDataUrls[1]];
+let mainDataUrl = 'https://f1stats.4lima.de/getData.php';
+let backupDataUrl = 'https://lshallo.eu/f1stats/getData.php';
+let dataUrl = mainDataUrl;
 let lineChart = undefined;
 let filterButton = $('#apply-filter-button');
 
@@ -11,7 +11,8 @@ let exportJsonHandler = undefined;
 function showTable(from, to) {
     if(from === undefined || to === undefined) {
         $.get({
-            url: dataUrls[0],
+            url: dataUrl,
+            data: {'type': 'data'},
             success: function(data) {
                 chartCallback(JSON.parse(data));
             },
@@ -21,7 +22,8 @@ function showTable(from, to) {
         });
     } else {
         $.get({
-            url: dataUrls[1].replace('$from', from).replace('$to', to),
+            url: dataUrl,
+            data: {'type': 'data', 'to': to, 'from': from},
             success: function(data) {
                 chartCallback(JSON.parse(data));
             },
@@ -145,14 +147,6 @@ function showTable(from, to) {
                 options: options
             });
 
-            $('.datepicker').flatpickr({
-                minDate: new Date(Math.min(findMinimum(dataListF1), findMinimum(dataListF1_5), findMinimum(dataListF1Feeder))),
-                maxDate: new Date(Math.max(findMaximum(dataListF1), findMaximum(dataListF1_5), findMaximum(dataListF1Feeder))),
-                enableTime: true,
-                dateFormat: "d/m/Y H:i",
-                time_24hr: true
-            });
-
             if(exportJsonHandler !== undefined) {
                 $('#export-json').off('click', '#export-json', exportJsonHandler);
             }
@@ -173,12 +167,10 @@ function showTable(from, to) {
 const maxTries = 5;
 let tries = 0;
 function switchUrls(from, to) {
-    if(dataUrls[0] === mainDataUrls[0] && dataUrls[1] === mainDataUrls[1]) {
-        dataUrls[0] = backupDataUrls[0];
-        dataUrls[1] = backupDataUrls[1];
+    if(dataUrl === mainDataUrl) {
+        dataUrl = backupDataUrl;
     } else {
-        dataUrls[0] = mainDataUrls[0];
-        dataUrls[1] = mainDataUrls[1];
+        dataUrl = mainDataUrl;
     }
     if(tries++ < maxTries) {
         if (to === undefined || from === undefined) {
@@ -187,26 +179,6 @@ function switchUrls(from, to) {
             showTable(from, to)
         }
     }
-}
-
-function findMinimum(list) {
-    let min = Infinity;
-    for(let elem of list) {
-        if(elem['x'].getTime() < min) {
-            min = elem["x"].getTime();
-        }
-    }
-    return min;
-}
-
-function findMaximum(list) {
-    let max = 0;
-    for(let elem of list) {
-        if(elem['x'].getTime() > max) {
-            max = elem["x"].getTime();
-        }
-    }
-    return max;
 }
 
 function showPoints(show) {
@@ -251,6 +223,20 @@ $(function() {
             filterButton.prop('disabled', false);
             console.error(e);
         }
+    });
+
+    $.get({
+        url: mainDataUrl,
+        data: {'type': 'minmax'}
+    }).done(function (data) {
+        data = JSON.parse(data);
+        $('.datepicker').flatpickr({
+            minDate: data[0] * 1000,
+            maxDate: data[1] * 1000,
+            enableTime: true,
+            dateFormat: "d/m/Y H:i",
+            time_24hr: true
+        });
     });
 
     showTable(Math.round(yesterday.getTime()/1000), Math.round(today.getTime()/1000));

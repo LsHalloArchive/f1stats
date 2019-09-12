@@ -9,12 +9,18 @@
   $to_return = [];
   $result = false;
 
-  if(isset($_GET["from"]) && isset($_GET["to"])) {
-    $from = mysqli_real_escape_string($db, $_GET["from"]);
-    $to = mysqli_real_escape_string($db, $_GET["to"]);
-    $result = mysqli_query($db, "SELECT time, f1, f1_5, f1feeder FROM f1stats WHERE time > $from AND time < $to");
+  if(isset($_GET['type']) && $_GET['type'] == 'minmax') {
+    $result = mysqli_query($db, "SELECT min(time) as min, max(time) as max FROM f1stats");
+    $fetched = mysqli_fetch_assoc($result);
+    $to_return = [$fetched['min'], $fetched['max']];
   } else {
-    $result = mysqli_query($db, "SELECT time, f1, f1_5, f1feeder FROM f1stats");
+    if(isset($_GET["from"]) && isset($_GET["to"])) {
+      $from = mysqli_real_escape_string($db, $_GET["from"]);
+      $to = mysqli_real_escape_string($db, $_GET["to"]);
+      $result = mysqli_query($db, "SELECT time, f1, f1_5, f1feeder FROM f1stats WHERE time > $from AND time < $to");
+    } else {
+      $result = mysqli_query($db, "SELECT time, f1, f1_5, f1feeder FROM f1stats");
+    }
   }
 
   if($result) {

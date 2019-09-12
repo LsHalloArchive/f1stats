@@ -3,7 +3,10 @@ let backupDataUrls = ['https://lshallo.eu/f1stats/getData.php', 'https://lshallo
 let dataUrls = [mainDataUrls[0], mainDataUrls[1]];
 let lineChart = undefined;
 let filterButton = $('#apply-filter-button');
+
+//JSON export
 let datasets = {};
+let exportJsonHandler = undefined;
 
 function showTable(from, to) {
     if(from === undefined || to === undefined) {
@@ -120,24 +123,24 @@ function showTable(from, to) {
                         fill: false,
                         pointRadius: 0
                     },
-                    {
-                        label: 'r/formula1point5',
-                        data: dataListF1_5,
-                        borderColor: "rgb(235,63,199)",
-                        backgroundColor: "rgb(235,63,199)",
-                        fill: false,
-                        hidden: true,
-                        pointRadius: 0
-                    },
-                    {
-                        label: 'r/f1feederseries',
-                        data: dataListF1Feeder,
-                        borderColor: "rgb(235,129,0)",
-                        backgroundColor: "rgb(235,129,0)",
-                        fill: false,
-                        hidden: true,
-                        pointRadius: 0
-                    }]
+                        {
+                            label: 'r/formula1point5',
+                            data: dataListF1_5,
+                            borderColor: "rgb(235,63,199)",
+                            backgroundColor: "rgb(235,63,199)",
+                            fill: false,
+                            hidden: true,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'r/f1feederseries',
+                            data: dataListF1Feeder,
+                            borderColor: "rgb(235,129,0)",
+                            backgroundColor: "rgb(235,129,0)",
+                            fill: false,
+                            hidden: true,
+                            pointRadius: 0
+                        }]
                 },
                 options: options
             });
@@ -149,16 +152,19 @@ function showTable(from, to) {
                 dateFormat: "d/m/Y H:i",
                 time_24hr: true
             });
-        }
 
-        $("#export-json").on('click',function() {
-            $("<a />", {
-                "download": "data.json",
-                "href" : "data:application/json," + encodeURIComponent(JSON.stringify(datasets))
-            }).appendTo("body").on('click', function() {
-                $(this).remove()
-            })[0].click();
-        });
+            if(exportJsonHandler !== undefined) {
+                $('#export-json').off('click', '#export-json', exportJsonHandler);
+            }
+            exportJsonHandler = $("#export-json").on('click',function() {
+                $("<a />", {
+                    "download": "data.json",
+                    "href" : "data:application/json," + encodeURIComponent(JSON.stringify(datasets))
+                }).appendTo("body").on('click', function() {
+                    $(this).remove()
+                })[0].click();
+            });
+        }
 
         filterButton.prop('disabled', false);
     }

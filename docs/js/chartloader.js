@@ -8,6 +8,10 @@ let filterButton = $('#apply-filter-button');
 let datasets = {};
 let exportJsonHandler = undefined;
 
+//Excel export
+let xlsData = [];
+let exportXlsHandler = undefined;
+
 function showTable(from, to) {
     if(from === undefined || to === undefined) {
         $.get({
@@ -34,6 +38,7 @@ function showTable(from, to) {
     }
 
     function chartCallback(chartData) {
+        xlsData = chartData;
         let dataListF1 = [];
         let dataListF1_5 = [];
         let dataListF1Feeder = [];
@@ -157,6 +162,21 @@ function showTable(from, to) {
                 }).appendTo("body").on('click', function() {
                     $(this).remove()
                 })[0].click();
+            });
+
+            if(exportXlsHandler !== undefined) {
+                $('#export-xls').off('click', '#export-json', exportXlsHandler);
+            }
+            exportXlsHandler = $("#export-xls").on('click',function() {
+                for(let i in xlsData) {
+                    xlsData[i][0] = xlsData[i][0] / 86400 + 25569;
+                }
+                xlsData.unshift(["date", "formula1", "formula1point5", "f1feederseries"]);
+                let workbook = XLSX.utils.book_new();
+                let worksheet = XLSX.utils.aoa_to_sheet(xlsData);
+                XLSX.utils.book_append_sheet(workbook, worksheet,"formula1 Stats");
+                XLSX.writeFile(workbook, "formula1Stats.xlsx", {'cellDates': true});
+                alert("You will manually need to change the format of the first column to date (with time) so you can work with the data.");
             });
         }
 

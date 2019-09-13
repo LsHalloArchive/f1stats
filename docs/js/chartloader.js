@@ -192,10 +192,16 @@ function showTable(from, to) {
 const maxTries = 5;
 let tries = 0;
 function switchUrls(from, to) {
-    if(dataUrl === mainDataUrls[0] || dataUrl === mainDataUrls[1]) {
-        dataUrl = backupDataUrl;
+    if(dataUrl === mainDataUrls[0] && tries === 0) {
+        dataUrl = mainDataUrls[1];
+    } else if(dataUrl === mainDataUrls[1] && tries === 0) {
+        dataUrl = mainDataUrls[0];
     } else {
-        dataUrl = mainDataUrls[Math.floor(Math.random() * mainDataUrls.length)];
+        if (dataUrl === mainDataUrls[0] || dataUrl === mainDataUrls[1]) {
+            dataUrl = backupDataUrl;
+        } else {
+            dataUrl = mainDataUrls[Math.floor(Math.random() * mainDataUrls.length)];
+        }
     }
     if(tries++ < maxTries) {
         if (to === undefined || from === undefined) {

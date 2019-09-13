@@ -38,6 +38,9 @@ function showTable(from, to) {
     }
 
     function chartCallback(chartData) {
+        //first element of data is min and max date for datepicker
+        let minmax = chartData.shift();
+        //save chartData for export to excel
         xlsData = chartData;
         let dataListF1 = [];
         let dataListF1_5 = [];
@@ -152,24 +155,32 @@ function showTable(from, to) {
                 options: options
             });
 
-            if(exportJsonHandler !== undefined) {
+            $('.datepicker').flatpickr({
+                minDate: minmax[0] * 1000,
+                maxDate: minmax[1] * 1000,
+                enableTime: true,
+                dateFormat: "d/m/Y H:i",
+                time_24hr: true
+            });
+
+            if (exportJsonHandler !== undefined) {
                 $('#export-json').off('click', '#export-json', exportJsonHandler);
             }
-            exportJsonHandler = $("#export-json").on('click',function() {
+            exportJsonHandler = $("#export-json").on('click', function () {
                 $("<a />", {
                     "download": "data.json",
-                    "href" : "data:application/json," + encodeURIComponent(JSON.stringify(datasets))
-                }).appendTo("body").on('click', function() {
+                    "href": "data:application/json," + encodeURIComponent(JSON.stringify(datasets))
+                }).appendTo("body").on('click', function () {
                     $(this).remove()
                 })[0].click();
             });
 
-            if(exportXlsHandler !== undefined) {
-                $('#export-xls').off('click', '#export-json', exportXlsHandler);
+            if (exportXlsHandler !== undefined) {
+                $('#export-xls').off('click', '#export-xls', exportXlsHandler);
             }
-            exportXlsHandler = $("#export-xls").on('click',function() {
+            exportXlsHandler = $("#export-xls").on('click', function () {
                 let pre = new Date();
-                for(let i in xlsData) {
+                for (let i in xlsData) {
                     xlsData[i][0] = new Date(xlsData[i][0] * 1000);
                     xlsData[i][1] = parseInt(xlsData[i][1]);
                     xlsData[i][2] = parseInt(xlsData[i][2]);
@@ -178,7 +189,7 @@ function showTable(from, to) {
                 xlsData.unshift(["date", "formula1", "formula1point5", "f1feederseries"]);
                 let workbook = XLSX.utils.book_new();
                 let worksheet = XLSX.utils.aoa_to_sheet(xlsData);
-                XLSX.utils.book_append_sheet(workbook, worksheet,"formula1 Stats");
+                XLSX.utils.book_append_sheet(workbook, worksheet, "formula1 Stats");
                 XLSX.writeFile(workbook, "formula1Stats.xlsx", {'cellDates': true});
                 console.log("Excel conversion took " + (new Date().getTime() - pre.getTime()) + "ms");
                 $('.toast').toast('show');
@@ -254,20 +265,6 @@ $(function() {
             filterButton.prop('disabled', false);
             console.error(e);
         }
-    });
-
-    $.get({
-        url: dataUrl,
-        data: {'type': 'minmax'}
-    }).done(function (data) {
-        data = JSON.parse(data);
-        $('.datepicker').flatpickr({
-            minDate: data[0] * 1000,
-            maxDate: data[1] * 1000,
-            enableTime: true,
-            dateFormat: "d/m/Y H:i",
-            time_24hr: true
-        });
     });
 
     showTable(Math.round(yesterday.getTime()/1000), Math.round(today.getTime()/1000));

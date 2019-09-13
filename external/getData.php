@@ -10,12 +10,11 @@
   $result = false;
 
   switch($_GET["type"]) {
-    case "minmax":
+    case "data":
       $result = mysqli_query($db, "SELECT min(time) as min, max(time) as max FROM f1stats");
       $fetched = mysqli_fetch_assoc($result);
-      $to_return = [$fetched['min'], $fetched['max']];
-      break;
-    case "data":
+      $to_return[] = [$fetched['min'], $fetched['max']];
+
       if(isset($_GET["from"]) && isset($_GET["to"])) {
         $from = mysqli_real_escape_string($db, $_GET["from"]);
         $to = mysqli_real_escape_string($db, $_GET["to"]);

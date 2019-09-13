@@ -2,6 +2,7 @@ import time
 import praw as praw
 import pprint
 import configparser
+import requests
 from tinydb import TinyDB
 import MySQLdb
 
@@ -41,7 +42,6 @@ if __name__ == "__main__":
                    'user_count_' + subreddit_names[2]: users[subreddit_names[2]]
                    })
 
-        """
         # Insert into remote db
         try:
             send_to_mysql(config['mysql.lima']['host'],
@@ -61,15 +61,17 @@ if __name__ == "__main__":
                           users)
         except Exception as exception:
             print(repr(exception))
-        """
 
         # Insert into remote backup backup db
         try:
-            send_to_mysql(config['mysql.x10']['host'],
-                          config['mysql.x10']['user'],
-                          config['mysql.x10']['password'],
-                          config['mysql.x10']['database'],
-                          users)
+            requests.post("https://f1status.000webhostapp.com/writeData.php", data={
+                'time': time.time(),
+                'f1': users[subreddit_names[0]],
+                'f1_5': users[subreddit_names[1]],
+                'f1feeder': users[subreddit_names[2]],
+                'token': config['mysql.000']['token'],
+                'uid': config['mysql.000']['uid']
+            })
         except Exception as exception:
             print(repr(exception))
 

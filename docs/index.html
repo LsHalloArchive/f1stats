@@ -15,7 +15,7 @@
                 <h2>r/formula1 statistics</h2>
                 <div id="toolbar">
                     <div class="form-inline">
-                        <div class="input-group mb-2 mr-sm-2">
+                        <div class="input-group mr-sm-2">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">From</div>
                             </div>
@@ -26,14 +26,16 @@
                             </div>
                             <label class="sr-only" for="datepicker-to">To</label>
                             <input type="text" class="form-control datepicker" id="datepicker-to">
+                            <div class="input-group-append">
+                                <input type="button" id="apply-filter-button" class="btn btn-primary" value="Apply">
+                            </div>
                         </div>
-                        <button type="button" id="apply-filter-button" class="btn btn-primary mb-2">Apply</button>
 
-                        <div class="form-check mb-2 ml-sm-4">
-                            <input class="form-check-input" type="checkbox" id="togglePoints">
-                            <label class="form-check-label" for="togglePoints">
-                                Show data points
-                            </label>
+                        <div class="form-check ml-sm-4">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="togglePoints" name="example1">
+                                <label class="custom-control-label" for="togglePoints">Data Points</label>
+                            </div>
                         </div>
                         <span class="mr-0 ml-auto">
                             <input type="button" class="btn btn-outline-info" value="Export as JSON" id="export-json">
@@ -45,6 +47,15 @@
                 <div id="chart-container">
                     <canvas id="chart"></canvas>
                 </div>
+            </div>
+        </div>
+        <div class="toast m-auto" data-autohide="false">
+            <div class="toast-header">
+                <strong class="mr-auto text-primary">Excel Export</strong>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
+            </div>
+            <div class="toast-body">
+                You may want to reformat the date to also show the time in the column.
             </div>
         </div>
     </body>

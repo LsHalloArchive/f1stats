@@ -181,6 +181,7 @@ function showTable(from, to) {
                 XLSX.utils.book_append_sheet(workbook, worksheet,"formula1 Stats");
                 XLSX.writeFile(workbook, "formula1Stats.xlsx", {'cellDates': true});
                 console.log("Excel conversion took " + (new Date().getTime() - pre.getTime()) + "ms");
+                $('.toast').toast('show');
             });
         }
 

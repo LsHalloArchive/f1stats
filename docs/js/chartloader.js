@@ -251,7 +251,7 @@ $(function() {
     });
 
     $.get({
-        url: mainDataUrl,
+        url: dataUrl,
         data: {'type': 'minmax'}
     }).done(function (data) {
         data = JSON.parse(data);

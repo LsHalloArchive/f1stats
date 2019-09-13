@@ -1,6 +1,6 @@
-let mainDataUrl = 'https://f1stats.4lima.de/getData.php';
+let mainDataUrls = ['https://f1stats.4lima.de/getData.php', 'https://f1status.000webhostapp.com/getData.php'];
 let backupDataUrl = 'https://lshallo.eu/f1stats/getData.php';
-let dataUrl = mainDataUrl;
+let dataUrl = mainDataUrls[Math.floor(Math.random() * mainDataUrls.length)];
 let lineChart = undefined;
 let filterButton = $('#apply-filter-button');
 
@@ -192,10 +192,10 @@ function showTable(from, to) {
 const maxTries = 5;
 let tries = 0;
 function switchUrls(from, to) {
-    if(dataUrl === mainDataUrl) {
+    if(dataUrl === mainDataUrls[0] || dataUrl === mainDataUrls[1]) {
         dataUrl = backupDataUrl;
     } else {
-        dataUrl = mainDataUrl;
+        dataUrl = mainDataUrls[Math.floor(Math.random() * mainDataUrls.length)];
     }
     if(tries++ < maxTries) {
         if (to === undefined || from === undefined) {

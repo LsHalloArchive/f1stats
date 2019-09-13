@@ -240,11 +240,15 @@ function showPoints(show) {
     }
 }
 
+function formatDate(d) {
+    return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + d.getHours() + ':' + d.getMinutes();
+}
+
 $(function() {
     let today = new Date();
     let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
-    $('#datepicker-from').val(yesterday.toLocaleDateString() + ' ' + yesterday.toLocaleTimeString());
-    $('#datepicker-to').val(today.toLocaleDateString() + ' ' + today.toLocaleTimeString());
+    $('#datepicker-from').val(formatDate(yesterday));
+    $('#datepicker-to').val(formatDate(today));
 
     $('#togglePoints').on('click',function () {
         showPoints(this.checked);

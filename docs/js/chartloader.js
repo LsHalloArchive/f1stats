@@ -160,13 +160,14 @@ function showTable(from, to) {
 
             $('#datepicker-to,#datepicker-from').flatpickr({
                 minDate: minmax[0] * 1000,
-                maxDate: minmax[1] * 1000,
+                maxDate: (parseInt(minmax[1]) + 60) * 1000,
                 enableTime: true,
                 dateFormat: "d/m/Y H:i",
+                altFormat: "m/d/Y H:i",
                 time_24hr: true
             });
 
-            if (exportJsonHandler !== undefined) {
+            if(exportJsonHandler !== undefined) {
                 $('#export-json').off('click', '#export-json', exportJsonHandler);
             }
             exportJsonHandler = $("#export-json").on('click', function () {
@@ -178,7 +179,7 @@ function showTable(from, to) {
                 })[0].click();
             });
 
-            if (exportXlsHandler !== undefined) {
+            if(exportXlsHandler !== undefined) {
                 $('#export-xls').off('click', '#export-xls', exportXlsHandler);
             }
             exportXlsHandler = $("#export-xls").on('click', function () {

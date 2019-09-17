@@ -185,9 +185,7 @@ function showTable(from, to) {
                 let pre = new Date();
                 if(!thisXlsDataExported) {
                     for (let i = 0; i < xlsData.length; i++) {
-                        if (!(xlsData[i][0] instanceof Date)) {
-                            xlsData[i][0] = new Date(xlsData[i][0] * 1000);
-                        }
+                        xlsData[i][0] = new Date(xlsData[i][0] * 1000);
                         xlsData[i][1] = parseInt(xlsData[i][1]);
                         xlsData[i][2] = parseInt(xlsData[i][2]);
                         xlsData[i][3] = parseInt(xlsData[i][3]);

@@ -10,6 +10,7 @@ let exportJsonHandler = undefined;
 
 //Excel export
 let xlsData = [];
+let thisXlsDataExported = false;
 let exportXlsHandler = undefined;
 
 function showTable(from, to) {
@@ -42,6 +43,8 @@ function showTable(from, to) {
         let minmax = chartData.shift();
         //save chartData for export to excel
         xlsData = chartData;
+        thisXlsDataExported = false;
+
         let dataListF1 = [];
         let dataListF1_5 = [];
         let dataListF1Feeder = [];
@@ -155,7 +158,7 @@ function showTable(from, to) {
                 options: options
             });
 
-            $('.datepicker').flatpickr({
+            $('#datepicker-to,#datepicker-from').flatpickr({
                 minDate: minmax[0] * 1000,
                 maxDate: minmax[1] * 1000,
                 enableTime: true,
@@ -180,19 +183,37 @@ function showTable(from, to) {
             }
             exportXlsHandler = $("#export-xls").on('click', function () {
                 let pre = new Date();
-                for (let i in xlsData) {
-                    xlsData[i][0] = new Date(xlsData[i][0] * 1000);
-                    xlsData[i][1] = parseInt(xlsData[i][1]);
-                    xlsData[i][2] = parseInt(xlsData[i][2]);
-                    xlsData[i][3] = parseInt(xlsData[i][3]);
+                if(!thisXlsDataExported) {
+                    for (let i = 0; i < xlsData.length; i++) {
+                        if (!(xlsData[i][0] instanceof Date)) {
+                            xlsData[i][0] = new Date(xlsData[i][0] * 1000);
+                        }
+                        xlsData[i][1] = parseInt(xlsData[i][1]);
+                        xlsData[i][2] = parseInt(xlsData[i][2]);
+                        xlsData[i][3] = parseInt(xlsData[i][3]);
+                    }
+
+                    xlsData.unshift(["date", "formula1", "formula1point5", "f1feederseries"]);
+                    thisXlsDataExported = true;
                 }
-                xlsData.unshift(["date", "formula1", "formula1point5", "f1feederseries"]);
-                let workbook = XLSX.utils.book_new();
-                let worksheet = XLSX.utils.aoa_to_sheet(xlsData);
-                XLSX.utils.book_append_sheet(workbook, worksheet, "formula1 Stats");
-                XLSX.writeFile(workbook, "formula1Stats.xlsx", {'cellDates': true});
-                console.log("Excel conversion took " + (new Date().getTime() - pre.getTime()) + "ms");
-                $('.toast').toast('show');
+
+                if(typeof XLSX === 'object') {
+                    let workbook = XLSX.utils.book_new();
+                    let worksheet = XLSX.utils.aoa_to_sheet(xlsData);
+                    XLSX.utils.book_append_sheet(workbook, worksheet, "formula1 Stats");
+                    XLSX.writeFile(workbook, "formula1Stats.xlsx", {'cellDates': true});
+                    console.log("Excel conversion took " + (new Date().getTime() - pre.getTime()) + "ms");
+                    $.toast({
+                        title: 'Excel Export',
+                        subtitle: '',
+                        content: 'You may want to reformat the date to also show the time in the column.',
+                        type: 'info',
+                        autohide: false,
+                    });
+                    //$('.toast').toast('show');
+                } else {
+                    alert("Excel library not loaded yet. Please try again in a few seconds.\n\nIf this problem persists please try reloading the page and waiting a bit for all required files to load.");
+                }
             });
         }
 

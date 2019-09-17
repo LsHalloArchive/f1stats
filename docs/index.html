@@ -15,8 +15,9 @@
         <meta name="twitter:site" content="@xlshallox">
     </head>
     <body>
-        <div id="content">
-                <h2>r/formula1 statistics</h2>
+        <div id="content-container">
+            <div id="content">
+                <h2 class="link-center">r/formula1 statistics</h2>
                 <div id="toolbar">
                     <div class="form-inline">
                         <div class="input-group mr-sm-2">
@@ -47,33 +48,31 @@
                         </span>
                     </div>
                 </div>
-            <div id="complete-chart-container">
-                <div id="chart-container">
-                    <canvas id="chart"></canvas>
+                <div id="complete-chart-container">
+                    <div id="chart-container">
+                        <canvas id="chart"></canvas>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="toast m-auto" data-autohide="false">
-            <div class="toast-header">
-                <strong class="mr-auto text-primary">Excel Export</strong>
-                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast">&times;</button>
-            </div>
-            <div class="toast-body">
-                You may want to reformat the date to also show the time in the column.
+                <div class="link-center font-weight-bolder">
+                    <a href="about.html">About</a>
+                </div>
             </div>
         </div>
     </body>
     <footer>
         <script src="js/jquery.min.js"></script>
-        <script src="js/bootstrap.bundle.min.js"></script>
-        <script src="js/chart.bundle.min.js"></script>
-        <script src="js/moment.js"></script>
+        <script src="js/moment.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/chart.min.js"></script>
         <script src="js/flatpickr.min.js"></script>
         <script src="js/chartloader.js"></script>
         <link rel="stylesheet" href="css/bootstrap.min.css"/>
         <link rel="stylesheet" href="css/chart.min.css"/>
         <link rel="stylesheet" href="css/flatpickr.min.css"/>
         <link rel="stylesheet" href="css/custom.css"/>
-        <script src="js/xlsx.full.min.js" async></script>
+        <link rel="stylesheet" href="css/toast.min.css"/>
+        <script src="js/xlsx.core.min.js" async></script>
+        <script src="js/toast.min.js" async></script>
     </footer>
 </html>

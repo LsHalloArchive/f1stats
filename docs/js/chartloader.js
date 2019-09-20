@@ -13,35 +13,52 @@ let xlsData = [];
 let thisXlsDataExported = false;
 let exportXlsHandler = undefined;
 
+//save data from last 10 requests to reduce number of requests needed
+//if requested data is inside one of the previous loaded data elements
+let chartDataHistory = [];
+
 function showTable(from, to) {
-    if(from === undefined || to === undefined) {
+    let cachedChartData = inChartDataHistory(from, to);
+    if(cachedChartData === undefined) {
         $.get({
             url: dataUrl,
-            data: {'type': 'data'},
-            success: function(data) {
-                chartCallback(JSON.parse(data));
+            data: {
+                'type': 'data',
+                'from': from,
+                'to': to
             },
-            error: function(error) {
-                switchUrls();
-            }
-        });
-    } else {
-        $.get({
-            url: dataUrl,
-            data: {'type': 'data', 'to': to, 'from': from},
-            success: function(data) {
-                chartCallback(JSON.parse(data));
+            success: function (data) {
+                let parsedData = JSON.parse(data);
+                chartCallback(parsedData);
+                //push loaded data to history array to reduce requests
+                chartDataHistory.push(new ChartData(parsedData));
+                //Limit length to 10 elements
+                chartDataHistory.splice(0, Math.max(chartDataHistory.length - 10, 0));
             },
-            error: function(error) {
+            error: function (error) {
                 switchUrls(from, to);
             }
         });
+    } else {
+        to = parseInt(to);
+        from = parseInt(from);
+
+        //removed unwanted elements from cached data
+        for(let i = cachedChartData.length; i > 0; i--) {
+            if(cachedChartData[i] !== undefined) {
+                let timestamp = parseInt(cachedChartData[i][0]);
+                if (timestamp < from || timestamp > to) {
+                    cachedChartData.splice(i, 1);
+                }
+            }
+        }
+        chartCallback(cachedChartData);
     }
 
     function chartCallback(chartData) {
         //first element of data is min and max date for datepicker
         let minmax = chartData.shift();
-        //save chartData for export to excel
+        //save cachedChartData for export to excel
         xlsData = chartData;
         thisXlsDataExported = false;
 
@@ -92,35 +109,47 @@ function showTable(from, to) {
                     distribution: 'linear'
                 }]
             },
+            tooltips: {
+                callbacks: {
+                    title: function(tooltipItem, data) {
+                        return formatDate(moment(tooltipItem[0].label, "MMM DD, YYYY, h:m:s a").toDate());
+                    },
+                    label: function(tooltipItem, data) {
+                        return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.yLabel + ' users';
+                    },
+                }
+            },
             maintainAspectRatio: false,
             responsive: true,
         };
         if(lineChart !== undefined) {
             lineChart.data =  {
-                datasets: [{
-                    label: 'r/formula1',
-                    data: dataListF1,
-                    borderColor: "rgb(235, 55, 55)",
-                    backgroundColor: "rgb(235, 55, 55)",
-                    fill: false,
-                    hidden: !lineChart.isDatasetVisible(0),
-                },
-                {
-                    label: 'r/formula1point5',
-                    data: dataListF1_5,
-                    borderColor: "rgb(235,63,199)",
-                    backgroundColor: "rgb(235,63,199)",
-                    fill: false,
-                    hidden: !lineChart.isDatasetVisible(1),
-                },
-                {
-                    label: 'r/f1feederseries',
-                    data: dataListF1Feeder,
-                    borderColor: "rgb(235,129,0)",
-                    backgroundColor: "rgb(235,129,0)",
-                    fill: false,
-                    hidden: !lineChart.isDatasetVisible(2),
-                }]
+                datasets: [
+                    {
+                        label: 'r/formula1',
+                        data: dataListF1,
+                        borderColor: "rgb(235, 55, 55)",
+                        backgroundColor: "rgb(235, 55, 55)",
+                        fill: false,
+                        hidden: !lineChart.isDatasetVisible(0),
+                    },
+                    {
+                        label: 'r/formula1point5',
+                        data: dataListF1_5,
+                        borderColor: "rgb(235,63,199)",
+                        backgroundColor: "rgb(235,63,199)",
+                        fill: false,
+                        hidden: !lineChart.isDatasetVisible(1),
+                    },
+                    {
+                        label: 'r/f1feederseries',
+                        data: dataListF1Feeder,
+                        borderColor: "rgb(235,129,0)",
+                        backgroundColor: "rgb(235,129,0)",
+                        fill: false,
+                        hidden: !lineChart.isDatasetVisible(2),
+                    }
+                ]
             };
             showPoints($('#togglePoints').prop('checked'));
             lineChart.update();
@@ -128,14 +157,15 @@ function showTable(from, to) {
             lineChart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    datasets: [{
-                        label: 'r/formula1',
-                        data: dataListF1,
-                        borderColor: "rgb(235, 55, 55)",
-                        backgroundColor: "rgb(235, 55, 55)",
-                        fill: false,
-                        pointRadius: 0
-                    },
+                    datasets: [
+                        {
+                            label: 'r/formula1',
+                            data: dataListF1,
+                            borderColor: "rgb(235, 55, 55)",
+                            backgroundColor: "rgb(235, 55, 55)",
+                            fill: false,
+                            pointRadius: 0
+                        },
                         {
                             label: 'r/formula1point5',
                             data: dataListF1_5,
@@ -153,7 +183,8 @@ function showTable(from, to) {
                             fill: false,
                             hidden: true,
                             pointRadius: 0
-                        }]
+                        }
+                    ]
                 },
                 options: options
             });
@@ -216,6 +247,7 @@ function showTable(from, to) {
             });
         }
 
+        setDarkMode(darkModeEnabled());
         filterButton.prop('disabled', false);
     }
 }
@@ -260,8 +292,66 @@ function showPoints(show) {
     }
 }
 
+function inChartDataHistory(from, to) {
+    from = parseInt(from);
+    to = parseInt(to);
+    for(let i = 0; i < chartDataHistory.length; i++) {
+        if(chartDataHistory[i].to >= to && chartDataHistory[i].from <= from) {
+            //copy array because we don't want to modify the cached data
+            return $.extend(true, [], chartDataHistory[i].data);
+        }
+    }
+    return undefined;
+}
+
+let moonIcon = $('#sun');
+let sunIcon = $('#moon');
+function setDarkMode(active) {
+    if(active) {
+        moonIcon.addClass('active');
+        sunIcon.removeClass('active');
+        $('body').addClass('dark');
+        if(typeof lineChart === 'object') {
+            lineChart.options.scales.xAxes[0].ticks.major.fontColor = '#eee';
+            lineChart.options.scales.xAxes[0].ticks.minor.fontColor = '#eee';
+            lineChart.options.scales.yAxes[0].ticks.major.fontColor = '#eee';
+            lineChart.options.scales.yAxes[0].ticks.minor.fontColor = '#eee';
+            lineChart.update();
+        }
+
+        localStorage.setItem('darkMode', true.toString());
+    } else {
+        sunIcon.addClass('active');
+        moonIcon.removeClass('active');
+        $('body').removeClass('dark');
+        if(typeof lineChart === 'object') {
+            lineChart.options.scales.xAxes[0].ticks.major.fontColor = '#666';
+            lineChart.options.scales.xAxes[0].ticks.minor.fontColor = '#666';
+            lineChart.options.scales.yAxes[0].ticks.major.fontColor = '#666';
+            lineChart.options.scales.yAxes[0].ticks.minor.fontColor = '#666';
+            lineChart.update();
+        }
+
+        localStorage.setItem('darkMode', false.toString());
+    }
+}
+
 function formatDate(d) {
-    return d.getDate() + '/' + (d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + d.getHours() + ':' + d.getMinutes();
+    return formatDigit(d.getDate()) + '/' + formatDigit(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + formatDigit(d.getHours()) + ':' + formatDigit(d.getMinutes());
+
+    function formatDigit(i) {
+        if(i < 10) {
+            return '0' + i;
+        }
+        return i;
+    }
+}
+
+function darkModeEnabled() {
+    if(localStorage.getItem('darkMode') !== null) {
+        return JSON.parse(localStorage.getItem('darkMode'));
+    }
+    return true;
 }
 
 $(function() {
@@ -273,12 +363,24 @@ $(function() {
     $('#togglePoints').on('click',function () {
         showPoints(this.checked);
     });
+    
+    $('#darkModeToggle').on('click', function () {
+        let $this = $(this);
+        let moonIcon = $this.find('#moon');
+        let sunIcon = $this.find('#sun');
+
+        if(moonIcon.hasClass('active')) {
+            setDarkMode(true);
+        } else {
+            setDarkMode(false);
+        }
+    });
 
     filterButton.on('click', function() {
         filterButton.prop('disabled', true);
         try {
-            let from = moment($('#datepicker-from').val(), "DD/MM/YYYY HH:mm").toDate();
-            let to = moment($('#datepicker-to').val(), "DD/MM/YYYY HH:mm").toDate();
+            let from = moment($('#datepicker-from').val(), "DD/MM/YYYY HH:mm").toDate().getTime();
+            let to = moment($('#datepicker-to').val(), "DD/MM/YYYY HH:mm").toDate().getTime();
             if(from < to) {
                 showTable(from / 1000, to / 1000);
             } else {
@@ -291,5 +393,39 @@ $(function() {
         }
     });
 
+    if(localStorage.getItem('darkMode') !== null) {
+        setDarkMode(JSON.parse(localStorage.getItem('darkMode')));
+    }
     showTable(Math.round(yesterday.getTime()/1000), Math.round(today.getTime()/1000));
+
+    $('[data-toggle="tooltip"]').tooltip()
 });
+
+
+class ChartData {
+    constructor(data) {
+        this.data = data;
+        this.to = this.findMaximum(data);
+        this.from = this.findMinimum(data);
+    }
+
+    findMaximum(data) {
+        let max = -1;
+        for(let i = 0; i < data.length; i++) {
+            if(parseInt(data[i][0]) > max) {
+                max = parseInt(data[i][0]);
+            }
+        }
+        return max;
+    }
+
+    findMinimum(data) {
+        let min = 8640000000000000;
+        for(let i = 0; i < data.length; i++) {
+            if(parseInt(data[i][0]) < min) {
+                min = parseInt(data[i][0]);
+            }
+        }
+        return min;
+    }
+}

@@ -15,7 +15,7 @@
         <meta name="twitter:card" content="summary_large_image">
         <meta name="twitter:site" content="@xlshallox">
     </head>
-    <body>
+    <body class="dark">
         <div id="content-container">
             <div id="content">
                 <div class="title">
@@ -46,6 +46,12 @@
                                 <label class="custom-control-label" for="togglePoints">Data Points</label>
                             </div>
                         </div>
+
+                        <span id="darkModeToggle" class="ml-3" data-toggle="tooltip" data-placement="top" title="Toggle Dark Mode">
+                            <img id="moon" class="darkModeIcon moon" alt="Moon Icon" src="img/moon.svg">
+                            <img id="sun" class="darkModeIcon sun active" alt="Sun Icon" src="img/sun.svg">
+                        </span>
+
                         <span class="mr-0 ml-auto">
                             <input type="button" class="btn btn-outline-info" value="Export as JSON" id="export-json">
                             <input type="button" class="btn btn-outline-info" value="Export to Excel" id="export-xls">

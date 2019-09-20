@@ -27,6 +27,7 @@ function showTable(from, to) {
                 'from': from,
                 'to': to
             },
+            timeout: 5000,
             success: function (data) {
                 let parsedData = JSON.parse(data);
                 chartCallback(parsedData);
@@ -314,8 +315,10 @@ function setDarkMode(active) {
         if(typeof lineChart === 'object') {
             lineChart.options.scales.xAxes[0].ticks.major.fontColor = '#eee';
             lineChart.options.scales.xAxes[0].ticks.minor.fontColor = '#eee';
+            lineChart.options.scales.xAxes[0].gridLines.color = 'rgba(255, 255, 255, 0.15)';
             lineChart.options.scales.yAxes[0].ticks.major.fontColor = '#eee';
             lineChart.options.scales.yAxes[0].ticks.minor.fontColor = '#eee';
+            lineChart.options.scales.yAxes[0].gridLines.color = 'rgba(255, 255, 255, 0.15)';
             lineChart.update();
         }
 
@@ -327,8 +330,10 @@ function setDarkMode(active) {
         if(typeof lineChart === 'object') {
             lineChart.options.scales.xAxes[0].ticks.major.fontColor = '#666';
             lineChart.options.scales.xAxes[0].ticks.minor.fontColor = '#666';
+            lineChart.options.scales.xAxes[0].gridLines.color = 'rgba(0, 0, 0, 0.1)';
             lineChart.options.scales.yAxes[0].ticks.major.fontColor = '#666';
             lineChart.options.scales.yAxes[0].ticks.minor.fontColor = '#666';
+            lineChart.options.scales.yAxes[0].gridLines.color = 'rgba(0, 0, 0, 0.1)';
             lineChart.update();
         }
 

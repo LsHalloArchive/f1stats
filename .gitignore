@@ -2,6 +2,7 @@
 praw.ini
 mysql.ini
 credentials.ini
+db.json
 
 # Created by https://www.gitignore.io/api/node,python,windows,pycharm
 # Edit at https://www.gitignore.io/?templates=node,python,windows,pycharm

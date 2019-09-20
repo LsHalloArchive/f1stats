@@ -34,13 +34,17 @@ if __name__ == "__main__":
             sub = reddit.subreddit(name)
             users[name] = sub.accounts_active
 
-        print("F1: " + str(users[subreddit_names[0]]) + "  F1.5: " + str(users[subreddit_names[1]]) + "  F1Feeder: " + str(users[subreddit_names[2]]))
         # Insert into local db
         db.insert({'time': time.time(),
                    'user_count_' + subreddit_names[0]: users[subreddit_names[0]],
                    'user_count_' + subreddit_names[1]: users[subreddit_names[1]],
                    'user_count_' + subreddit_names[2]: users[subreddit_names[2]]
                    })
+
+        lima = False
+        ac = False
+        webhost = False
+        bplaced = False
 
         # Insert into remote db
         try:
@@ -49,6 +53,7 @@ if __name__ == "__main__":
                           config['mysql.lima']['password'],
                           config['mysql.lima']['database'],
                           users)
+            lima = True
         except Exception as exception:
             print(repr(exception))
 
@@ -59,6 +64,7 @@ if __name__ == "__main__":
                           config['mysql.ac']['password'],
                           config['mysql.ac']['database'],
                           users)
+            ac = True
         except Exception as exception:
             print(repr(exception))
 
@@ -74,10 +80,33 @@ if __name__ == "__main__":
                               'uid': config['mysql.000']['uid']
                           },
                           timeout=5)
+            webhost = True
+        except Exception as exception:
+            print(repr(exception))
+
+        # Insert into remote backup backup backup db
+        try:
+            requests.post("http://wotmods.square7.ch/writeData.php",
+                          data={
+                              'time': time.time(),
+                              'f1': users[subreddit_names[0]],
+                              'f1_5': users[subreddit_names[1]],
+                              'f1feeder': users[subreddit_names[2]],
+                              'token': config['mysql.000']['token'],
+                              'uid': config['mysql.000']['uid']
+                          },
+                          timeout=5)
+            bplaced = True
         except Exception as exception:
             print(repr(exception))
 
         time_post = time.time()
         run_time = time_post - time_pre
+
+        print("F1: " + str(users[subreddit_names[0]]) + "  F1.5: " + str(
+            users[subreddit_names[1]]) + "  F1Feeder: " + str(
+            users[subreddit_names[2]]) + " | lima: {}; ac: {}; 000: {}; bplaced: {}; time: {}s".format(
+            lima, ac, webhost, bplaced, run_time))
+
         run_time = run_time if run_time < 60 else 60
         time.sleep(60 - run_time)

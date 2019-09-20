@@ -18,3 +18,4 @@
       $result = mysqli_query($db, "INSERT INTO f1stats (`time`, `f1`, `f1_5`, `f1feeder`) VALUES ({$time}, {$f1}, {$f1_5}, {$f1feeder})");
     }
   }
+  mysqli_close($db);

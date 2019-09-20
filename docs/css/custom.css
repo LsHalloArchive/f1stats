@@ -106,3 +106,12 @@ input.datepicker {
 .custom-control-label:hover {
     cursor: pointer;
 }
+
+#url-debug {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    font-size: .65em;
+    user-select: none;
+    opacity: .4;
+}

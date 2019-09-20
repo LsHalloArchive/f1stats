@@ -1,5 +1,5 @@
 let mainDataUrls = ['https://f1stats.4lima.de/getData.php', 'https://f1status.000webhostapp.com/getData.php'];
-let backupDataUrl = 'https://lshallo.eu/f1stats/getData.php';
+let backupDataUrl = 'http://wotmods.square7.ch/getData.php';
 let dataUrl = mainDataUrls[Math.floor(Math.random() * mainDataUrls.length)];
 let lineChart = undefined;
 let filterButton = $('#apply-filter-button');
@@ -249,6 +249,7 @@ function showTable(from, to) {
         }
 
         setDarkMode(darkModeEnabled());
+        updateDebugUrl();
         filterButton.prop('disabled', false);
     }
 }
@@ -274,6 +275,10 @@ function switchUrls(from, to) {
             showTable(from, to)
         }
     }
+}
+
+function updateDebugUrl() {
+    $('#url-debug').text("Debug: " + new URL(dataUrl).hostname);
 }
 
 function showPoints(show) {
@@ -372,7 +377,6 @@ $(function() {
     $('#darkModeToggle').on('click', function () {
         let $this = $(this);
         let moonIcon = $this.find('#moon');
-        let sunIcon = $this.find('#sun');
 
         if(moonIcon.hasClass('active')) {
             setDarkMode(true);
@@ -403,7 +407,8 @@ $(function() {
     }
     showTable(Math.round(yesterday.getTime()/1000), Math.round(today.getTime()/1000));
 
-    $('[data-toggle="tooltip"]').tooltip()
+    $('[data-toggle="tooltip"]').tooltip();
+    updateDebugUrl();
 });
 
 

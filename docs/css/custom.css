@@ -6,6 +6,10 @@
     }
 }
 
+body {
+    transition: background-color .4s, color .4s;
+}
+
 /* Dark mode */
 .dark {
     background-color: #222;

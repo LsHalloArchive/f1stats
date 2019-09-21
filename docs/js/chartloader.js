@@ -153,7 +153,7 @@ function showTable(from, to) {
                     }
                 ]
             };
-            showPoints($('#togglePoints').prop('checked'));
+            showPoints($('#togglePoints').prop('checked') || $('#togglePoints-mobile').prop('checked'));
             lineChart.update();
         } else {
             lineChart = new Chart(ctx, {

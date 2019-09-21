@@ -39,6 +39,14 @@ body.dark .custom-control-label::before {
     background-color: #444;
 }
 
+body.dark .modal-content {
+    background-color: #222;
+}
+
+.modal-content {
+    transition: background-color .4s;
+}
+
 .darkModeIcon {
     height: 28px;
     width: auto;
@@ -107,11 +115,6 @@ input.datepicker {
     cursor: pointer;
 }
 
-#url-debug {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    font-size: .65em;
-    user-select: none;
-    opacity: .4;
+.form-check {
+    padding-left: 0;
 }

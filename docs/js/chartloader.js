@@ -3,6 +3,7 @@ let backupDataUrl = 'http://wotmods.square7.ch/getData.php';
 let dataUrl = mainDataUrls[Math.floor(Math.random() * mainDataUrls.length)];
 let lineChart = undefined;
 let filterButton = $('#apply-filter-button');
+let filterButtonMobile = $('#apply-filter-button-mobile');
 
 //JSON export
 let datasets = {};
@@ -36,7 +37,7 @@ function showTable(from, to) {
                 //Limit length to 10 elements
                 chartDataHistory.splice(0, Math.max(chartDataHistory.length - 10, 0));
             },
-            error: function (error) {
+            error: function () {
                 switchUrls(from, to);
             }
         });
@@ -112,7 +113,7 @@ function showTable(from, to) {
             },
             tooltips: {
                 callbacks: {
-                    title: function(tooltipItem, data) {
+                    title: function(tooltipItem) {
                         return formatDate(moment(tooltipItem[0].label, "MMM DD, YYYY, h:m:s a").toDate());
                     },
                     label: function(tooltipItem, data) {
@@ -190,7 +191,7 @@ function showTable(from, to) {
                 options: options
             });
 
-            $('#datepicker-to,#datepicker-from').flatpickr({
+            $('.datepicker').flatpickr({
                 minDate: minmax[0] * 1000,
                 maxDate: (parseInt(minmax[1]) + 60) * 1000,
                 enableTime: true,
@@ -200,11 +201,11 @@ function showTable(from, to) {
             });
 
             if(exportJsonHandler !== undefined) {
-                $('#export-json').off('click', '#export-json', exportJsonHandler);
+                $('#export-json, #export-json-mobile').off('click', '#export-json', exportJsonHandler);
             }
-            exportJsonHandler = $("#export-json").on('click', function () {
+            exportJsonHandler = $("#export-json, #export-json-mobile").on('click', function () {
                 $("<a />", {
-                    "download": "data.json",
+                    "download": "formula1.json",
                     "href": "data:application/json," + encodeURIComponent(JSON.stringify(datasets))
                 }).appendTo("body").on('click', function () {
                     $(this).remove()
@@ -212,9 +213,9 @@ function showTable(from, to) {
             });
 
             if(exportXlsHandler !== undefined) {
-                $('#export-xls').off('click', '#export-xls', exportXlsHandler);
+                $('#export-xls, #export-xls-mobile').off('click', '#export-xls', exportXlsHandler);
             }
-            exportXlsHandler = $("#export-xls").on('click', function () {
+            exportXlsHandler = $("#export-xls, #export-xls-mobile").on('click', function () {
                 let pre = new Date();
                 if(!thisXlsDataExported) {
                     for (let i = 0; i < xlsData.length; i++) {
@@ -241,7 +242,6 @@ function showTable(from, to) {
                         type: 'info',
                         autohide: false,
                     });
-                    //$('.toast').toast('show');
                 } else {
                     alert("Excel library not loaded yet. Please try again in a few seconds.\n\nIf this problem persists please try reloading the page and waiting a bit for all required files to load.");
                 }
@@ -249,8 +249,8 @@ function showTable(from, to) {
         }
 
         setDarkMode(darkModeEnabled());
-        updateDebugUrl();
         filterButton.prop('disabled', false);
+        filterButtonMobile.prop('disabled', false);
     }
 }
 
@@ -275,10 +275,6 @@ function switchUrls(from, to) {
             showTable(from, to)
         }
     }
-}
-
-function updateDebugUrl() {
-    $('#url-debug').text("Debug: " + new URL(dataUrl).hostname);
 }
 
 function showPoints(show) {
@@ -310,12 +306,18 @@ function inChartDataHistory(from, to) {
     return undefined;
 }
 
-let moonIcon = $('#sun');
-let sunIcon = $('#moon');
+let moonIcon = $('.moon');
+let sunIcon = $('.sun');
 function setDarkMode(active) {
     if(active) {
-        moonIcon.addClass('active');
-        sunIcon.removeClass('active');
+        sunIcon.each(function() {
+            $(this).addClass('active');
+        });
+        moonIcon.each(function() {
+            $(this).removeClass('active');
+        });
+        //moonIcon.addClass('active');
+        //sunIcon.removeClass('active');
         $('body').addClass('dark');
         if(typeof lineChart === 'object') {
             lineChart.options.scales.xAxes[0].ticks.major.fontColor = '#eee';
@@ -329,8 +331,14 @@ function setDarkMode(active) {
 
         localStorage.setItem('darkMode', true.toString());
     } else {
-        sunIcon.addClass('active');
-        moonIcon.removeClass('active');
+        moonIcon.each(function() {
+            $(this).addClass('active');
+        });
+        sunIcon.each(function() {
+            $(this).removeClass('active');
+        });
+        //sunIcon.addClass('active');
+        //moonIcon.removeClass('active');
         $('body').removeClass('dark');
         if(typeof lineChart === 'object') {
             lineChart.options.scales.xAxes[0].ticks.major.fontColor = '#666';
@@ -369,14 +377,16 @@ $(function() {
     let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
     $('#datepicker-from').val(formatDate(yesterday));
     $('#datepicker-to').val(formatDate(today));
+    $('#datepicker-from-mobile').val(formatDate(yesterday));
+    $('#datepicker-to-mobile').val(formatDate(today));
 
-    $('#togglePoints').on('click',function () {
+    $('#togglePoints, #togglePoints-mobile').on('click',function () {
         showPoints(this.checked);
     });
     
-    $('#darkModeToggle').on('click', function () {
+    $('#darkModeToggle, #darkModeToggle-mobile').on('click', function () {
         let $this = $(this);
-        let moonIcon = $this.find('#moon');
+        let moonIcon = $this.find('.moon');
 
         if(moonIcon.hasClass('active')) {
             setDarkMode(true);
@@ -402,13 +412,29 @@ $(function() {
         }
     });
 
+    filterButtonMobile.on('click', function() {
+        filterButtonMobile.prop('disabled', true);
+        try {
+            let from = moment($('#datepicker-from-mobile').val(), "DD/MM/YYYY HH:mm").toDate().getTime();
+            let to = moment($('#datepicker-to-mobile').val(), "DD/MM/YYYY HH:mm").toDate().getTime();
+            if(from < to) {
+                showTable(from / 1000, to / 1000);
+            } else {
+                throw new Error("from date greater than to date");
+            }
+        } catch (e) {
+            alert("Please check your date input!");
+            filterButtonMobile.prop('disabled', false);
+            console.error(e);
+        }
+    });
+
     if(localStorage.getItem('darkMode') !== null) {
         setDarkMode(JSON.parse(localStorage.getItem('darkMode')));
     }
     showTable(Math.round(yesterday.getTime()/1000), Math.round(today.getTime()/1000));
 
     $('[data-toggle="tooltip"]').tooltip();
-    updateDebugUrl();
 });
 
 

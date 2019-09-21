@@ -19,10 +19,13 @@
         <div id="content-container">
             <div id="content">
                 <div class="title">
-                    <h2 class="link-center d-inline-block">r/formula1 statistics</h2>
-                    <a href="about.html" class="d-inline-block ml-3">About</a>
+                    <h2 class="link-center d-inline-block" style="vertical-align: middle;">r/formula1 statistics</h2>
+                    <a href="about.html" class="ml-3 d-none d-md-inline-block">About</a>
+                    <span id="toolbar-trigger" class="ml-2 d-sm-inline-block d-md-none">
+                        <input type="button" class="btn btn-outline-primary" value="Options" data-toggle="modal" data-target="#dateoptions-modal">
+                    </span>
                 </div>
-                <div id="toolbar">
+                <div id="toolbar" class="d-none d-md-block">
                     <div class="form-inline">
                         <div class="input-group mr-sm-2">
                             <div class="input-group-prepend">
@@ -58,6 +61,64 @@
                         </span>
                     </div>
                 </div>
+
+                <div class="modal fade" id="dateoptions-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Settings</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <h4>Data Range</h4>
+                                <div>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">From</div>
+                                        </div>
+                                        <label class="sr-only" for="datepicker-from-mobile">From</label>
+                                        <input type="text" class="form-control datepicker" id="datepicker-from-mobile">
+                                    </div>
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <div class="input-group-text">To</div>
+                                        </div>
+                                        <label class="sr-only" for="datepicker-to-mobile">To</label>
+                                        <input type="text" class="form-control datepicker" id="datepicker-to-mobile">
+                                    </div>
+                                    <div class="input-group-append mt-2">
+                                        <input type="button" id="apply-filter-button-mobile" class="btn btn-primary" value="Apply">
+                                    </div>
+
+                                    <div class="form-check mt-4">
+                                        <div class="custom-control custom-switch">
+                                            <input type="checkbox" class="custom-control-input" id="togglePoints-mobile" name="example1">
+                                            <label class="custom-control-label" for="togglePoints-mobile">Show Data Points</label>
+                                        </div>
+                                    </div>
+
+                                    <span class="d-block mt-2">
+                                        <span class="d-inline-block">
+                                            <input type="button" class="btn btn-outline-info" value="Export as JSON" id="export-json-mobile">
+                                            <input type="button" class="btn btn-outline-info" value="Export to Excel" id="export-xls-mobile">
+                                        </span>
+
+                                        <span id="darkModeToggle-mobile" class="d-inline-block ml-2" data-toggle="tooltip" data-placement="top" title="Toggle Dark Mode" style="vertical-align: middle">
+                                            <img id="moon-mobile" class="darkModeIcon moon" alt="Moon Icon" src="img/moon.svg" style="max-width: 60px; max-height: 60px;">
+                                            <img id="sun-mobile" class="darkModeIcon sun active" alt="Sun Icon" src="img/sun.svg" style="max-width: 60px; max-height: 60px;">
+                                        </span>
+                                    </span>
+                                </div>
+                                <a href="about.html" class="mt-3 d-block" style="font-size: 1.4em;">About this project</a>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div id="complete-chart-container">
                     <div id="chart-container">
                         <canvas id="chart"></canvas>
@@ -79,6 +140,5 @@
         <link rel="stylesheet" href="css/toast.min.css"/>
         <script src="js/xlsx.core.min.js" async></script>
         <script src="js/toast.min.js" async></script>
-        <span id="url-debug"></span>
     </body>
 </html>

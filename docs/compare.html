@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>
+            Compare Races
+        </title>
+        <meta charset="UTF-8">
+        <meta name="description" content="Formula 1 subreddit active user statistics. Updated every minute.">
+        <meta name="keywords" content="reddit, formula 1, formel 1, f1, active users">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta property="og:title" content="r/formula1 Active User Statistics">
+        <meta property="og:description" content="See how many users are active during a race. Analyze spikes at exciting moments.">
+        <meta property="og:image" content="https://lshallo.github.io/f1stats/thumb.png">
+        <meta property="og:url" content="https://lshallo.github.io/f1stats/">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:site" content="@xlshallox">
+    </head>
+    <body class="dark">
+        <div id="content-container">
+            <div id="content">
+                <div id="toolbar">
+                    <div class="form-inline">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    Compare
+                                </div>
+                            </div>
+                            <label class="sr-only" for="compareSource">Compare</label>
+                            <select class="custom-select" id="compareSource">
+                                <option value="sgp" selected>Singapore</option>
+                                <option value="rus">Russia</option>
+                                <option value="jpn">Japan</option>
+                                <option value="mex">Mexico</option>
+                                <option value="usa">United States</option>
+                                <option value="bra">Brazil</option>
+                                <option value="are">Abu Dhabi</option>
+                            </select>
+
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">with</div>
+                            </div>
+                            <label class="sr-only" for="compareTarget">with</label>
+                            <select class="custom-select" id="compareTarget">
+                                <option value="sgp">Singapore</option>
+                                <option value="rus" selected>Russia</option>
+                                <option value="jpn">Japan</option>
+                                <option value="mex">Mexico</option>
+                                <option value="usa">United States</option>
+                                <option value="bra">Brazil</option>
+                                <option value="are">Abu Dhabi</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script src="js/jquery.min.js"></script>
+        <script src="js/moment.min.js"></script>
+        <script src="js/popper.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/chart.min.js"></script>
+        <script src="js/chart-annotation.min.js"></script>
+        <script src="js/flatpickr.min.js"></script>
+        <script src="js/compare.js"></script>
+        <link rel="stylesheet" href="css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="css/chart.min.css"/>
+        <link rel="stylesheet" href="css/flatpickr.min.css"/>
+        <link rel="stylesheet" href="css/custom.css"/>
+        <link rel="stylesheet" href="css/toast.min.css"/>
+        <script src="js/xlsx.core.min.js" async></script>
+        <script src="js/toast.min.js" async></script>
+    </body>
+</html>

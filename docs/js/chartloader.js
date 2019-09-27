@@ -2,8 +2,6 @@ let mainDataUrls = ['https://f1stats.4lima.de/getData.php', 'https://f1status.00
 let backupDataUrl = 'http://wotmods.square7.ch/getData.php';
 let dataUrl = mainDataUrls[Math.floor(Math.random() * mainDataUrls.length)];
 let lineChart = undefined;
-let filterButton = $('#apply-filter-button');
-let filterButtonMobile = $('#apply-filter-button-mobile');
 
 //JSON export
 let datasets = {};
@@ -33,7 +31,7 @@ function showTable(from, to) {
                 let parsedData = JSON.parse(data);
                 chartCallback(parsedData);
                 //push loaded data to history array to reduce requests
-                chartDataHistory.push(new ChartData(parsedData));
+                chartDataHistory.push(new ChartData(parsedData, from, to));
                 //Limit length to 10 elements
                 chartDataHistory.splice(0, Math.max(chartDataHistory.length - 10, 0));
             },
@@ -197,7 +195,10 @@ function showTable(from, to) {
                 enableTime: true,
                 dateFormat: "d/m/Y H:i",
                 altFormat: "m/d/Y H:i",
-                time_24hr: true
+                time_24hr: true,
+                locale: {
+                    firstDayOfWeek: 1
+                }
             });
 
             if(exportJsonHandler !== undefined) {
@@ -251,9 +252,11 @@ function showTable(from, to) {
         setDarkMode(darkModeEnabled());
         filterButton.prop('disabled', false);
         filterButtonMobile.prop('disabled', false);
+        loadingIcon.animateWidth(0, 0);
     }
 }
 
+//Switch the current data url to another url in case of failure switch to backup url
 const maxTries = 5;
 let tries = 0;
 function switchUrls(from, to) {
@@ -277,6 +280,7 @@ function switchUrls(from, to) {
     }
 }
 
+//Toggle the visiblity of the data points on the chart
 function showPoints(show) {
     if(lineChart !== undefined) {
         let datasets = lineChart.data.datasets;
@@ -294,11 +298,12 @@ function showPoints(show) {
     }
 }
 
+//Checks if date range is already cached in chartDataHistory and returns the requested dataset if found
 function inChartDataHistory(from, to) {
     from = parseInt(from);
     to = parseInt(to);
     for(let i = 0; i < chartDataHistory.length; i++) {
-        if(chartDataHistory[i].to >= to && chartDataHistory[i].from <= from) {
+        if(chartDataHistory[i].toReq >= to && chartDataHistory[i].fromReq <= from) {
             //copy array because we don't want to modify the cached data
             return $.extend(true, [], chartDataHistory[i].data);
         }
@@ -306,6 +311,19 @@ function inChartDataHistory(from, to) {
     return undefined;
 }
 
+//Custom date format for datepicker
+function formatDate(d) {
+    return formatDigit(d.getDate()) + '/' + formatDigit(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + formatDigit(d.getHours()) + ':' + formatDigit(d.getMinutes());
+
+    function formatDigit(i) {
+        if(i < 10) {
+            return '0' + i;
+        }
+        return i;
+    }
+}
+
+//Enable or disable dark mode
 let moonIcon = $('.moon');
 let sunIcon = $('.sun');
 function setDarkMode(active) {
@@ -356,17 +374,7 @@ function setDarkMode(active) {
     }
 }
 
-function formatDate(d) {
-    return formatDigit(d.getDate()) + '/' + formatDigit(d.getMonth() + 1) + '/' + d.getFullYear() + ' ' + formatDigit(d.getHours()) + ':' + formatDigit(d.getMinutes());
-
-    function formatDigit(i) {
-        if(i < 10) {
-            return '0' + i;
-        }
-        return i;
-    }
-}
-
+//Checks if darkmode local storage is set
 function darkModeEnabled() {
     if(localStorage.getItem('darkMode') !== null) {
         return JSON.parse(localStorage.getItem('darkMode'));
@@ -374,6 +382,18 @@ function darkModeEnabled() {
     return true;
 }
 
+//Extend jQuery with custom function
+$.fn.animateWidth = function (width, opacity) {
+    this.animate({
+        'width': width,
+        'opacity': opacity,
+    }, 350);
+};
+
+let filterButton = $('#apply-filter-button');
+let filterButtonMobile = $('#apply-filter-button-mobile');
+let loadingIcon = $('.loading');
+//Startup function
 $(function() {
     let today = new Date();
     let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
@@ -387,8 +407,7 @@ $(function() {
     });
     
     $('#darkModeToggle, #darkModeToggle-mobile').on('click', function () {
-        let $this = $(this);
-        let moonIcon = $this.find('.moon');
+        let moonIcon = $(this).find('.moon');
 
         if(moonIcon.hasClass('active')) {
             setDarkMode(true);
@@ -398,38 +417,41 @@ $(function() {
     });
 
     filterButton.on('click', function() {
-        filterButton.prop('disabled', true);
-        try {
-            let from = moment($('#datepicker-from').val(), "DD/MM/YYYY HH:mm").toDate().getTime();
-            let to = moment($('#datepicker-to').val(), "DD/MM/YYYY HH:mm").toDate().getTime();
-            if(from < to) {
-                showTable(from / 1000, to / 1000);
-            } else {
-                throw new Error("from date greater than to date");
-            }
-        } catch (e) {
-            alert("Please check your date input!");
-            filterButton.prop('disabled', false);
-            console.error(e);
-        }
+        let from = moment($('#datepicker-from').val(), "DD/MM/YYYY HH:mm").toDate().getTime();
+        let to = moment($('#datepicker-to').val(), "DD/MM/YYYY HH:mm").toDate().getTime();
+        handleDateInput(from, to);
     });
 
     filterButtonMobile.on('click', function() {
+        let from = moment($('#datepicker-from-mobile').val(), "DD/MM/YYYY HH:mm").toDate().getTime();
+        let to = moment($('#datepicker-to-mobile').val(), "DD/MM/YYYY HH:mm").toDate().getTime();
+        handleDateInput(from, to);
+    });
+
+    function handleDateInput(from, to) {
         filterButtonMobile.prop('disabled', true);
+        filterButton.prop('disabled', true);
+        loadingIcon.animateWidth(38, 1);
+
         try {
-            let from = moment($('#datepicker-from-mobile').val(), "DD/MM/YYYY HH:mm").toDate().getTime();
-            let to = moment($('#datepicker-to-mobile').val(), "DD/MM/YYYY HH:mm").toDate().getTime();
+                            //14 days in ms
+            if(to - from > (14 * 86400000)) {
+                throw new RangeError("Selected date range too big. (Maximum 2 weeks)");
+            }
+
             if(from < to) {
                 showTable(from / 1000, to / 1000);
             } else {
-                throw new Error("from date greater than to date");
+                throw new RangeError("FROM date greater or equal to TO date.");
             }
         } catch (e) {
-            alert("Please check your date input!");
+            alert(e.toString());
             filterButtonMobile.prop('disabled', false);
-            console.error(e);
+            filterButton.prop('disabled', false);
+            loadingIcon.animateWidth(0, 0);
+            console.warn(e);
         }
-    });
+    }
 
     if(localStorage.getItem('darkMode') !== null) {
         setDarkMode(JSON.parse(localStorage.getItem('darkMode')));
@@ -441,10 +463,12 @@ $(function() {
 
 
 class ChartData {
-    constructor(data) {
+    constructor(data, fromReq, toReq) {
         this.data = data;
         this.to = this.findMaximum(data);
         this.from = this.findMinimum(data);
+        this.fromReq = fromReq;
+        this.toReq = toReq;
     }
 
     findMaximum(data) {

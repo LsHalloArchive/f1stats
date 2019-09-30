@@ -314,6 +314,7 @@ function updateShareUrl(from, to) {
     url.searchParams.set('from', from);
     url.searchParams.set('to', to);
     $('#shareUrl').attr('value', url.href);
+    $('#sharePopover').popover('hide');
 }
 
 //Checks if date range is already cached in chartDataHistory and returns the requested dataset if found
@@ -484,6 +485,7 @@ $(function() {
     }
 
     $('[data-toggle="tooltip"]').tooltip();
+
     //Custom popover content
     $("[data-toggle=popover]").popover({
         html : true,
@@ -500,8 +502,25 @@ $(function() {
     $(document).on('shown.bs.popover', function() {
         $("input.select-focus").on("click", function () {
             $(this).trigger("select");
+            document.execCommand('copy');
         });
-    })
+    });
+
+    //Dynamically bind event to new tooltips in popover
+    $('body').tooltip({
+        selector: '[data-toggle=tooltip-click]',
+        trigger: 'click',
+        delay: {show: 200, hide: 400}
+    });
+    //Hide popover tooltip after 2s as it does not close automatically
+    $(document).on('shown.bs.tooltip', function(e) {
+        if($(e.target).hasClass('autohide')) {
+            setTimeout(function() {
+                $(e.target).tooltip('hide');
+            }, 2000);
+
+        }
+    });
 });
 
 

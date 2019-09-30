@@ -52,17 +52,17 @@
                         </div>
 
                         <div class="ml-2">
-                            <!-- Popover #1 -->
-                            <a class="btn btn-primary" data-placement="top" data-popover-content="#sharePopover" data-toggle="popover" tabindex="0">Share</a>
+                            <a class="btn btn-primary" data-placement="top" data-popover-content="#sharePopoverContent" data-toggle="popover" id="sharePopover" tabindex="0">Share</a>
 
-                            <!-- Content for Popover #1 -->
-                            <div class="hidden d-none" id="sharePopover">
+                            <div class="hidden d-none" id="sharePopoverContent">
                                 <div class="popover-heading">
                                     Copy to share selected time range
                                 </div>
 
                                 <div class="popover-body">
-                                    <input type="text" class="form-control select-focus" id="shareUrl" >
+                                    <span class="autohide" id="shareUrlTooltip" data-toggle="tooltip-click" data-placement="top" title="Copied">
+                                        <input type="text" class="form-control select-focus" id="shareUrl">
+                                    </span>
                                 </div>
                             </div>
                         </div>

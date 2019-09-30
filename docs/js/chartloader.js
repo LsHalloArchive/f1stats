@@ -250,6 +250,7 @@ function showTable(from, to) {
         }
 
         setDarkMode(darkModeEnabled());
+        updateUrl(from, to);
         filterButton.prop('disabled', false);
         filterButtonMobile.prop('disabled', false);
         loadingIcon.animateWidth(0, 0);
@@ -296,6 +297,23 @@ function showPoints(show) {
         }
         lineChart.update();
     }
+}
+
+//Remember user selected date range for easier sharing with friends
+function handleGetParameters() {
+    let url = new URL(window.location);
+    let from = url.searchParams.get('from');
+    let to = url.searchParams.get('to');
+    let gp = url.searchParams.get('gp');
+    return {from, to, gp};
+}
+
+//Update from and get in the url bar
+function updateUrl(from, to) {
+    let url = new URL(window.location);
+    url.searchParams.set('from', from);
+    url.searchParams.set('to', to);
+    window.history.pushState(null, document.title, url.href);
 }
 
 //Checks if date range is already cached in chartDataHistory and returns the requested dataset if found
@@ -395,12 +413,20 @@ let filterButtonMobile = $('#apply-filter-button-mobile');
 let loadingIcon = $('.loading');
 //Startup function
 $(function() {
-    let today = new Date();
-    let yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
-    $('#datepicker-from').val(formatDate(yesterday));
-    $('#datepicker-to').val(formatDate(today));
-    $('#datepicker-from-mobile').val(formatDate(yesterday));
-    $('#datepicker-to-mobile').val(formatDate(today));
+    let from = new Date(new Date().setDate(new Date().getDate() - 1));
+    let to = new Date();
+
+    let getParams = handleGetParameters();
+    if(getParams['from'] !== null && getParams['to'] !== null) {
+        from = new Date(parseInt(getParams['from']) * 1000);
+        to = new Date(parseInt(getParams['to']) * 1000);
+    }
+    showTable(Math.round(from.getTime() / 1000), Math.round(to.getTime() / 1000));
+
+    $('#datepicker-from').val(formatDate(from));
+    $('#datepicker-to').val(formatDate(to));
+    $('#datepicker-from-mobile').val(formatDate(from));
+    $('#datepicker-to-mobile').val(formatDate(to));
 
     $('#togglePoints, #togglePoints-mobile').on('click',function () {
         showPoints(this.checked);
@@ -456,7 +482,6 @@ $(function() {
     if(localStorage.getItem('darkMode') !== null) {
         setDarkMode(JSON.parse(localStorage.getItem('darkMode')));
     }
-    showTable(Math.round(yesterday.getTime()/1000), Math.round(today.getTime()/1000));
 
     $('[data-toggle="tooltip"]').tooltip();
 });

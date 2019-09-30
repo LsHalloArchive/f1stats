@@ -30,6 +30,7 @@ body.dark .input-group-text {
   border-color: #555;
 }
 body.dark .form-control {
+  background-color: #444;
   color: #eee !important;
   border-color: #555 !important;
 }
@@ -41,6 +42,21 @@ body.dark .modal-content {
 }
 body.dark .loading {
   filter: invert(0.85);
+}
+body.dark .popover .arrow::after {
+  border-bottom-color: #555;
+}
+body.dark .popover-header::before {
+  border-bottom-color: #555;
+}
+body.dark .popover-header {
+  background-color: #222;
+  color: #eee;
+  border-bottom-color: #555;
+}
+body.dark .popover-body {
+  background-color: #444;
+  color: #eee;
 }
 
 .modal-content {

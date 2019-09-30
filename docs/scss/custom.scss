@@ -39,6 +39,7 @@ body.dark {
     }
 
     .form-control {
+        background-color: $input-background-dark;
         color: $color-dark !important;
         border-color: $border-dark !important;
     }
@@ -53,6 +54,25 @@ body.dark {
 
     .loading {
         filter: invert(.85);
+    }
+
+    .popover .arrow::after {
+        border-bottom-color: $border-dark;
+    }
+
+    .popover-header::before {
+        border-bottom-color: $border-dark;
+    }
+
+    .popover-header {
+        background-color: $background-dark;
+        color: $color-dark;
+        border-bottom-color: $border-dark;
+    }
+
+    .popover-body {
+        background-color: $input-background-dark;
+        color: $color-dark;
     }
 }
 

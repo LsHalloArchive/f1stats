@@ -249,8 +249,8 @@ function showTable(from, to) {
             });
         }
 
+        updateShareUrl(from, to);
         setDarkMode(darkModeEnabled());
-        updateUrl(from, to);
         filterButton.prop('disabled', false);
         filterButtonMobile.prop('disabled', false);
         loadingIcon.animateWidth(0, 0);
@@ -309,11 +309,11 @@ function handleGetParameters() {
 }
 
 //Update from and get in the url bar
-function updateUrl(from, to) {
+function updateShareUrl(from, to) {
     let url = new URL(window.location);
     url.searchParams.set('from', from);
     url.searchParams.set('to', to);
-    window.history.pushState(null, document.title, url.href);
+    $('#shareUrl').attr('value', url.href);
 }
 
 //Checks if date range is already cached in chartDataHistory and returns the requested dataset if found
@@ -484,6 +484,24 @@ $(function() {
     }
 
     $('[data-toggle="tooltip"]').tooltip();
+    //Custom popover content
+    $("[data-toggle=popover]").popover({
+        html : true,
+        sanitize: false,
+        content: function() {
+            let content = $(this).attr("data-popover-content");
+            return $(content).children(".popover-body").html();
+        },
+        title: function() {
+            let title = $(this).attr("data-popover-content");
+            return $(title).children(".popover-heading").html();
+        }
+    });
+    $(document).on('shown.bs.popover', function() {
+        $("input.select-focus").on("click", function () {
+            $(this).trigger("select");
+        });
+    })
 });
 
 

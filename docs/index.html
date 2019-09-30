@@ -51,6 +51,22 @@
                             </div>
                         </div>
 
+                        <div class="ml-2">
+                            <!-- Popover #1 -->
+                            <a class="btn btn-primary" data-placement="top" data-popover-content="#sharePopover" data-toggle="popover" tabindex="0">Share</a>
+
+                            <!-- Content for Popover #1 -->
+                            <div class="hidden d-none" id="sharePopover">
+                                <div class="popover-heading">
+                                    Copy to share selected time range
+                                </div>
+
+                                <div class="popover-body">
+                                    <input type="text" class="form-control select-focus" id="shareUrl" >
+                                </div>
+                            </div>
+                        </div>
+
                         <span id="darkModeToggle" class="ml-3" data-toggle="tooltip" data-placement="top" title="Toggle Dark Mode">
                             <img id="moon" class="darkModeIcon moon" alt="Moon Icon" src="img/moon.svg" style="max-width: 60px; max-height: 60px;">
                             <img id="sun" class="darkModeIcon sun active" alt="Sun Icon" src="img/sun.svg" style="max-width: 60px; max-height: 60px;">

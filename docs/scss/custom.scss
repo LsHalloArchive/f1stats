@@ -36,6 +36,14 @@ body.dark {
         border-color: $border-dark !important;
     }
 
+    .form-control[readonly] {
+        background-color: #444;
+    }
+
+    .text-muted {
+        color: #a9a9a9 !important;
+    }
+
     .custom-control-label::before {
         background-color: $input-background-dark;
     }
@@ -88,6 +96,14 @@ body.dark {
     .share {
         filter: invert(.9);
     }
+}
+
+.input-min-width {
+    min-width: 400px;
+}
+
+.popover {
+    max-width: 500px;
 }
 
 .share {

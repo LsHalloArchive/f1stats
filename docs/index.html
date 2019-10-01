@@ -58,12 +58,16 @@
 
                             <div class="hidden d-none" id="sharePopoverContent">
                                 <div class="popover-heading">
-                                    Copy to share selected time range
+                                    Share Url
                                 </div>
 
                                 <div class="popover-body">
                                     <span class="autohide" id="shareUrlTooltip" data-toggle="tooltip-click" data-placement="top" data-original-title="Copied">
-                                        <input type="text" class="form-control select-focus" id="shareUrl">
+                                        <div class="form-group">
+                                            <label class="sr-only" for="shareUrl">Share Url</label>
+                                            <input type="text" class="form-control select-focus input-min-width" id="shareUrl" readonly>
+                                            <small class="form-text text-muted">Copy to share the selected time range</small>
+                                        </div>
                                     </span>
                                 </div>
                             </div>

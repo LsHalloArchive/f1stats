@@ -26,6 +26,12 @@ body.dark .form-control {
   color: #eee !important;
   border-color: #555 !important;
 }
+body.dark .form-control[readonly] {
+  background-color: #444;
+}
+body.dark .text-muted {
+  color: #a9a9a9 !important;
+}
 body.dark .custom-control-label::before {
   background-color: #2b2b2b;
 }
@@ -66,6 +72,14 @@ body.dark .toast-body {
 }
 body.dark .share {
   filter: invert(0.9);
+}
+
+.input-min-width {
+  min-width: 400px;
+}
+
+.popover {
+  max-width: 500px;
 }
 
 .share {

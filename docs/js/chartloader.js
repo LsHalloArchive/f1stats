@@ -12,6 +12,9 @@ let xlsData = [];
 let thisXlsDataExported = false;
 let exportXlsHandler = undefined;
 
+//Image export
+let exportImageHandler = undefined;
+
 //save data from last 10 requests to reduce number of requests needed
 //if requested data is inside one of the previous loaded data elements
 let chartDataHistory = [];
@@ -237,7 +240,7 @@ function showTable(from, to) {
                     XLSX.writeFile(workbook, "formula1Stats.xlsx", {'cellDates': true});
                     console.log("Excel conversion took " + (new Date().getTime() - pre.getTime()) + "ms");
                     $.toast({
-                        title: 'Excel Export',
+                        title: 'Excel Export Information',
                         subtitle: '',
                         content: 'You may want to reformat the date to also show the time in the column.',
                         type: 'info',
@@ -246,6 +249,14 @@ function showTable(from, to) {
                 } else {
                     alert("Excel library not loaded yet. Please try again in a few seconds.\n\nIf this problem persists please try reloading the page and waiting a bit for all required files to load.");
                 }
+            });
+
+            let exportImg = $('#export-img, #export-img-mobile');
+            if(exportImageHandler !== undefined) {
+                exportImg.off('click', '#export-img', exportImageHandler);
+            }
+            exportImageHandler = exportImg.on('click', function () {
+                saveAsImage();
             });
         }
 
@@ -393,6 +404,16 @@ function setDarkMode(active) {
     }
 }
 
+function saveAsImage() {
+    let base64 = lineChart.toBase64Image();
+    $("<a />", {
+        "download": "formula1.png",
+        "href": base64
+    }).appendTo("body").on('click', function () {
+        $(this).remove()
+    })[0].click();
+}
+
 //Checks if darkmode local storage is set
 function darkModeEnabled() {
     if(localStorage.getItem('darkMode') !== null) {
@@ -507,7 +528,8 @@ $(function() {
     });
 
     //Dynamically bind event to new tooltips in popover
-    $('body').tooltip({
+    let body = $('body');
+    body.tooltip({
         selector: '[data-toggle=tooltip-click]',
         trigger: 'click',
         delay: {show: 200, hide: 400}
@@ -521,6 +543,19 @@ $(function() {
 
         }
     });
+
+    //Add custom beforeDraw to chart so the background on exported image is colored
+    Chart.plugins.register({
+        beforeDraw: function(c) {
+            let ctx = c.chart.ctx;
+            ctx.fillStyle = $('body').css('background-color');
+            ctx.fillRect(0, 0, c.chart.width, c.chart.height);
+        }
+    });
+
+    //Add smooth transition to color effect after page has loaded to avoid distracting color fade
+    body.css('transition', 'background-color .4s');
+    $('.datepicker, .input-group-text, .form-control, .custom-control-label, h2').css('transition', 'background-color .4s, border-color .4s');
 });
 
 

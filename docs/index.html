@@ -72,9 +72,15 @@
                             <img id="sun" class="darkModeIcon sun active" alt="Sun Icon" src="img/sun.svg" style="max-width: 60px; max-height: 60px;">
                         </span>
 
-                        <span class="mr-0 ml-auto">
-                            <input type="button" class="btn btn-outline-info" value="Export as JSON" id="export-json">
-                            <input type="button" class="btn btn-outline-info" value="Export to Excel" id="export-xls">
+                        <span class="mr-0 ml-auto input-group">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text">Export</label>
+                            </div>
+                            <div class="input-group-append">
+                                <input type="button" class="btn btn-outline-info" value="JSON" id="export-json">
+                                <input type="button" class="btn btn-outline-info" value="Excel" id="export-xls">
+                                <input type="button" class="btn btn-outline-info" value="Image" id="export-img">
+                            </div>
                         </span>
                     </div>
                 </div>
@@ -144,19 +150,21 @@
                 </div>
             </div>
         </div>
-        <script src="js/jquery.min.js"></script>
-        <script src="js/moment.min.js"></script>
-        <script src="js/popper.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/chart.min.js"></script>
-        <script src="js/flatpickr.min.js"></script>
-        <script src="js/chartloader.js"></script>
-        <link rel="stylesheet" href="css/bootstrap.min.css"/>
-        <link rel="stylesheet" href="css/chart.min.css"/>
-        <link rel="stylesheet" href="css/flatpickr.min.css"/>
-        <link rel="stylesheet" href="css/custom.css"/>
-        <link rel="stylesheet" href="css/toast.min.css"/>
-        <script src="js/xlsx.core.min.js" async></script>
-        <script src="js/toast.min.js" async></script>
+        <footer>
+            <script src="js/jquery.min.js"></script>
+            <script src="js/popper.min.js"></script>
+            <script src="js/bootstrap.min.js"></script>
+            <script src="js/moment.min.js"></script>
+            <script src="js/chart.min.js"></script>
+            <script src="js/flatpickr.min.js"></script>
+            <script src="js/chartloader.js"></script>
+            <link rel="stylesheet" href="css/bootstrap.min.css"/>
+            <link rel="stylesheet" href="css/chart.min.css"/>
+            <link rel="stylesheet" href="css/flatpickr.min.css"/>
+            <link rel="stylesheet" href="css/toast.min.css"/>
+            <link rel="stylesheet" href="css/custom.css"/>
+            <script src="js/xlsx.core.min.js" async></script>
+            <script src="js/toast.min.js" async></script>
+        </footer>
     </body>
 </html>

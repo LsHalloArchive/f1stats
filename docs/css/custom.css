@@ -5,14 +5,6 @@
     margin: auto !important;
   }
 }
-body {
-  transition: background-color 0.4s;
-}
-
-.datepicker, .input-group-text, .form-control, .custom-control-label, h2 {
-  transition: background-color 0.4s, border-color 0.4s;
-}
-
 /* Dark mode */
 .dark {
   background-color: #222;
@@ -20,22 +12,22 @@ body {
 }
 
 body.dark .custom-select, body.dark .datepicker {
-  background-color: #444 !important;
+  background-color: #2b2b2b !important;
   color: #eee !important;
   border-color: #555 !important;
 }
 body.dark .input-group-text {
   color: #eee;
-  background-color: #222;
+  background-color: #424040;
   border-color: #555;
 }
 body.dark .form-control {
-  background-color: #444;
+  background-color: #2b2b2b;
   color: #eee !important;
   border-color: #555 !important;
 }
 body.dark .custom-control-label::before {
-  background-color: #444;
+  background-color: #2b2b2b;
 }
 body.dark .modal-content {
   background-color: #222;
@@ -55,7 +47,18 @@ body.dark .popover-header {
   border-bottom-color: #555;
 }
 body.dark .popover-body {
-  background-color: #444;
+  background-color: #2b2b2b;
+  color: #eee;
+}
+body.dark .toast {
+  box-shadow: 0 0.25rem 0.75rem rgba(255, 255, 255, 0.1);
+}
+body.dark .toast-header {
+  background-color: #222 !important;
+  color: #eee !important;
+}
+body.dark .toast-body {
+  background-color: #2b2b2b;
   color: #eee;
 }
 
@@ -79,9 +82,9 @@ body.dark .popover-body {
 
 /* Page layout */
 #content-container {
-  width: 95%;
-  height: 95vh;
-  margin: 2.5vh auto auto;
+  width: 97%;
+  height: 97vh;
+  margin: 1.5vh auto auto;
 }
 
 #content {
@@ -93,7 +96,7 @@ body.dark .popover-body {
 #toolbar {
   display: flex;
   flex-direction: column;
-  margin-top: 1.4em;
+  margin-top: 0.6em;
 }
 
 #darkModeToggle:hover {
@@ -542,7 +545,7 @@ body.dark .flatpickr-current-month .flatpickr-monthDropdown-months:hover {
   background: rgba(192, 187, 167, 0.05);
 }
 body.dark .flatpickr-current-month .flatpickr-monthDropdown-months .flatpickr-monthDropdown-month {
-  background-color: #444;
+  background-color: #2b2b2b;
   outline: none;
   padding: 0;
 }

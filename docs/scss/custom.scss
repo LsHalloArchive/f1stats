@@ -48,12 +48,16 @@ body.dark {
         filter: invert(.85);
     }
 
+    .popover {
+        box-shadow: 0 0 .5em rgba(255, 255, 255, .1);
+    }
+
     .popover .arrow::after {
-        border-bottom-color: $border-dark;
+        border-bottom-color: $background-dark;
     }
 
     .popover-header::before {
-        border-bottom-color: $border-dark;
+        border-bottom-color: $background-dark;
     }
 
     .popover-header {
@@ -80,6 +84,14 @@ body.dark {
         background-color: $input-background-dark;
         color: $color-dark;
     }
+
+    .share {
+        filter: invert(.9);
+    }
+}
+
+.share {
+    cursor: pointer;
 }
 
 .modal-content {
@@ -93,7 +105,7 @@ body.dark {
 }
 
 .darkModeIcon.sun {
-    filter: invert(1);
+    filter: invert(.9);
 }
 
 .darkModeIcon.active {

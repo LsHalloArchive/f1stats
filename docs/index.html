@@ -51,8 +51,10 @@
                             </div>
                         </div>
 
-                        <div class="ml-2">
-                            <a class="btn btn-primary" data-placement="top" data-popover-content="#sharePopoverContent" data-toggle="popover" id="sharePopover" tabindex="0">Share</a>
+                        <div class="ml-4">
+                            <div data-placement="top" data-popover-content="#sharePopoverContent" data-toggle="popover" id="sharePopover" >
+                                <img src="img/share.svg" class="darkModeIcon d-block share" alt="Share Icon" style="max-width: 30px; max-height: 30px;" data-toggle="tooltip" title="Share">
+                            </div>
 
                             <div class="hidden d-none" id="sharePopoverContent">
                                 <div class="popover-heading">
@@ -60,7 +62,7 @@
                                 </div>
 
                                 <div class="popover-body">
-                                    <span class="autohide" id="shareUrlTooltip" data-toggle="tooltip-click" data-placement="top" title="Copied">
+                                    <span class="autohide" id="shareUrlTooltip" data-toggle="tooltip-click" data-placement="top" data-original-title="Copied">
                                         <input type="text" class="form-control select-focus" id="shareUrl">
                                     </span>
                                 </div>
@@ -68,8 +70,8 @@
                         </div>
 
                         <span id="darkModeToggle" class="ml-3" data-toggle="tooltip" data-placement="top" title="Toggle Dark Mode">
-                            <img id="moon" class="darkModeIcon moon" alt="Moon Icon" src="img/moon.svg" style="max-width: 60px; max-height: 60px;">
-                            <img id="sun" class="darkModeIcon sun active" alt="Sun Icon" src="img/sun.svg" style="max-width: 60px; max-height: 60px;">
+                            <img id="moon" class="darkModeIcon moon" alt="Moon Icon" src="img/moon.svg" style="max-width: 30px; max-height: 30px;">
+                            <img id="sun" class="darkModeIcon sun active" alt="Sun Icon" src="img/sun.svg" style="max-width: 30px; max-height: 30px;">
                         </span>
 
                         <span class="mr-0 ml-auto input-group">

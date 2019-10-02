@@ -1,4 +1,4 @@
-# f1stats
+# f1stats [![Netlify Status](https://api.netlify.com/api/v1/badges/7c14b8c4-7a4a-4b6a-b9c5-72872cfb5592/deploy-status)](https://app.netlify.com/sites/formula1stats/deploys)
 ##### Provides user statistics for the f1 subreddit. (Including [r/Formula1Point5](http://reddit.com/r/formula1point5) and [r/F1FeederSeries](http://reddit.com/r/f1feederseries))
 ### View the statistics [here](https://lshallo.github.io/f1stats/)
 

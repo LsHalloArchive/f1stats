@@ -457,10 +457,10 @@ function generateFavicon(data) {
     $('link[type="image/x-icon"]').remove();
 
     let link = document.createElement('link');
-    link.type = 'image/x-icon';
-    link.rel = 'shortcut icon';
+    link.type = 'image/png';
+    link.rel = 'icon';
     link.sizes = canvas.width + 'x' + canvas.height;
-    link.href = canvas.toDataURL("image/x-icon");
+    link.href = canvas.toDataURL("image/png");
     document.getElementsByTagName('head')[0].appendChild(link);
 
     function findMaximum(data) {

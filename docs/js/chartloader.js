@@ -64,6 +64,7 @@ function showTable(from, to) {
         //save cachedChartData for export to excel
         xlsData = chartData;
         thisXlsDataExported = false;
+        generateFavicon(chartData);
 
         let dataListF1 = [];
         let dataListF1_5 = [];
@@ -420,6 +421,55 @@ function darkModeEnabled() {
         return JSON.parse(localStorage.getItem('darkMode'));
     }
     return true;
+}
+
+function generateFavicon(data) {
+    let canvas = document.createElement('canvas');
+    canvas.width = 128;
+    canvas.height = 128;
+    let ctx = canvas.getContext('2d');
+    let skipAmount = data.length / canvas.width;
+    let maximum = findMaximum(data);
+
+    ctx.fillStyle = '#cb0000';
+    ctx.strokeStyle = ctx.fillStyle;
+    ctx.strokeWidth = 2;
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    for(let i = 0; i < canvas.width; i++) {
+        let index = i * skipAmount;
+        let value = undefined;
+        for(let j = Math.max(index - skipAmount, 0); j < Math.min(index + skipAmount, data.length - 1); j++) {
+            if(value === undefined) {
+                value = data[Math.round(j)][1];
+            } else {
+                value = value * 0.5 + data[Math.round(j)][1] * 0.5;
+            }
+        }
+        value = value / maximum * canvas.height;
+        if(i === 0) {
+            ctx.moveTo(0, canvas.height - value);
+        }
+        ctx.lineTo(i, canvas.height - value);
+    }
+    ctx.stroke();
+
+    $('link[type="image/x-icon"]').remove();
+
+    let link = document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.sizes = canvas.width + 'x' + canvas.height;
+    link.href = canvas.toDataURL("image/x-icon");
+    document.getElementsByTagName('head')[0].appendChild(link);
+
+    function findMaximum(data) {
+        let max = -Infinity;
+        for(let i = 0; i < data.length; i++) {
+            max = Math.max(max, data[i][1]);
+        }
+        return max;
+    }
 }
 
 //Extend jQuery with custom function

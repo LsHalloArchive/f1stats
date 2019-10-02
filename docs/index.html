@@ -78,7 +78,7 @@
                             <img id="sun" class="darkModeIcon sun active" alt="Sun Icon" src="img/sun.svg" style="max-width: 30px; max-height: 30px;">
                         </span>
 
-                        <span class="mr-0 ml-auto input-group">
+                        <div class="mr-0 ml-auto input-group">
                             <div class="input-group-prepend">
                                 <label class="input-group-text">Export</label>
                             </div>
@@ -87,7 +87,7 @@
                                 <input type="button" class="btn btn-outline-info" value="Excel" id="export-xls">
                                 <input type="button" class="btn btn-outline-info" value="Image" id="export-img">
                             </div>
-                        </span>
+                        </div>
                     </div>
                 </div>
 
@@ -157,6 +157,11 @@
             </div>
         </div>
         <footer>
+            <link rel="stylesheet" href="css/bootstrap.min.css"/>
+            <link rel="stylesheet" href="css/chart.min.css"/>
+            <link rel="stylesheet" href="css/flatpickr.min.css"/>
+            <link rel="stylesheet" href="css/toast.min.css"/>
+            <link rel="stylesheet" href="css/custom.css"/>
             <script src="js/jquery.min.js"></script>
             <script src="js/popper.min.js"></script>
             <script src="js/bootstrap.min.js"></script>
@@ -164,13 +169,8 @@
             <script src="js/chart.min.js"></script>
             <script src="js/flatpickr.min.js"></script>
             <script src="js/chartloader.js"></script>
-            <link rel="stylesheet" href="css/bootstrap.min.css"/>
-            <link rel="stylesheet" href="css/chart.min.css"/>
-            <link rel="stylesheet" href="css/flatpickr.min.css"/>
-            <link rel="stylesheet" href="css/toast.min.css"/>
-            <link rel="stylesheet" href="css/custom.css"/>
-            <script src="js/xlsx.core.min.js" async></script>
-            <script src="js/toast.min.js" async></script>
+            <script src="js/xlsx.core.min.js" defer></script>
+            <script src="js/toast.min.js" defer></script>
         </footer>
     </body>
 </html>

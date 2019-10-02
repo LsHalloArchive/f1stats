@@ -428,33 +428,45 @@ function generateFavicon(data) {
     canvas.width = 128;
     canvas.height = 128;
     let ctx = canvas.getContext('2d');
-    let skipAmount = data.length / canvas.width;
+    let skipAmount = Math.floor(data.length / canvas.width);
     let maximum = findMaximum(data);
 
     ctx.fillStyle = '#cb0000';
     ctx.strokeStyle = ctx.fillStyle;
     ctx.strokeWidth = 2;
     ctx.lineWidth = 4;
+    /*
     ctx.beginPath();
     for(let i = 0; i < canvas.width; i++) {
         let index = i * skipAmount;
         let value = undefined;
-        for(let j = Math.max(index - skipAmount, 0); j < Math.min(index + skipAmount, data.length - 1); j++) {
+        for(let j = Math.max(Math.round(index - skipAmount), 0); j < Math.min(Math.round(index + skipAmount), data.length - 1); j++) {
             if(value === undefined) {
                 value = data[Math.round(j)][1];
             } else {
                 value = value * 0.5 + data[Math.round(j)][1] * 0.5;
             }
         }
-        value = value / maximum * canvas.height;
+        value = (value / maximum) * canvas.height;
         if(i === 0) {
             ctx.moveTo(0, canvas.height - value);
         }
         ctx.lineTo(i, canvas.height - value);
     }
     ctx.stroke();
+    */
 
-    $('link[type="image/x-icon"]').remove();
+    ctx.beginPath();
+    let value = data[0][1];
+    ctx.moveTo(0, canvas.height - (value / maximum * canvas.height));
+    for(let i = 1; i < data.length; i++) {
+        value = value * 0.95 + data[i][1] * 0.05;
+        if(i % skipAmount === 0) {
+            ctx.lineTo(Math.round(i / skipAmount), canvas.height - (value / maximum * canvas.height));
+        }
+    }
+    ctx.stroke();
+    $('link[rel="icon"], link[rel="shortcut icon"]').remove();
 
     let link = document.createElement('link');
     link.type = 'image/png';

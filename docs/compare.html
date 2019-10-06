@@ -28,13 +28,7 @@
                             </div>
                             <label class="sr-only" for="compareSource">Compare</label>
                             <select class="custom-select" id="compareSource">
-                                <option value="sgp" selected>Singapore</option>
-                                <option value="rus">Russia</option>
-                                <option value="jpn">Japan</option>
-                                <option value="mex">Mexico</option>
-                                <option value="usa">United States</option>
-                                <option value="bra">Brazil</option>
-                                <option value="are">Abu Dhabi</option>
+
                             </select>
 
                             <div class="input-group-prepend">
@@ -42,15 +36,17 @@
                             </div>
                             <label class="sr-only" for="compareTarget">with</label>
                             <select class="custom-select" id="compareTarget">
-                                <option value="sgp">Singapore</option>
-                                <option value="rus" selected>Russia</option>
-                                <option value="jpn">Japan</option>
-                                <option value="mex">Mexico</option>
-                                <option value="usa">United States</option>
-                                <option value="bra">Brazil</option>
-                                <option value="are">Abu Dhabi</option>
+
                             </select>
+                            <div class="input-group-append">
+                                <input id="compareBtn" type="button" class="btn btn-primary" value="Apply" disabled="disabled">
+                            </div>
                         </div>
+                    </div>
+                </div>
+                <div id="complete-chart-container">
+                    <div id="chart-container">
+                        <canvas id="chart"></canvas>
                     </div>
                 </div>
             </div>

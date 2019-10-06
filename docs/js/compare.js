@@ -37,7 +37,6 @@ let dataUrl = mainDataUrls[Math.floor(Math.random() * mainDataUrls.length)];
 dataUrl = mainDataUrls[0];
 
 let cachedRaceData = {};
-let chartData = [];
 let lineChart = undefined;
 let timeOffset = 1800;
 
@@ -45,12 +44,15 @@ function showTable(selectedRaces) {
     console.log("Showing comparison between " + selectedRaces[0].name + " and " + selectedRaces[1].name);
 
     let requests = [];
+    let chartData = [];
     let error = false;
     for(let i = 0; i < selectedRaces.length; i++) {
         if(cachedRaceData[selectedRaces[i].name] !== undefined) {
             if(cachedRaceData[selectedRaces[i].name].getOffset() === timeOffset) {
-                chartData = [];
-                chartData.push($.extend(true, [], cachedRaceData[selectedRaces[i].name]));
+                console.log("Cache hit: " + selectedRaces[i].name);
+                console.log("Pre: ", chartData);
+                chartData.push(cachedRaceData[selectedRaces[i].name]);
+                console.log("Post: ", chartData);
             }
         } else {
             requests.push(
@@ -95,7 +97,11 @@ function showTable(selectedRaces) {
             tooltips: {
                 callbacks: {
                     title: function(tooltipItem) {
-                        return Math.round(tooltipItem[0].label)+"min";
+                        let pre = '-';
+                        if(tooltipItem[0].label > 0) {
+                            pre = '+';
+                        }
+                        return 'Start ' + pre + Math.round(tooltipItem[0].label)+"min";
                     },
                     label: function(tooltipItem, data) {
                         return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.yLabel + ' users';
@@ -217,6 +223,9 @@ function switchUrls(from, to) {
 
 $(function() {
     fillSelectOptions();
+    $('#compareBtn').on('click', function () {
+        showTable(getSelectedRaces());
+    })
 });
 
 

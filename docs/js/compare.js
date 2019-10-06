@@ -193,39 +193,11 @@ function parseTime(time) {
     return 7200;
 }
 
-const maxTries = 5;
-let tries = 0;
-/**
- * Switches the current present data url with either the other main data url or if that also failed with the backup data urö
- * @param from
- * @param to
- */
-function switchUrls(from, to) {
-    if(dataUrl === mainDataUrls[0] && tries === 0) {
-        dataUrl = mainDataUrls[1];
-    } else if(dataUrl === mainDataUrls[1] && tries === 0) {
-        dataUrl = mainDataUrls[0];
-    } else {
-        if (dataUrl === mainDataUrls[0] || dataUrl === mainDataUrls[1]) {
-            dataUrl = backupDataUrl;
-        } else {
-            dataUrl = mainDataUrls[Math.floor(Math.random() * mainDataUrls.length)];
-        }
-    }
-    if(tries++ < maxTries) {
-        if (to === undefined || from === undefined) {
-            showTable()
-        } else {
-            showTable(from, to)
-        }
-    }
-}
-
 $(function() {
     fillSelectOptions();
     $('#compareBtn').on('click', function () {
         showTable(getSelectedRaces());
-    })
+    });
 });
 
 

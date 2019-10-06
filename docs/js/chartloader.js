@@ -213,7 +213,7 @@ function showTable(from, to) {
                     "download": "formula1.json",
                     "href": "data:application/json," + encodeURIComponent(JSON.stringify(datasets))
                 }).appendTo("body").on('click', function () {
-                    $(this).remove()
+                    $(this).remove();
                 })[0].click();
             });
 
@@ -269,30 +269,6 @@ function showTable(from, to) {
     }
 }
 
-//Switch the current data url to another url in case of failure switch to backup url
-const maxTries = 5;
-let tries = 0;
-function switchUrls(from, to) {
-    if(dataUrl === mainDataUrls[0] && tries === 0) {
-        dataUrl = mainDataUrls[1];
-    } else if(dataUrl === mainDataUrls[1] && tries === 0) {
-        dataUrl = mainDataUrls[0];
-    } else {
-        if (dataUrl === mainDataUrls[0] || dataUrl === mainDataUrls[1]) {
-            dataUrl = backupDataUrl;
-        } else {
-            dataUrl = mainDataUrls[Math.floor(Math.random() * mainDataUrls.length)];
-        }
-    }
-    if(tries++ < maxTries) {
-        if (to === undefined || from === undefined) {
-            showTable()
-        } else {
-            showTable(from, to)
-        }
-    }
-}
-
 //Toggle the visiblity of the data points on the chart
 function showPoints(show) {
     if(lineChart !== undefined) {
@@ -316,8 +292,7 @@ function handleGetParameters() {
     let url = new URL(window.location);
     let from = url.searchParams.get('from');
     let to = url.searchParams.get('to');
-    let gp = url.searchParams.get('gp');
-    return {from, to, gp};
+    return {from, to};
 }
 
 //Update from and get in the url bar
@@ -352,75 +327,6 @@ function formatDate(d) {
         }
         return i;
     }
-}
-
-//Enable or disable dark mode
-let moonIcon = $('.moon');
-let sunIcon = $('.sun');
-function setDarkMode(active) {
-    if(active) {
-        sunIcon.each(function() {
-            $(this).addClass('active');
-        });
-        moonIcon.each(function() {
-            $(this).removeClass('active');
-        });
-        //moonIcon.addClass('active');
-        //sunIcon.removeClass('active');
-        $('body').addClass('dark');
-        if(typeof lineChart === 'object') {
-            lineChart.options.scales.xAxes[0].ticks.major.fontColor = '#eee';
-            lineChart.options.scales.xAxes[0].ticks.minor.fontColor = '#eee';
-            lineChart.options.scales.xAxes[0].gridLines.color = 'rgba(255, 255, 255, 0.15)';
-            lineChart.options.scales.yAxes[0].ticks.major.fontColor = '#eee';
-            lineChart.options.scales.yAxes[0].ticks.minor.fontColor = '#eee';
-            lineChart.options.scales.yAxes[0].gridLines.color = 'rgba(255, 255, 255, 0.15)';
-            lineChart.options.legend.labels.fontColor = '#eee';
-            lineChart.update();
-        }
-
-        localStorage.setItem('darkMode', true.toString());
-    } else {
-        moonIcon.each(function() {
-            $(this).addClass('active');
-        });
-        sunIcon.each(function() {
-            $(this).removeClass('active');
-        });
-        //sunIcon.addClass('active');
-        //moonIcon.removeClass('active');
-        $('body').removeClass('dark');
-        if(typeof lineChart === 'object') {
-            lineChart.options.scales.xAxes[0].ticks.major.fontColor = '#666';
-            lineChart.options.scales.xAxes[0].ticks.minor.fontColor = '#666';
-            lineChart.options.scales.xAxes[0].gridLines.color = 'rgba(0, 0, 0, 0.1)';
-            lineChart.options.scales.yAxes[0].ticks.major.fontColor = '#666';
-            lineChart.options.scales.yAxes[0].ticks.minor.fontColor = '#666';
-            lineChart.options.scales.yAxes[0].gridLines.color = 'rgba(0, 0, 0, 0.1)';
-            lineChart.options.legend.labels.fontColor = '#666';
-            lineChart.update();
-        }
-
-        localStorage.setItem('darkMode', false.toString());
-    }
-}
-
-function saveAsImage() {
-    let base64 = lineChart.toBase64Image();
-    $("<a />", {
-        "download": "formula1.png",
-        "href": base64
-    }).appendTo("body").on('click', function () {
-        $(this).remove()
-    })[0].click();
-}
-
-//Checks if darkmode local storage is set
-function darkModeEnabled() {
-    if(localStorage.getItem('darkMode') !== null) {
-        return JSON.parse(localStorage.getItem('darkMode'));
-    }
-    return true;
 }
 
 function generateFavicon(data) {

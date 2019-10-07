@@ -53,16 +53,10 @@ let tries = 0;
  * @param to
  */
 function switchUrls(from = undefined, to = undefined) {
-    if(dataUrl === mainDataUrls[0] && tries === 0) {
+    if(dataUrl === mainDataUrls[0]) {
         dataUrl = mainDataUrls[1];
-    } else if(dataUrl === mainDataUrls[1] && tries === 0) {
+    } else if(dataUrl === mainDataUrls[1]) {
         dataUrl = mainDataUrls[0];
-    } else {
-        if (dataUrl === mainDataUrls[0] || dataUrl === mainDataUrls[1]) {
-            dataUrl = backupDataUrl;
-        } else {
-            dataUrl = mainDataUrls[Math.floor(Math.random() * mainDataUrls.length)];
-        }
     }
     if(tries++ < maxTries) {
         if(from !== undefined && to === undefined) {

@@ -32,9 +32,7 @@ let races = {
 };
 
 let mainDataUrls = ['https://f1stats.4lima.de/getData.php', 'https://f1status.000webhostapp.com/getData.php'];
-let backupDataUrl = 'http://wotmods.square7.ch/getData.php';
 let dataUrl = mainDataUrls[Math.floor(Math.random() * mainDataUrls.length)];
-dataUrl = mainDataUrls[0];
 
 let cachedRaceData = {};
 let lineChart = undefined;
@@ -81,6 +79,7 @@ function showTable(selectedRaces) {
             },
             error: function (e) {
                 console.error(e);
+                switchUrls(selectedRaces);
             }
         });
     } else {

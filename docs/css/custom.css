@@ -121,7 +121,7 @@ body.dark .share {
 #toolbar {
   display: flex;
   flex-direction: column;
-  margin-top: 0.6em;
+  margin-top: 0.4em;
 }
 
 #darkModeToggle:hover {

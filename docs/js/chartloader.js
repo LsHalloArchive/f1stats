@@ -29,7 +29,7 @@ function showTable(from, to) {
                 'from': from,
                 'to': to
             },
-            timeout: 5000,
+            timeout: 15000,
             success: function (data) {
                 let parsedData = JSON.parse(data);
                 chartCallback(parsedData);
@@ -269,24 +269,6 @@ function showTable(from, to) {
     }
 }
 
-//Toggle the visiblity of the data points on the chart
-function showPoints(show) {
-    if(lineChart !== undefined) {
-        let datasets = lineChart.data.datasets;
-
-        if(show) {
-            for(let i = 0; i < datasets.length; i++) {
-                datasets[i].pointRadius = 3;
-            }
-        } else {
-            for(let i = 0; i < datasets.length; i++) {
-                datasets[i].pointRadius = 0;
-            }
-        }
-        lineChart.update();
-    }
-}
-
 //Remember user selected date range for easier sharing with friends
 function handleGetParameters() {
     let url = new URL(window.location);
@@ -341,26 +323,6 @@ function generateFavicon(data) {
     ctx.strokeStyle = ctx.fillStyle;
     ctx.strokeWidth = 2;
     ctx.lineWidth = 4;
-    /*
-    ctx.beginPath();
-    for(let i = 0; i < canvas.width; i++) {
-        let index = i * skipAmount;
-        let value = undefined;
-        for(let j = Math.max(Math.round(index - skipAmount), 0); j < Math.min(Math.round(index + skipAmount), data.length - 1); j++) {
-            if(value === undefined) {
-                value = data[Math.round(j)][1];
-            } else {
-                value = value * 0.5 + data[Math.round(j)][1] * 0.5;
-            }
-        }
-        value = (value / maximum) * canvas.height;
-        if(i === 0) {
-            ctx.moveTo(0, canvas.height - value);
-        }
-        ctx.lineTo(i, canvas.height - value);
-    }
-    ctx.stroke();
-    */
 
     ctx.beginPath();
     let value = data[0][1];

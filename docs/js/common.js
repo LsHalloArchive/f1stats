@@ -7,18 +7,12 @@ function darkModeEnabled() {
 }
 
 //Enable or disable dark mode
-let moonIcon = $('.moon');
-let sunIcon = $('.sun');
 function setDarkMode(active) {
+    let moonIcon = $('.moon');
+    let sunIcon = $('.sun');
     if(active) {
-        sunIcon.each(function() {
-            $(this).addClass('active');
-        });
-        moonIcon.each(function() {
-            $(this).removeClass('active');
-        });
-        //moonIcon.addClass('active');
-        //sunIcon.removeClass('active');
+        moonIcon.removeClass('active');
+        sunIcon.addClass('active');
         $('body').addClass('dark');
         if(typeof lineChart === 'object') {
             lineChart.options.scales.xAxes[0].ticks.major.fontColor = '#eee';
@@ -33,14 +27,8 @@ function setDarkMode(active) {
 
         localStorage.setItem('darkMode', true.toString());
     } else {
-        moonIcon.each(function() {
-            $(this).addClass('active');
-        });
-        sunIcon.each(function() {
-            $(this).removeClass('active');
-        });
-        //sunIcon.addClass('active');
-        //moonIcon.removeClass('active');
+        sunIcon.removeClass('active');
+        moonIcon.addClass('active');
         $('body').removeClass('dark');
         if(typeof lineChart === 'object') {
             lineChart.options.scales.xAxes[0].ticks.major.fontColor = '#666';
@@ -99,4 +87,25 @@ function saveAsImage() {
     }).appendTo("body").on('click', function () {
         $(this).remove();
     })[0].click();
+}
+
+/**
+ * Sets the pointRadius on the datasets to 0 or 3 depending if *show* is true or false
+ * @param show {boolean} radius 0 if false; radius 3 if true
+ */
+function showPoints(show) {
+    if(lineChart !== undefined) {
+        let datasets = lineChart.data.datasets;
+
+        if(show) {
+            for(let i = 0; i < datasets.length; i++) {
+                datasets[i].pointRadius = 3;
+            }
+        } else {
+            for(let i = 0; i < datasets.length; i++) {
+                datasets[i].pointRadius = 0;
+            }
+        }
+        lineChart.update();
+    }
 }

@@ -54,10 +54,10 @@
                             </div>
                         </div>
 
-                        <div class="ml-4">
-                            <div data-placement="top" data-popover-content="#sharePopoverContent" data-toggle="popover" id="sharePopover" >
+                        <div class="ml-2">
+                            <button data-placement="top" data-popover-content="#sharePopoverContent" data-toggle="popover" id="sharePopover" class="btn">
                                 <img src="img/share.svg" class="darkModeIcon d-block share" alt="Share Icon" style="max-width: 30px; max-height: 30px;" data-toggle="tooltip" title="Share">
-                            </div>
+                            </button>
 
                             <div class="hidden d-none" id="sharePopoverContent">
                                 <div class="popover-heading">
@@ -76,10 +76,10 @@
                             </div>
                         </div>
 
-                        <span id="darkModeToggle" class="ml-3" data-toggle="tooltip" data-placement="top" title="Toggle Dark Mode">
+                        <button id="darkModeToggle" class="ml-1 btn" data-toggle="tooltip" data-placement="top" title="Toggle Dark Mode">
                             <img id="moon" class="darkModeIcon moon" alt="Moon Icon" src="img/moon.svg" style="max-width: 30px; max-height: 30px;">
                             <img id="sun" class="darkModeIcon sun active" alt="Sun Icon" src="img/sun.svg" style="max-width: 30px; max-height: 30px;">
-                        </span>
+                        </button>
 
                         <div class="mr-0 ml-auto input-group">
                             <div class="input-group-prepend">
@@ -125,26 +125,33 @@
                                         <div class="loading ml-1"></div>
                                     </div>
 
-                                    <div class="form-check mt-4">
-                                        <div class="custom-control custom-switch">
+                                    <div class="form-check mt-2">
+                                        <div class="custom-control custom-switch d-inline-block">
                                             <input type="checkbox" class="custom-control-input" id="togglePoints-mobile" name="example1">
                                             <label class="custom-control-label" for="togglePoints-mobile">Show Data Points</label>
                                         </div>
+                                        <button id="darkModeToggle-mobile" class="d-inline-block ml-2 btn" data-toggle="tooltip" data-placement="top" title="Toggle Dark Mode" style="vertical-align: middle">
+                                            <img id="moon-mobile" class="darkModeIcon moon" alt="Moon Icon" src="img/moon.svg" style="max-width: 60px; max-height: 60px;">
+                                            <img id="sun-mobile" class="darkModeIcon sun active" alt="Sun Icon" src="img/sun.svg" style="max-width: 60px; max-height: 60px;">
+                                        </button>
                                     </div>
 
                                     <span class="d-block mt-2">
-                                        <span class="d-inline-block">
-                                            <input type="button" class="btn btn-outline-info" value="Export as JSON" id="export-json-mobile">
-                                            <input type="button" class="btn btn-outline-info" value="Export to Excel" id="export-xls-mobile">
-                                        </span>
-
-                                        <span id="darkModeToggle-mobile" class="d-inline-block ml-2" data-toggle="tooltip" data-placement="top" title="Toggle Dark Mode" style="vertical-align: middle">
-                                            <img id="moon-mobile" class="darkModeIcon moon" alt="Moon Icon" src="img/moon.svg" style="max-width: 60px; max-height: 60px;">
-                                            <img id="sun-mobile" class="darkModeIcon sun active" alt="Sun Icon" src="img/sun.svg" style="max-width: 60px; max-height: 60px;">
-                                        </span>
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <label class="input-group-text">Export</label>
+                                            </div>
+                                            <div class="input-group-append">
+                                                <input type="button" class="btn btn-outline-info" value="JSON" id="export-json-mobile">
+                                                <input type="button" class="btn btn-outline-info" value="Excel" id="export-xls-mobile">
+                                                <input type="button" class="btn btn-outline-info" value="Image" id="export-img-mobile">
+                                            </div>
+                                        </div>
                                     </span>
                                 </div>
-                                <a href="about.html" class="mt-3 d-block" style="font-size: 1.4em;">About this project</a>
+                                <div class="mt-3">
+                                    <a href="about.html" style="font-size: 1.1em;">About this project</a>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

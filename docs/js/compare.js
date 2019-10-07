@@ -38,49 +38,54 @@ dataUrl = mainDataUrls[0];
 
 let cachedRaceData = {};
 let lineChart = undefined;
+let chartColors = ['#0009ff', '#b9001d'];
 let timeOffset = 1800;
 
 function showTable(selectedRaces) {
     console.log("Showing comparison between " + selectedRaces[0].name + " and " + selectedRaces[1].name);
 
-    let requests = [];
     let chartData = [];
-    let error = false;
+    let requestedRaces = [];
+    let fromTimes = [];
+    let toTimes = [];
     for(let i = 0; i < selectedRaces.length; i++) {
         if(cachedRaceData[selectedRaces[i].name] !== undefined) {
             if(cachedRaceData[selectedRaces[i].name].getOffset() === timeOffset) {
                 console.log("Cache hit: " + selectedRaces[i].name);
-                console.log("Pre: ", chartData);
+                console.log("Data: ", cachedRaceData[selectedRaces[i].name]);
                 chartData.push(cachedRaceData[selectedRaces[i].name]);
-                console.log("Post: ", chartData);
             }
         } else {
-            requests.push(
-                $.get({
-                    url: dataUrl,
-                    data: {
-                        type: 'data',
-                        from: selectedRaces[i].start / 1000 - timeOffset,
-                        to: selectedRaces[i].start / 1000  + parseTime(selectedRaces[i].length) + timeOffset
-                    },
-                    success: function (requestData) {
-                        chartData.push(new RaceData(selectedRaces[i].name, JSON.parse(requestData), selectedRaces[i].start));
-                        cachedRaceData[selectedRaces[i].name] = new RaceData(selectedRaces[i].name, JSON.parse(requestData), selectedRaces[i].start);
-                    },
-                    error: function (e) {
-                        console.error(e);
-                        error = true;
-                    }
-                })
-            );
+            let from = selectedRaces[i].start;
+            let to = selectedRaces[i].start / 1000 + 7200;
+            requestedRaces.push({name: selectedRaces[i].name, start: from});
+            fromTimes.push(Math.round(from / 1000 - timeOffset));
+            toTimes.push(Math.round(to + timeOffset));
         }
     }
-
-    $.when(requests[0], requests[1]).then(function () {
-        if(!error) {
-            updateChartData();
-        }
-    });
+    if(fromTimes.length > 0 && toTimes.length > 0) {
+        $.get({
+            url: dataUrl,
+            data: {
+                type: 'multi',
+                from: fromTimes,
+                to: toTimes
+            },
+            success: function (requestData) {
+                let data = JSON.parse(requestData);
+                for (let i = 0; i < data.length; i++) {
+                    cachedRaceData[requestedRaces[i].name] = new RaceData(requestedRaces[i].name, data[i], requestedRaces[i].start);
+                    chartData.push(new RaceData(requestedRaces[i].name, data[i], requestedRaces[i].start));
+                }
+                updateChartData();
+            },
+            error: function (e) {
+                console.error(e);
+            }
+        });
+    } else {
+        updateChartData();
+    }
     
     function updateChartData() {
         let options = {
@@ -91,14 +96,18 @@ function showTable(selectedRaces) {
                     }
                 }],
                 xAxes: [{
-                    type: 'linear'
+                    type: 'linear',
+                    ticks: {
+                        min: -timeOffset / 60,
+                        max: timeOffset / 60 + 120
+                    }
                 }]
             },
             tooltips: {
                 callbacks: {
                     title: function(tooltipItem) {
-                        let pre = '-';
-                        if(tooltipItem[0].label > 0) {
+                        let pre = '';
+                        if(parseInt(tooltipItem[0].label) >= 0) {
                             pre = '+';
                         }
                         return 'Start ' + pre + Math.round(tooltipItem[0].label)+"min";
@@ -110,7 +119,44 @@ function showTable(selectedRaces) {
             },
             maintainAspectRatio: false,
             responsive: true,
+            annotation: {
+                annotations: generateAnnotations()
+            }
         };
+
+        function generateAnnotations() {
+            let annotations = [{
+                    type: 'line',
+                    drawTime: 'afterDatasetsDraw',
+                    mode: 'vertical',
+                    scaleID: 'x-axis-0',
+                    value: 0,
+                    borderColor: darkModeEnabled()?'#ccc':'#222',
+                    borderWidth: 2,
+                    label: {
+                        enabled: true,
+                        position: 'top',
+                        content: "Start"
+                    }
+                }];
+            for(let i = 0; i < chartData.length; i++) {
+                annotations.push({
+                    type: 'line',
+                    drawTime: 'afterDatasetsDraw',
+                    mode: 'vertical',
+                    scaleID: 'x-axis-0',
+                    value: chartData[i].end,
+                    borderColor: chartColors[i],
+                    borderWidth: 2,
+                    label: {
+                        enabled: true,
+                        position: 'top',
+                        content: chartData[i].getName() + " finish"
+                    }
+                });
+            }
+            return annotations;
+        }
 
         if(lineChart === undefined) {
             let ctx = $('#chart');
@@ -121,27 +167,31 @@ function showTable(selectedRaces) {
                         label: chartData[0].getName(),
                         data: chartData[0].getF1(),
                         fill: false,
-                        borderColor: '#ee5000',
-                        backgroundColor: '#ee5000',
+                        borderColor: chartColors[0],
+                        backgroundColor: chartColors[0],
                         pointRadius: 3
                     },
                     {
                         label: chartData[1].getName(),
                         data: chartData[1].getF1(),
                         fill: false,
-                        borderColor: '#0010ee',
-                        backgroundColor: '#0010ee',
+                        borderColor: chartColors[1],
+                        backgroundColor: chartColors[1],
                         pointRadius: 3
                     }]
                 }
             }, options);
         }
-        for(let i = 0; i < chartData.length; i++) {
+        for (let i = 0; i < chartData.length; i++) {
             lineChart.data.datasets[i].label = chartData[i].getName();
             lineChart.data.datasets[i].data = chartData[i].getF1();
             lineChart.options = options;
         }
+        //Needs update before setting darkMode to fill in default values
         lineChart.update();
+        setDarkMode(darkModeEnabled());
+        lineChart.update();
+
     }
 }
 
@@ -208,6 +258,12 @@ class RaceData {
         }
         this.name = name;
         this.timeOffset = timeOffset;
+        for(let short in races) {
+            if(races[short].name === this.name) {
+                this.end = parseTime(races[short].length) / 60;
+            }
+        }
+
 
         this.f1 = [];
         this.f1_5 = [];

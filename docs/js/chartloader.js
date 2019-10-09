@@ -351,14 +351,6 @@ function generateFavicon(data) {
     }
 }
 
-//Extend jQuery with custom function
-$.fn.animateWidth = function (width, opacity) {
-    this.animate({
-        'width': width,
-        'opacity': opacity,
-    }, 350);
-};
-
 let filterButton = $('#apply-filter-button');
 let filterButtonMobile = $('#apply-filter-button-mobile');
 let loadingIcon = $('.loading');

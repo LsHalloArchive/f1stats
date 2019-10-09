@@ -103,3 +103,11 @@ function showPoints(show) {
         lineChart.update();
     }
 }
+
+//Extend jQuery with custom function
+$.fn.animateWidth = function (width, opacity) {
+    this.animate({
+        'width': width,
+        'opacity': opacity,
+    }, 350);
+};

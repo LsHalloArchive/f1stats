@@ -47,6 +47,11 @@ let chartColors = ['#365eff', '#b93432'];
 let timeOffset = 5400;
 
 function showTable(selectedRaces) {
+    let loading = $('.loading');
+    let compareBtn = $('#compareBtn');
+    $('#helpText').remove();
+    loading.animateWidth(38, 1);
+    compareBtn.prop('disabled', true);
     console.log("Showing comparison between " + selectedRaces[0].name + " and " + selectedRaces[1].name);
 
     let chartData = [];
@@ -202,7 +207,8 @@ function showTable(selectedRaces) {
         lineChart.update();
         setDarkMode(darkModeEnabled());
         lineChart.update();
-
+        compareBtn.prop('disabled', false);
+        loading.animateWidth(0, 0);
     }
 }
 

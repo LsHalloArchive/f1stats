@@ -1,31 +1,38 @@
 let races = {
     'sgp': {
+        id: 15,
         name: 'Singapore',
         start: 1569154200000,
         length: '1:58:33'
     },
     'rus': {
+        id: 16,
         name: 'Russia',
         start: 1569755400000,
         length: '1:33:38'
     },
     'jpn': {
+        id: 17,
         name: 'Japan',
         start: 1570943400000
     },
     'mex': {
+        id: 18,
         name: 'Mexico',
         start: 1572203400000
     },
     'usa': {
+        id: 19,
         name: 'United States',
         start: 1572808200000
     },
     'bra': {
+        id: 20,
         name: 'Brazil',
         start: 1574010600000
     },
     'are': {
+        id: 21,
         name: 'Abu Dhabi',
         start: 1575205800000
     }
@@ -36,8 +43,8 @@ let dataUrl = mainDataUrls[Math.floor(Math.random() * mainDataUrls.length)];
 
 let cachedRaceData = {};
 let lineChart = undefined;
-let chartColors = ['#0009ff', '#b9001d'];
-let timeOffset = 1800;
+let chartColors = ['#365eff', '#b93432'];
+let timeOffset = 5400;
 
 function showTable(selectedRaces) {
     console.log("Showing comparison between " + selectedRaces[0].name + " and " + selectedRaces[1].name);
@@ -55,9 +62,9 @@ function showTable(selectedRaces) {
             }
         } else {
             let from = selectedRaces[i].start;
-            let to = selectedRaces[i].start / 1000 + 7200;
+            let to = selectedRaces[i].start / 1000 + 7200; //Get 2h from race start
             requestedRaces.push({name: selectedRaces[i].name, start: from});
-            fromTimes.push(Math.round(from / 1000 - timeOffset));
+            fromTimes.push(Math.round(from / 1000 - timeOffset / 2));
             toTimes.push(Math.round(to + timeOffset));
         }
     }
@@ -95,10 +102,14 @@ function showTable(selectedRaces) {
                     }
                 }],
                 xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Time relative to start'
+                    },
                     type: 'linear',
                     ticks: {
-                        min: -timeOffset / 60,
-                        max: timeOffset / 60 + 120
+                        min: -timeOffset / 60 / 2,
+                        max: timeOffset / 60 + parseTime(undefined) / 60
                     }
                 }]
             },
@@ -139,12 +150,13 @@ function showTable(selectedRaces) {
                     }
                 }];
             for(let i = 0; i < chartData.length; i++) {
+                console.log(chartData[i]);
                 annotations.push({
                     type: 'line',
                     drawTime: 'afterDatasetsDraw',
                     mode: 'vertical',
                     scaleID: 'x-axis-0',
-                    value: chartData[i].end,
+                    value: chartData[i].duration,
                     borderColor: chartColors[i],
                     borderWidth: 2,
                     label: {
@@ -222,7 +234,6 @@ function fillSelectOptions() {
             text: name
         }).appendTo([compareSource, compareTarget]);
     }
-    $('#compareBtn').prop('disabled', false);
     compareTarget.val('rus');
 }
 
@@ -233,6 +244,11 @@ function fillSelectOptions() {
  */
 function parseTime(time) {
     if(time !== undefined) {
+        //If time includes millis remove millis as the accuracy is unnecessary
+        if(time.indexOf('.') !== -1) {
+            time = time.split('.')[0];
+        }
+
         let parts = time.split(':');
         if (parts.length === 3) {
             return (parseInt(parts[0]) * 3600 + parseInt(parts[1]) * 60 + parseInt(parts[2]));
@@ -242,11 +258,38 @@ function parseTime(time) {
     return 7200;
 }
 
+function getDurationOfRaces() {
+    let oneMissing = false;
+    for(let short in races) {
+        if (races[short].start < new Date().getTime() && races[short].length === undefined) {
+            oneMissing = true;
+            let ergastUrl = "https://ergast.com/api/f1/2019/{{race}}/results.json";
+            let raceNum = races[short].id;
+            let requestUrl = ergastUrl.replace('{{race}}', raceNum);
+            $.get({
+                url: requestUrl,
+                success: function (data) {
+                    let time = data['MRData']['RaceTable']['Races'][0]['Results'][0]['Time']['time'];
+                    console.log(races[short].length);
+                    races[short].length = time.split('.')[0].toString();
+                    console.log(races[short].length);
+                    this.duration = parseTime(time) / 60;
+                    $('#compareBtn').prop('disabled', false);
+                }
+            });
+        }
+    }
+    if(!oneMissing) {
+        $('#compareBtn').prop('disabled', false);
+    }
+}
+
 $(function() {
     fillSelectOptions();
     $('#compareBtn').on('click', function () {
         showTable(getSelectedRaces());
     });
+    getDurationOfRaces();
 });
 
 
@@ -259,8 +302,13 @@ class RaceData {
         this.timeOffset = timeOffset;
         for(let short in races) {
             if(races[short].name === this.name) {
-                this.end = parseTime(races[short].length) / 60;
+                if(races[short].length !== undefined) {
+                    this.duration = parseTime(races[short].length) / 60;
+                } else {
+                    this.duration = 120;
+                }
             }
+
         }
 
 
@@ -293,15 +341,5 @@ class RaceData {
 
     getF1FeederSeries() {
         return this.f1feeder;
-    }
-}
-
-class Race {
-    constructor(shorthand) {
-        if(races[shorthand] !== undefined) {
-            this.name = races[shorthand].name;
-            this.start = races[shorthand].start;
-            this.end = races[shorthand].end;
-        }
     }
 }

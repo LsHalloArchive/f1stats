@@ -185,7 +185,7 @@ function showTable(selectedRaces) {
                         fill: false,
                         borderColor: chartColors[0],
                         backgroundColor: chartColors[0],
-                        pointRadius: 0
+                        pointRadius: 1
                     },
                     {
                         label: chartData[1].getName(),
@@ -193,7 +193,7 @@ function showTable(selectedRaces) {
                         fill: false,
                         borderColor: chartColors[1],
                         backgroundColor: chartColors[1],
-                        pointRadius: 0
+                        pointRadius: 1
                     }]
                 }
             }, options);

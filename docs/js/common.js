@@ -97,7 +97,7 @@ function showPoints(show) {
             }
         } else {
             for(let i = 0; i < datasets.length; i++) {
-                datasets[i].pointRadius = 0;
+                datasets[i].pointRadius = 1;
             }
         }
         lineChart.update();

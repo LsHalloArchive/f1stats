@@ -176,7 +176,7 @@ function showTable(from, to) {
                             backgroundColor: "rgb(235,63,199)",
                             fill: false,
                             hidden: true,
-                            pointRadius: 0
+                            pointRadius: 1
                         },
                         {
                             label: 'r/f1feederseries',
@@ -185,7 +185,7 @@ function showTable(from, to) {
                             backgroundColor: "rgb(235,129,0)",
                             fill: false,
                             hidden: true,
-                            pointRadius: 0
+                            pointRadius: 1
                         }
                     ]
                 },

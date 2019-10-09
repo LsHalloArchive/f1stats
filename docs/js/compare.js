@@ -180,7 +180,7 @@ function showTable(selectedRaces) {
                         fill: false,
                         borderColor: chartColors[0],
                         backgroundColor: chartColors[0],
-                        pointRadius: 3
+                        pointRadius: 0
                     },
                     {
                         label: chartData[1].getName(),
@@ -188,7 +188,7 @@ function showTable(selectedRaces) {
                         fill: false,
                         borderColor: chartColors[1],
                         backgroundColor: chartColors[1],
-                        pointRadius: 3
+                        pointRadius: 0
                     }]
                 }
             }, options);
@@ -290,6 +290,7 @@ $(function() {
         showTable(getSelectedRaces());
     });
     getDurationOfRaces();
+    setDarkMode(darkModeEnabled());
 });
 
 

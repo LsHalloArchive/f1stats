@@ -14,7 +14,8 @@ let races = {
     'jpn': {
         id: 17,
         name: 'Japan',
-        start: 1570943400000
+        start: 1570943400000,
+        length: '1:21:46'
     },
     'mex': {
         id: 18,
@@ -207,9 +208,23 @@ function showTable(selectedRaces) {
         lineChart.update();
         setDarkMode(darkModeEnabled());
         lineChart.update();
+
         compareBtn.prop('disabled', false);
         loading.animateWidth(0, 0);
+
+        updateShareUrl(selectedRaces);
     }
+}
+
+//Update from and get in the url bar
+function updateShareUrl(selectedRaces) {
+    let url = new URL(window.location);
+    url.search = ""; //remove all previous params
+    for(let i = 0; i < selectedRaces.length; i++) {
+        url.searchParams.set('r' + i, selectedRaces[i].short);
+    }
+    $('#shareUrl').attr('value', url.href);
+    $('#sharePopover').popover('hide');
 }
 
 function getSelectedRaces() {
@@ -217,21 +232,27 @@ function getSelectedRaces() {
     let compareTarget = $('#compareTarget');
     let source = compareSource.val();
     let target = compareTarget.val();
-    return [races[source], races[target]];
+
+    let sourceObj = races[source];
+    sourceObj.short = source;
+    let targetObj = races[target];
+    targetObj.short = target;
+    return [sourceObj, targetObj];
 }
 
 function fillSelectOptions() {
     let compareSource = $('#compareSource');
     let compareTarget = $('#compareTarget');
+    let completedRaces = [];
     for(let shorthand in races) {
         let race = races[shorthand];
         let name = race.name;
-        let length = parseTime(race.length);
         let start = race.start;
         let disabled = true;
 
         let now = new Date().getTime();
-        if(now > start + length * 1000) {
+        if(now > start) {
+            completedRaces.push({index: shorthand, start: start});
             disabled = false;
         }
         $('<option>', {
@@ -240,7 +261,21 @@ function fillSelectOptions() {
             text: name
         }).appendTo([compareSource, compareTarget]);
     }
-    compareTarget.val('rus');
+
+    //sort completed races by start time
+    completedRaces.sort(function(a, b) {
+        if(a.start > b.start) {
+            return 1;
+        } else if(b.start > a.start) {
+            return -1;
+        }
+        return 0;
+    });
+    if(completedRaces.length > 1) {
+        compareSource.val(completedRaces[completedRaces.length - 2].index);
+        compareTarget.val(completedRaces[completedRaces.length - 1].index);
+    }
+
 }
 
 /**
@@ -265,10 +300,10 @@ function parseTime(time) {
 }
 
 function getDurationOfRaces() {
-    let oneMissing = false;
+    let requestPending = false;
     for(let short in races) {
         if (races[short].start < new Date().getTime() && races[short].length === undefined) {
-            oneMissing = true;
+            requestPending = true;
             let ergastUrl = "https://ergast.com/api/f1/2019/{{race}}/results.json";
             let raceNum = races[short].id;
             let requestUrl = ergastUrl.replace('{{race}}', raceNum);
@@ -276,16 +311,23 @@ function getDurationOfRaces() {
                 url: requestUrl,
                 success: function (data) {
                     let time = data['MRData']['RaceTable']['Races'][0]['Results'][0]['Time']['time'];
-                    console.log(races[short].length);
                     races[short].length = time.split('.')[0].toString();
-                    console.log(races[short].length);
                     this.duration = parseTime(time) / 60;
                     $('#compareBtn').prop('disabled', false);
+                    requestPending = false;
+                },
+                error: function(err) {
+                    console.error("Request to ergast api failed. Assuming race took 2h maximum time.");
+                    //Should ergast be not available fill with maximum time a race needs
+                    races[short].length = '2:00:00';
+                    this.duration = 120;
+                    $('#compareBtn').prop('disabled', false);
+                    requestPending = false;
                 }
             });
         }
     }
-    if(!oneMissing) {
+    if(!requestPending) {
         $('#compareBtn').prop('disabled', false);
     }
 }
@@ -295,10 +337,30 @@ $(function() {
     $('#compareBtn').on('click', function () {
         showTable(getSelectedRaces());
     });
+    $('#togglePoints').on('click', function () {
+       showPoints($(this).prop('checked'));
+    });
+    $('#darkModeToggle').on('click', function () {
+        setDarkMode(!darkModeEnabled());
+    });
     getDurationOfRaces();
     setDarkMode(darkModeEnabled());
+
+    let params = handleGetParameters();
+    if(params[0] !== null && params[1] !== null) {
+        let r1 = races[params[0]];
+        r1.short = params[0];
+        let r2 = races[params[1]];
+        r2.short = params[1];
+        let selectedRaces = [r1, r2];
+        showTable(selectedRaces);
+    }
 });
 
+function handleGetParameters() {
+    let url = new URL(window.location);
+    return [url.searchParams.get('r0'), url.searchParams.get('r1')];
+}
 
 class RaceData {
     constructor(name, data, start) {

@@ -50,10 +50,58 @@
                             </div>
                         </div>
                         <div class="loading"></div>
+
+                        <!--Toggle data points-->
+                        <div class="form-check ml-sm-2">
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="togglePoints" name="example1">
+                                <label class="custom-control-label" for="togglePoints">Data Points</label>
+                            </div>
+                        </div>
+
+                        <!--share button-->
+                        <div class="ml-2">
+                            <button data-placement="top" data-popover-content="#sharePopoverContent" data-toggle="popover" id="sharePopover" class="btn">
+                                <img src="img/share.svg" class="darkModeIcon d-block share" alt="Share Icon" style="max-width: 30px; max-height: 30px;" data-toggle="tooltip" title="Share">
+                            </button>
+
+                            <div class="hidden d-none" id="sharePopoverContent">
+                                <div class="popover-heading">
+                                    Share Url
+                                </div>
+
+                                <div class="popover-body">
+                                    <div class="autohide" id="shareUrlTooltip" data-toggle="tooltip-click" data-placement="top" data-original-title="Copied">
+                                        <div class="form-group">
+                                            <label class="sr-only" for="shareUrl">Share Url</label>
+                                            <input type="text" class="form-control select-focus input-min-width" id="shareUrl" readonly>
+                                            <small class="form-text text-muted">Copy to share the selected time range</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!--Dark mode button-->
+                        <button id="darkModeToggle" class="ml-1 btn" data-toggle="tooltip" data-placement="top" title="Toggle Dark Mode">
+                            <img id="moon" class="darkModeIcon moon" alt="Moon Icon" src="img/moon.svg" style="max-width: 30px; max-height: 30px;">
+                            <img id="sun" class="darkModeIcon sun active" alt="Sun Icon" src="img/sun.svg" style="max-width: 30px; max-height: 30px;">
+                        </button>
+
+                        <div class="mr-0 ml-auto input-group">
+                            <div class="input-group-prepend">
+                                <label class="input-group-text">Export</label>
+                            </div>
+                            <div class="input-group-append">
+                                <input type="button" class="btn btn-outline-info" value="JSON" id="export-json">
+                                <input type="button" class="btn btn-outline-info" value="Excel" id="export-xls">
+                                <input type="button" class="btn btn-outline-info" value="Image" id="export-img">
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div id="helpText">
-                    <h1>Please select 2 races an click apply to show a chart.</h1>
+                    <h1>Please select 2 races and click apply to show a chart.</h1>
                 </div>
                 <div id="complete-chart-container">
                     <div id="chart-container">

@@ -18,6 +18,11 @@ let exportImageHandler = undefined;
 //if requested data is inside one of the previous loaded data elements
 let chartDataHistory = [];
 
+//Cached jQuery selectors for improved performance
+let filterButton = $('#apply-filter-button');
+let filterButtonMobile = $('#apply-filter-button-mobile');
+let loadingIcon = $('.loading');
+
 function showTable(from, to) {
     let cachedChartData = inChartDataHistory(from, to);
     if(cachedChartData === undefined) {
@@ -351,9 +356,6 @@ function generateFavicon(data) {
     }
 }
 
-let filterButton = $('#apply-filter-button');
-let filterButtonMobile = $('#apply-filter-button-mobile');
-let loadingIcon = $('.loading');
 //Startup function
 $(function() {
     let from = new Date(new Date().setDate(new Date().getDate() - 1));
@@ -425,58 +427,6 @@ $(function() {
     if(localStorage.getItem('darkMode') !== null) {
         setDarkMode(JSON.parse(localStorage.getItem('darkMode')));
     }
-
-    $('[data-toggle="tooltip"]').tooltip();
-
-    //Custom popover content
-    $("[data-toggle=popover]").popover({
-        html : true,
-        sanitize: false,
-        content: function() {
-            let content = $(this).attr("data-popover-content");
-            return $(content).children(".popover-body").html();
-        },
-        title: function() {
-            let title = $(this).attr("data-popover-content");
-            return $(title).children(".popover-heading").html();
-        }
-    });
-    $(document).on('shown.bs.popover', function() {
-        $("input.select-focus").on("click", function () {
-            $(this).trigger("select");
-            document.execCommand('copy');
-        });
-    });
-
-    //Dynamically bind event to new tooltips in popover
-    let body = $('body');
-    body.tooltip({
-        selector: '[data-toggle=tooltip-click]',
-        trigger: 'click',
-        delay: {show: 200, hide: 400}
-    });
-    //Hide popover tooltip after 2s as it does not close automatically
-    $(document).on('shown.bs.tooltip', function(e) {
-        if($(e.target).hasClass('autohide')) {
-            setTimeout(function() {
-                $(e.target).tooltip('hide');
-            }, 2000);
-
-        }
-    });
-
-    //Add custom beforeDraw to chart so the background on exported image is colored
-    Chart.plugins.register({
-        beforeDraw: function(c) {
-            let ctx = c.chart.ctx;
-            ctx.fillStyle = $('body').css('background-color');
-            ctx.fillRect(0, 0, c.chart.width, c.chart.height);
-        }
-    });
-
-    //Add smooth transition to color effect after page has loaded to avoid distracting color fade
-    body.css('transition', 'background-color .4s');
-    $('.datepicker, .input-group-text, .form-control, .custom-control-label, h2').css('transition', 'background-color .4s, border-color .4s');
 });
 
 
@@ -490,7 +440,7 @@ class ChartData {
     }
 
     findMaximum(data) {
-        let max = -1;
+        let max = -Infinity;
         for(let i = 0; i < data.length; i++) {
             if(parseInt(data[i][0]) > max) {
                 max = parseInt(data[i][0]);
@@ -500,7 +450,7 @@ class ChartData {
     }
 
     findMinimum(data) {
-        let min = 8640000000000000;
+        let min = Infinity;
         for(let i = 0; i < data.length; i++) {
             if(parseInt(data[i][0]) < min) {
                 min = parseInt(data[i][0]);

@@ -104,6 +104,60 @@ function showPoints(show) {
     }
 }
 
+$(function () {
+   $('[data-toggle="tooltip"]').tooltip();
+
+    //Custom popover content
+    $("[data-toggle=popover]").popover({
+        html : true,
+        sanitize: false,
+        content: function() {
+            let content = $(this).attr("data-popover-content");
+            return $(content).children(".popover-body").html();
+        },
+        title: function() {
+            let title = $(this).attr("data-popover-content");
+            return $(title).children(".popover-heading").html();
+        }
+    });
+    $(document).on('shown.bs.popover', function() {
+        $("input.select-focus").on("click", function () {
+            $(this).trigger("select");
+            document.execCommand('copy');
+        });
+    });
+
+    //Dynamically bind event to new tooltips in popover
+    let body = $('body');
+    body.tooltip({
+        selector: '[data-toggle=tooltip-click]',
+        trigger: 'click',
+        delay: {show: 200, hide: 400}
+    });
+    //Hide popover tooltip after 2s as it does not close automatically
+    $(document).on('shown.bs.tooltip', function(e) {
+        if($(e.target).hasClass('autohide')) {
+            setTimeout(function() {
+                $(e.target).tooltip('hide');
+            }, 2000);
+
+        }
+    });
+
+    //Add custom beforeDraw to chart so the background on exported image is colored
+    Chart.plugins.register({
+        beforeDraw: function(c) {
+            let ctx = c.chart.ctx;
+            ctx.fillStyle = $('body').css('background-color');
+            ctx.fillRect(0, 0, c.chart.width, c.chart.height);
+        }
+    });
+
+    //Add smooth transition to color effect after page has loaded to avoid distracting color fade
+    body.css('transition', 'background-color .4s');
+    $('.datepicker, .input-group-text, .form-control, .custom-control-label, h2').css('transition', 'background-color .4s, border-color .4s');
+});
+
 //Extend jQuery with custom function
 $.fn.animateWidth = function (width, opacity) {
     this.animate({

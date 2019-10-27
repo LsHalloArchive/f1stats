@@ -20,7 +20,8 @@ let races = {
     'mex': {
         id: 18,
         name: 'Mexico',
-        start: 1572203400000
+        start: 1572203400000,
+        length: '1:36:48'
     },
     'usa': {
         id: 19,
@@ -196,8 +197,9 @@ function showTable(selectedRaces) {
                         backgroundColor: chartColors[1],
                         pointRadius: 1
                     }]
-                }
-            }, options);
+                },
+                options: options
+            });
         }
         for (let i = 0; i < chartData.length; i++) {
             lineChart.data.datasets[i].label = chartData[i].getName();
@@ -205,7 +207,7 @@ function showTable(selectedRaces) {
             lineChart.options = options;
         }
         //Needs update before setting darkMode to fill in default values
-        lineChart.update();
+        lineChart.update(0);
         setDarkMode(darkModeEnabled());
         lineChart.update();
 

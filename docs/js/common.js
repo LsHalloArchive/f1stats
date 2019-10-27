@@ -100,7 +100,7 @@ function showPoints(show) {
                 datasets[i].pointRadius = 1;
             }
         }
-        lineChart.update();
+        lineChart.update(0);
     }
 }
 

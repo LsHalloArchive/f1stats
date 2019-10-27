@@ -275,11 +275,15 @@ function getDurationOfRaces() {
             $.get({
                 url: requestUrl,
                 success: function (data) {
-                    let time = data['MRData']['RaceTable']['Races'][0]['Results'][0]['Time']['time'];
-                    console.log(races[short].length);
-                    races[short].length = time.split('.')[0].toString();
-                    console.log(races[short].length);
-                    this.duration = parseTime(time) / 60;
+                    try {
+                        let time = data['MRData']['RaceTable']['Races'][0]['Results'][0]['Time']['time'];
+                        console.log(races[short].length);
+                        races[short].length = time.split('.')[0].toString();
+                        console.log(races[short].length);
+                        this.duration = parseTime(time) / 60;
+                    } catch (e) {
+                        console.error(e);
+                    }
                     $('#compareBtn').prop('disabled', false);
                 }
             });

@@ -210,7 +210,7 @@ function showTable(from, to) {
             });
 
             if(exportJsonHandler !== undefined) {
-                $('#export-json, #export-json-mobile').off('click', '#export-json', exportJsonHandler);
+                $('#export-json, #export-json-mobile').off('click');
             }
             exportJsonHandler = $("#export-json, #export-json-mobile").on('click', function () {
                 $("<a />", {
@@ -222,7 +222,7 @@ function showTable(from, to) {
             });
 
             if(exportXlsHandler !== undefined) {
-                $('#export-xls, #export-xls-mobile').off('click', '#export-xls', exportXlsHandler);
+                $('#export-xls, #export-xls-mobile').off('click');
             }
             exportXlsHandler = $("#export-xls, #export-xls-mobile").on('click', function () {
                 let pre = new Date();
@@ -258,7 +258,7 @@ function showTable(from, to) {
 
             let exportImg = $('#export-img, #export-img-mobile');
             if(exportImageHandler !== undefined) {
-                exportImg.off('click', '#export-img', exportImageHandler);
+                exportImg.off('click');
             }
             exportImageHandler = exportImg.on('click', function () {
                 saveAsImage();

@@ -2,9 +2,9 @@ setDarkMode(darkModeEnabled());
 
 function setDarkMode(active) {
     if(active) {
-        $('body').addClass('dark');
+        document.getElementsByTagName('body')[0].className = "dark";
     } else {
-        $('body').removeClass('dark');
+        document.getElementsByTagName('body')[0].className = "";
     }
 }
 

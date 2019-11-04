@@ -19,14 +19,15 @@ let races = {
     },
     'mex': {
         id: 18,
-        name: 'Mexico',
+        name: 'México',
         start: 1572203400000,
         length: '1:36:48'
     },
     'usa': {
         id: 19,
         name: 'United States',
-        start: 1572808200000
+        start: 1572808200000,
+        length: '1:33:55'
     },
     'bra': {
         id: 20,
@@ -47,6 +48,9 @@ let cachedRaceData = {};
 let lineChart = undefined;
 let chartColors = ['#365eff', '#b93432'];
 let timeOffset = 5400;
+
+let exportJsonHandler = undefined;
+let exportImageHandler = undefined;
 
 function showTable(selectedRaces) {
     let loading = $('.loading');
@@ -116,7 +120,8 @@ function showTable(selectedRaces) {
                     type: 'linear',
                     ticks: {
                         min: -timeOffset / 60 / 2,
-                        max: timeOffset / 60 + parseTime(undefined) / 60
+                        max: timeOffset / 60 + parseTime(undefined) / 60,
+                        stepSize: 15
                     }
                 }]
             },
@@ -132,7 +137,8 @@ function showTable(selectedRaces) {
                     label: function(tooltipItem, data) {
                         return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.yLabel + ' users';
                     },
-                }
+                },
+                mode: 'label'
             },
             maintainAspectRatio: false,
             responsive: true,
@@ -153,22 +159,25 @@ function showTable(selectedRaces) {
                     label: {
                         enabled: true,
                         position: 'top',
-                        content: "Start"
+                        content: "Start",
+                        yAdjust: 10
                     }
                 }];
             for(let i = 0; i < chartData.length; i++) {
-                console.log(chartData[i]);
                 annotations.push({
                     type: 'line',
                     drawTime: 'afterDatasetsDraw',
                     mode: 'vertical',
                     scaleID: 'x-axis-0',
                     value: chartData[i].duration,
-                    borderColor: chartColors[i],
+                    borderColor: chartColors[i] + 'bb',
                     borderWidth: 2,
                     label: {
                         enabled: true,
+                        fontColor: darkModeEnabled()?'#eee':'#444',
+                        backgroundColor: chartColors[i] + '77',
                         position: 'top',
+                        yAdjust: (i % 2 === 1)? 40 : 10,
                         content: chartData[i].getName() + " finish"
                     }
                 });
@@ -213,6 +222,26 @@ function showTable(selectedRaces) {
 
         compareBtn.prop('disabled', false);
         loading.animateWidth(0, 0);
+
+        if(exportJsonHandler !== undefined) {
+            $('#export-json, #export-json-mobile').off('click');
+        }
+        exportJsonHandler = $("#export-json, #export-json-mobile").on('click', function () {
+            $("<a />", {
+                "download": "formula1.json",
+                "href": "data:application/json," + encodeURIComponent(JSON.stringify({'r1': chartData[0].getF1(), 'r2': chartData[1].getF1()}))
+            }).appendTo("body").on('click', function () {
+                $(this).remove();
+            })[0].click();
+        });
+
+        let exportImg = $('#export-img, #export-img-mobile');
+        if(exportImageHandler !== undefined) {
+            exportImg.off('click');
+        }
+        exportImageHandler = exportImg.on('click', function () {
+            saveAsImage();
+        });
 
         updateShareUrl(selectedRaces);
     }
@@ -342,6 +371,8 @@ function getDurationOfRaces() {
 
 $(function() {
     fillSelectOptions();
+    getDurationOfRaces();
+    setDarkMode(darkModeEnabled());
     $('#compareBtn').on('click', function () {
         showTable(getSelectedRaces());
     });
@@ -351,8 +382,6 @@ $(function() {
     $('#darkModeToggle').on('click', function () {
         setDarkMode(!darkModeEnabled());
     });
-    getDurationOfRaces();
-    setDarkMode(darkModeEnabled());
 
     let params = handleGetParameters();
     if(params[0] !== null && params[1] !== null) {
@@ -387,7 +416,6 @@ class RaceData {
             }
 
         }
-
 
         this.f1 = [];
         this.f1_5 = [];

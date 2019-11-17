@@ -32,7 +32,8 @@ let races = {
     'bra': {
         id: 20,
         name: 'Brazil',
-        start: 1574010600000
+        start: 1574010600000,
+        length: '1:33:14'
     },
     'are': {
         id: 21,

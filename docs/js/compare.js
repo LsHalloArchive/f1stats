@@ -38,7 +38,8 @@ let races = {
     'are': {
         id: 21,
         name: 'Abu Dhabi',
-        start: 1575205800000
+        start: 1575205800000,
+        length: '1:34:05'
     }
 };
 

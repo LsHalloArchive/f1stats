@@ -33,7 +33,7 @@ function showTable(from, to) {
                 'from': from,
                 'to': to
             },
-            timeout: 15000,
+            timeout: 30000,
             success: function (data) {
                 let parsedData = JSON.parse(data);
                 chartCallback(parsedData);

@@ -89,6 +89,7 @@ function showTable(selectedRaces) {
                 from: fromTimes,
                 to: toTimes
             },
+            timeout: 30000,
             success: function (requestData) {
                 let data = JSON.parse(requestData);
                 for (let i = 0; i < data.length; i++) {

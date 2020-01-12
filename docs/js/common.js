@@ -108,7 +108,7 @@ $(function () {
    $('[data-toggle="tooltip"]').tooltip();
 
     //Custom popover content
-    $("[data-toggle=popover]").popover({
+    $('[data-toggle="popover"]').popover({
         html : true,
         sanitize: false,
         content: function() {
@@ -159,9 +159,10 @@ $(function () {
 });
 
 //Extend jQuery with custom function
-$.fn.animateWidth = function (width, opacity) {
+$.fn.animateWidth = function (width, height, opacity) {
     this.animate({
         'width': width,
+        'height': height,
         'opacity': opacity,
     }, 350);
 };

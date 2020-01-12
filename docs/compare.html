@@ -18,42 +18,35 @@
         <link rel="dns-prefetch" href="https://f1stats.4lima.de">
         <link rel="dns-prefetch" href="https://f1status.000webhostapp.com">
     </head>
-    <body class="dark">
+    <body class="dark toolbar-side">
         <div id="content-container">
-            <div id="content">
-                <div class="title">
-                    <h2 class="link-center d-inline-block align-middle">Compare Races</h2>
-                    <a href="index.html" class="ml-3 d-none d-md-inline-block align-bottom">Home</a>
-                    <a href="about.html" class="ml-2 d-none d-md-inline-block align-bottom">About</a>
+            <div id="toolbar" class="">
+                <div class="border-dark border-bottom mb-3 p-1 pb-3">
+                    Navigation
+                    <a href="index.html" class="ml-3 align-bottom">Home</a>
+                    <a href="about.html" class="ml-2 align-bottom">About</a>
                 </div>
-                <div id="toolbar">
-                    <div class="form-inline">
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    Compare
-                                </div>
-                            </div>
-                            <label class="sr-only" for="compareSource">Compare</label>
-                            <select class="custom-select" id="compareSource">
-
-                            </select>
-
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">with</div>
-                            </div>
-                            <label class="sr-only" for="compareTarget">with</label>
-                            <select class="custom-select" id="compareTarget">
-
-                            </select>
-                            <div class="input-group-append">
-                                <input id="compareBtn" type="button" class="btn btn-primary" value="Apply" disabled="disabled">
-                            </div>
+                <div class="form">
+                    <div class="toolbar-group">
+                        <div class="form-group">
+                            <label for="compareSource">Compare</label>
+                            <select class="custom-select form-control" id="compareSource"></select>
                         </div>
-                        <div class="loading"></div>
+                        <div class="form-group">
+                            <label for="compareTarget">with</label>
+                            <select class="custom-select  form-control" id="compareTarget"></select>
+                        </div>
 
+                        <div class="input-group-append">
+                            <input id="compareBtn" type="button" class="btn btn-primary" value="Apply" disabled="disabled">
+                        </div>
+                    </div>
+                    <div class="loading"></div>
+
+                    <div class="toolbar-group mt-2">
+                        <span style="opacity: .8">Options</span>
                         <!--Toggle data points-->
-                        <div class="form-check ml-sm-2">
+                        <div class="form-check ml-2">
                             <div class="custom-control custom-switch">
                                 <input type="checkbox" class="custom-control-input" id="togglePoints" name="example1">
                                 <label class="custom-control-label" for="togglePoints">Data Points</label>
@@ -61,10 +54,11 @@
                         </div>
 
                         <!--share button-->
-                        <div class="ml-2">
-                            <button data-placement="top" data-popover-content="#sharePopoverContent" data-toggle="popover" id="sharePopover" class="btn">
+                        <div class="">
+                            <button data-placement="right" data-popover-content="#sharePopoverContent" data-toggle="popover" id="sharePopover" class="btn">
                                 <img src="img/share.svg" class="darkModeIcon d-block share" alt="Share Icon" style="max-width: 30px; max-height: 30px;" data-toggle="tooltip" title="Share">
                             </button>
+                            Share
 
                             <div class="hidden d-none" id="sharePopoverContent">
                                 <div class="popover-heading">
@@ -84,22 +78,34 @@
                         </div>
 
                         <!--Dark mode button-->
-                        <button id="darkModeToggle" class="ml-1 btn" data-toggle="tooltip" data-placement="top" title="Toggle Dark Mode">
+                        <button id="darkModeToggle" class="btn" data-toggle="tooltip" data-placement="top" title="Toggle Dark Mode">
                             <img id="moon" class="darkModeIcon moon" alt="Moon Icon" src="img/moon.svg" style="max-width: 30px; max-height: 30px;">
                             <img id="sun" class="darkModeIcon sun active" alt="Sun Icon" src="img/sun.svg" style="max-width: 30px; max-height: 30px;">
                         </button>
+                        Dark Mode
+                    </div>
 
-                        <div class="mr-0 ml-auto input-group">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text">Export</label>
-                            </div>
-                            <div class="input-group-append">
-                                <input type="button" class="btn btn-outline-info" value="JSON" id="export-json">
-                                <input type="button" class="btn btn-outline-info" value="Image" id="export-img">
-                            </div>
+                    <div class="mt-3 input-group">
+                        <div class="input-group-prepend">
+                            <label class="input-group-text">Export</label>
+                        </div>
+                        <div class="input-group-append">
+                            <input type="button" class="btn btn-outline-info" value="JSON" id="export-json">
+                            <input type="button" class="btn btn-outline-info" value="Image" id="export-img">
                         </div>
                     </div>
                 </div>
+            </div>
+            <div id="content">
+                <div class="title">
+                    <button class="navbar-toggler border-dark" id="toggle-toolbar" type="button">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <h2 class="link-center d-inline-block align-middle">Compare Races</h2>
+                    <a href="index.html" class="ml-3 d-none d-md-inline-block align-bottom">Home</a>
+                    <a href="about.html" class="ml-2 d-none d-md-inline-block align-bottom">About</a>
+                </div>
+
                 <div id="helpText">
                     <h3 style="margin-top: 1em; font-weight: 400;">Please select 2 races and click apply to show a chart.</h3>
                 </div>

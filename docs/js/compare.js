@@ -58,7 +58,7 @@ function showTable(selectedRaces) {
     let loading = $('.loading');
     let compareBtn = $('#compareBtn');
     $('#helpText').remove();
-    loading.animateWidth(38, 1);
+    loading.animateWidth(38, 38, 1);
     compareBtn.prop('disabled', true);
     console.log("Showing comparison between " + selectedRaces[0].name + " and " + selectedRaces[1].name);
 
@@ -380,7 +380,7 @@ $(function() {
         showTable(getSelectedRaces());
     });
     $('#togglePoints').on('click', function () {
-       showPoints($(this).prop('checked'));
+        showPoints($(this).prop('checked'));
     });
     $('#darkModeToggle').on('click', function () {
         setDarkMode(!darkModeEnabled());
@@ -395,6 +395,11 @@ $(function() {
         let selectedRaces = [r1, r2];
         showTable(selectedRaces);
     }
+
+    $('#toggle-toolbar').on('click', function() {
+        $('#toolbar').toggleClass('active');
+        $('#content').toggleClass('active');
+    })
 });
 
 function handleGetParameters() {

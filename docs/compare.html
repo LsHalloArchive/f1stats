@@ -111,6 +111,9 @@
             </div>
         </div>
         <footer>
+            <link rel="stylesheet" href="css/bootstrap.min.css"/>
+            <link rel="stylesheet" href="css/chart.min.css"/>
+            <link rel="stylesheet" href="css/custom.css"/>
             <script src="js/jquery.min.js"></script>
             <script src="js/moment.min.js"></script>
             <script src="js/popper.min.js"></script>
@@ -119,9 +122,14 @@
             <script src="js/chart-annotation.min.js"></script>
             <script src="js/common.js"></script>
             <script src="js/compare.js"></script>
-            <link rel="stylesheet" href="css/bootstrap.min.css"/>
-            <link rel="stylesheet" href="css/chart.min.css"/>
-            <link rel="stylesheet" href="css/custom.css"/>
+            <script async src="https://www.googletagmanager.com/gtag/js?id=UA-156097097-2"></script>
+            <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+
+                gtag('config', 'UA-156097097-2');
+            </script>
         </footer>
     </body>
 </html>

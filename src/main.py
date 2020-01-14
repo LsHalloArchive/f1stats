@@ -21,7 +21,6 @@ def send_to_mysql(host, username, password, database, users):
 
 
 if __name__ == "__main__":
-    db = TinyDB('db.json')
     config = configparser.ConfigParser()
     config.read("mysql.ini")
     pp = pprint.PrettyPrinter(indent=4)
@@ -33,13 +32,6 @@ if __name__ == "__main__":
         for name in subreddit_names:
             sub = reddit.subreddit(name)
             users[name] = sub.accounts_active
-
-        # Insert into local db
-        db.insert({'time': time.time(),
-                   'user_count_' + subreddit_names[0]: users[subreddit_names[0]],
-                   'user_count_' + subreddit_names[1]: users[subreddit_names[1]],
-                   'user_count_' + subreddit_names[2]: users[subreddit_names[2]]
-                   })
 
         lima = False
         ac = False

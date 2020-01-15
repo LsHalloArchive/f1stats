@@ -208,8 +208,14 @@ function showTable(selectedRaces) {
             success: function (requestData) {
                 let data = JSON.parse(requestData);
                 for (let i = 0; i < data.length; i++) {
-                    let raceName = selectedRaces[i].year + '-' + selectedRaces[i].name;
+                    let raceName = requestedRaces[i].year + '-' + requestedRaces[i].name;
+                    console.log("Inserting cache for " +  raceName);
+                    console.table(selectedRaces);
+                    console.log("--PRE--");
+                    console.table(cachedRaceData);
                     cachedRaceData[raceName] = new RaceData(requestedRaces[i].name, requestedRaces[i].year, data[i], requestedRaces[i].start);
+                    console.log("---POST---");
+                    console.table(cachedRaceData);
                     chartData.push(new RaceData(requestedRaces[i].name, requestedRaces[i].year, data[i], requestedRaces[i].start));
                 }
                 updateChartData();

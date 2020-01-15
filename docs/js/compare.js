@@ -394,31 +394,56 @@ function getSelectedRaces() {
     return [sourceObj, targetObj];
 }
 
-function fillSelectOptions() {
-    let compareSource = $('#compareSource');
-    let compareTarget = $('#compareTarget');
-    let completedRaces = [];
-    for(let year in races) {
-        let optGroup = $('<optgroup label="' + year + '">');
-        for (let shorthand in races[year]) {
-            let race = races[year][shorthand];
-            let name = race.name;
-            let start = race.start;
-            let disabled = true;
+function fillSelectOptionYears() {
+    let compareSource = $('#compareSourceYear');
+    let compareTarget = $('#compareTargetYear');
 
-            let now = new Date().getTime();
-            let valIndex = year + '-' + shorthand;
-            if (now > start) {
-                completedRaces.push({index: valIndex, start: start});
-                disabled = false;
-            }
-            $('<option>', {
-                disabled: disabled,
-                value: valIndex,
-                text: name
-            }).appendTo(optGroup);
+    compareSource.on('change.year', function() {
+        fillSelectOptions($(this).val(), $('#compareSource'));
+    });
+    compareTarget.on('change.year', function() {
+        fillSelectOptions($(this).val(), $('#compareTarget'));
+    });
+
+    for(let year in races) {
+        $('<option>', {
+            value: year,
+            text: year
+        }).appendTo([compareSource, compareTarget]);
+    }
+    compareSource.val(new Date().getFullYear());
+    compareTarget.val(new Date().getFullYear());
+
+    fillSelectOptions(new Date().getFullYear(), $('#compareSource'));
+    fillSelectOptions(new Date().getFullYear(), $('#compareTarget'));
+}
+
+function fillSelectOptions(year, target) {
+    target.find('option').remove();
+    let completedRaces = [];
+
+    for (let shorthand in races[year]) {
+        let race = races[year][shorthand];
+        let name = race.name;
+        let start = race.start;
+        let disabled = true;
+
+        let now = new Date().getTime();
+        let valIndex = year + '-' + shorthand;
+        if (now > start) {
+            completedRaces.push({index: valIndex, start: start});
+            disabled = false;
         }
-        optGroup.appendTo([compareSource, compareTarget]);
+        let title = '';
+        if(disabled) {
+            title = 'Race not started'
+        }
+        $('<option>', {
+            disabled: disabled,
+            value: valIndex,
+            text: name,
+            title: title
+        }).appendTo(target);
     }
 
     //sort completed races by start time
@@ -430,11 +455,9 @@ function fillSelectOptions() {
         }
         return 0;
     });
-    if(completedRaces.length > 1) {
-        compareSource.val(completedRaces[completedRaces.length - 2].index);
-        compareTarget.val(completedRaces[completedRaces.length - 1].index);
+    if(completedRaces.length > 0) {
+        target.val(completedRaces[completedRaces.length - 1].index);
     }
-
 }
 
 /**
@@ -499,7 +522,7 @@ function getDurationOfRaces() {
 }
 
 $(function() {
-    fillSelectOptions();
+    fillSelectOptionYears();
     getDurationOfRaces();
     setDarkMode(darkModeEnabled());
     $('#compareBtn').on('click', function () {

@@ -369,7 +369,7 @@ function updateShareUrl(selectedRaces) {
     let url = new URL(window.location);
     url.search = ""; //remove all previous params
     for(let i = 0; i < selectedRaces.length; i++) {
-        url.searchParams.set('r' + i, selectedRaces[i].short);
+        url.searchParams.set('r' + i, selectedRaces[i].year + '-' + selectedRaces[i].short);
     }
     $('#shareUrl').attr('value', url.href);
     $('#sharePopover').popover('hide');
@@ -537,10 +537,14 @@ $(function() {
 
     let params = handleGetParameters();
     if(params[0] !== null && params[1] !== null) {
-        let r1 = races[params[0]];
-        r1.short = params[0];
-        let r2 = races[params[1]];
-        r2.short = params[1];
+        let p0 = params[0].split('-');
+        let p1 = params[1].split('-');
+        let r1 = races[p0[0]][p0[1]];
+        r1.year = p0[0];
+        r1.short = p0[1];
+        let r2 = races[p1[0]][p1[1]];
+        r2.year = p1[0];
+        r2.short = p1[1];
         let selectedRaces = [r1, r2];
         showTable(selectedRaces);
     }

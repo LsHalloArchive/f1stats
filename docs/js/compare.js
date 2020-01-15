@@ -1,43 +1,43 @@
 let races = {
     '2019': {
         'sgp': {
-            id: 15,
+            id: 14,
             name: 'Singapore',
             start: 1569154200000,
             length: '1:58:33'
         },
         'rus': {
-            id: 16,
+            id: 15,
             name: 'Russia',
             start: 1569755400000,
             length: '1:33:38'
         },
         'jpn': {
-            id: 17,
+            id: 16,
             name: 'Japan',
             start: 1570943400000,
             length: '1:21:46'
         },
         'mex': {
-            id: 18,
+            id: 17,
             name: 'México',
             start: 1572203400000,
             length: '1:36:48'
         },
         'usa': {
-            id: 19,
+            id: 18,
             name: 'United States',
             start: 1572808200000,
             length: '1:33:55'
         },
         'bra': {
-            id: 20,
+            id: 19,
             name: 'Brazil',
             start: 1574010600000,
             length: '1:33:14'
         },
         'are': {
-            id: 21,
+            id: 20,
             name: 'Abu Dhabi',
             start: 1575205800000,
             length: '1:34:05'
@@ -181,11 +181,12 @@ function showTable(selectedRaces) {
     let fromTimes = [];
     let toTimes = [];
     for(let i = 0; i < selectedRaces.length; i++) {
-        if(cachedRaceData[selectedRaces[i].year + '-' + selectedRaces[i].name] !== undefined) {
-            if(cachedRaceData[selectedRaces[i].year + '-' + selectedRaces[i].name].getOffset() === timeOffset) {
-                console.log("Cache hit: " + selectedRaces[i].year + '-' + selectedRaces[i].name);
-                console.log("Data: ", cachedRaceData[selectedRaces[i].year + '-' + selectedRaces[i].name]);
-                chartData.push(cachedRaceData[selectedRaces[i].year + '-' + selectedRaces[i].name]);
+        let raceName = selectedRaces[i].year + '-' + selectedRaces[i].name;
+        if(cachedRaceData[raceName] !== undefined) {
+            if(cachedRaceData[raceName].getOffset() === timeOffset && cachedRaceData[raceName].name === selectedRaces[i].name && cachedRaceData[raceName].year === selectedRaces[i].year) {
+                console.log("Cache hit: " + raceName);
+                console.log("Data: ", cachedRaceData[raceName]);
+                chartData.push(cachedRaceData[raceName]);
             }
         } else {
             let from = selectedRaces[i].start;
@@ -207,7 +208,8 @@ function showTable(selectedRaces) {
             success: function (requestData) {
                 let data = JSON.parse(requestData);
                 for (let i = 0; i < data.length; i++) {
-                    cachedRaceData[selectedRaces[i].year + '-' + selectedRaces[i].name] = new RaceData(requestedRaces[i].name, requestedRaces[i].year, data[i], requestedRaces[i].start);
+                    let raceName = selectedRaces[i].year + '-' + selectedRaces[i].name;
+                    cachedRaceData[raceName] = new RaceData(requestedRaces[i].name, requestedRaces[i].year, data[i], requestedRaces[i].start);
                     chartData.push(new RaceData(requestedRaces[i].name, requestedRaces[i].year, data[i], requestedRaces[i].start));
                 }
                 updateChartData();
@@ -488,7 +490,7 @@ function getDurationOfRaces() {
             if (races[year][short].start < new Date().getTime() && races[year][short].length === undefined) {
                 requestPending = true;
                 let raceNum = races[year][short].id;
-                let requestUrl = "https://ergast.com/api/f1/" + year + "/" + raceNum + "/results.json";
+                let requestUrl = "https://ergast.com/api/f1/" + year + "/" + (raceNum + 1) + "/results.json";
                 $.get({
                     url: requestUrl,
                     success: function (data) {
@@ -537,8 +539,8 @@ $(function() {
 
     let params = handleGetParameters();
     if(params[0] !== null && params[1] !== null) {
-        let p0 = params[0].split('-');
-        let p1 = params[1].split('-');
+        let p0 = params[0].toString().split('-');
+        let p1 = params[1].toString().split('-');
         let r1 = races[p0[0]][p0[1]];
         r1.year = p0[0];
         r1.short = p0[1];

@@ -165,9 +165,6 @@ let lineChart = undefined;
 let chartColors = ['#365eff', '#b93432'];
 let timeOffset = 5400;
 
-let exportJsonHandler = undefined;
-let exportImageHandler = undefined;
-
 function showTable(selectedRaces) {
     let loading = $('.loading');
     let compareBtn = $('#compareBtn');
@@ -184,8 +181,7 @@ function showTable(selectedRaces) {
         let raceName = selectedRaces[i].year + '-' + selectedRaces[i].name;
         if(cachedRaceData[raceName] !== undefined) {
             if(cachedRaceData[raceName].getOffset() === timeOffset && cachedRaceData[raceName].name === selectedRaces[i].name && cachedRaceData[raceName].year === selectedRaces[i].year) {
-                console.log("Cache hit: " + raceName);
-                console.log("Data: ", cachedRaceData[raceName]);
+                console.log("Cache hit: " + raceName + "\nData: ", cachedRaceData[raceName]);
                 chartData.push(cachedRaceData[raceName]);
             }
         } else {
@@ -210,12 +206,7 @@ function showTable(selectedRaces) {
                 for (let i = 0; i < data.length; i++) {
                     let raceName = requestedRaces[i].year + '-' + requestedRaces[i].name;
                     console.log("Inserting cache for " +  raceName);
-                    console.table(selectedRaces);
-                    console.log("--PRE--");
-                    console.table(cachedRaceData);
                     cachedRaceData[raceName] = new RaceData(requestedRaces[i].name, requestedRaces[i].year, data[i], requestedRaces[i].start);
-                    console.log("---POST---");
-                    console.table(cachedRaceData);
                     chartData.push(new RaceData(requestedRaces[i].name, requestedRaces[i].year, data[i], requestedRaces[i].start));
                 }
                 updateChartData();
@@ -299,10 +290,10 @@ function showTable(selectedRaces) {
                     borderWidth: 2,
                     label: {
                         enabled: true,
-                        fontColor: darkModeEnabled()?'#eee':'#444',
-                        backgroundColor: chartColors[i] + '77',
+                        fontColor: darkModeEnabled()?'#eee':'#000',
+                        backgroundColor: chartColors[i] + '99',
                         position: 'top',
-                        yAdjust: (i % 2 === 1)? 40 : 10,
+                        yAdjust: (i % 2) * 30 + 10,
                         content: chartData[i].getName() + " finish"
                     }
                 });
@@ -348,11 +339,8 @@ function showTable(selectedRaces) {
         compareBtn.prop('disabled', false);
         loading.animateWidth(0, 0);
 
-        if(exportJsonHandler !== undefined) {
-            $('#export-json, #export-json-mobile').off('click');
-        }
-        exportJsonHandler = $("#export-json, #export-json-mobile").on('click', function () {
-            $("<a />", {
+        $('#export-json, #export-json-mobile').off('click.jsonHandler').on('click.jsonHandler', function () {
+            $("<a/>", {
                 "download": "formula1.json",
                 "href": "data:application/json," + encodeURIComponent(JSON.stringify({'r1': chartData[0].getF1(), 'r2': chartData[1].getF1()}))
             }).appendTo("body").on('click', function () {
@@ -360,11 +348,7 @@ function showTable(selectedRaces) {
             })[0].click();
         });
 
-        let exportImg = $('#export-img, #export-img-mobile');
-        if(exportImageHandler !== undefined) {
-            exportImg.off('click');
-        }
-        exportImageHandler = exportImg.on('click', function () {
+        $('#export-img, #export-img-mobile').off('click.imgHandler').on('click.imgHandler', function () {
             saveAsImage();
         });
 

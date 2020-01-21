@@ -202,7 +202,7 @@ function showTable(selectedRaces) {
             },
             timeout: 30000,
             success: function (requestData) {
-                let data = JSON.parse(requestData);
+                let data = requestData;
                 for (let i = 0; i < data.length; i++) {
                     let raceName = requestedRaces[i].year + '-' + requestedRaces[i].name;
                     console.log("Inserting cache for " +  raceName);

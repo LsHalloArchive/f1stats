@@ -30,7 +30,7 @@ function showTable(from, to) {
             },
             timeout: 30000,
             success: function (data) {
-                let parsedData = JSON.parse(data);
+                let parsedData = data;
                 chartCallback(parsedData);
                 //push loaded data to history array to reduce requests
                 chartDataHistory.push(new ChartData(parsedData, from, to));

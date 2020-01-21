@@ -64,13 +64,13 @@ $input-background-dark: #2b2b2b;
 body.toolbar-side {
     #toolbar {
         display: block;
-        width: 250px;
+        width: 251px;
         position: fixed;
         top: 0;
         left: 0;
         height: 100vh;
         z-index: 999;
-        background: #fff;
+        background: #eee;
         color: #000;
         transition: all 0.3s;
         margin-top: 0;
@@ -78,10 +78,14 @@ body.toolbar-side {
         overflow-y: auto;
     }
 
+    .form-group {
+        margin-bottom: .5rem;
+    }
+
     .toolbar-group {
         border-radius: .2em;
-        border: 1px solid #444;
-        background-color: #eee;
+        border: 1px solid #aaa;
+        background-color: #ececec;
         padding: .3em;
     }
 
@@ -261,7 +265,7 @@ body.dark {
         background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
     }
 
-    #toolbar {
+    #toolbar.side {
         background: #323232;
         color: #ccc;
     }
@@ -271,7 +275,7 @@ body.dark {
         background-color: #292929;
     }
 
-    //<editor-fold desc="Flatpickr">
+    //<editor-fold desc="Flatpickr CSS">
     .flatpickr-calendar {
         background: transparent;
         opacity: 0;

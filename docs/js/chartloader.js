@@ -4,17 +4,12 @@ let lineChart = undefined;
 
 //JSON export
 let datasets = {};
-let exportJsonHandler = undefined;
 
 //Excel export
 let xlsData = [];
 let thisXlsDataExported = false;
-let exportXlsHandler = undefined;
 
-//Image export
-let exportImageHandler = undefined;
-
-//save data from last 10 requests to reduce number of requests needed
+//save data from last 50 requests to reduce number of requests needed
 //if requested data is inside one of the previous loaded data elements
 let chartDataHistory = [];
 
@@ -35,12 +30,12 @@ function showTable(from, to) {
             },
             timeout: 30000,
             success: function (data) {
-                let parsedData = JSON.parse(data);
+                let parsedData = data;
                 chartCallback(parsedData);
                 //push loaded data to history array to reduce requests
                 chartDataHistory.push(new ChartData(parsedData, from, to));
-                //Limit length to 10 elements
-                chartDataHistory.splice(0, Math.max(chartDataHistory.length - 10, 0));
+                //Limit length to 50 elements
+                chartDataHistory.splice(0, Math.max(chartDataHistory.length - 50, 0));
             },
             error: function () {
                 switchUrls(from, to);
@@ -209,10 +204,7 @@ function showTable(from, to) {
                 }
             });
 
-            if(exportJsonHandler !== undefined) {
-                $('#export-json, #export-json-mobile').off('click');
-            }
-            exportJsonHandler = $("#export-json, #export-json-mobile").on('click', function () {
+            $('#export-json, #export-json-mobile').off('click.jsonHandler').on('click.jsonHandler', function () {
                 $("<a />", {
                     "download": "formula1.json",
                     "href": "data:application/json," + encodeURIComponent(JSON.stringify(datasets))
@@ -221,12 +213,9 @@ function showTable(from, to) {
                 })[0].click();
             });
 
-            if(exportXlsHandler !== undefined) {
-                $('#export-xls, #export-xls-mobile').off('click');
-            }
-            exportXlsHandler = $("#export-xls, #export-xls-mobile").on('click', function () {
+            $('#export-xls, #export-xls-mobile').off('click.xlsHandler').on('click.xlsHandler', function () {
                 let pre = new Date();
-                if(!thisXlsDataExported) {
+                if (!thisXlsDataExported) {
                     for (let i = 0; i < xlsData.length; i++) {
                         xlsData[i][0] = new Date(xlsData[i][0] * 1000);
                         xlsData[i][1] = parseInt(xlsData[i][1]);
@@ -256,11 +245,7 @@ function showTable(from, to) {
                 }
             });
 
-            let exportImg = $('#export-img, #export-img-mobile');
-            if(exportImageHandler !== undefined) {
-                exportImg.off('click');
-            }
-            exportImageHandler = exportImg.on('click', function () {
+            $('#export-img, #export-img-mobile').off('click.imageHandler').on('click.imageHandler', function () {
                 saveAsImage();
             });
         }

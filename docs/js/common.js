@@ -75,7 +75,7 @@ function switchUrls(from = undefined, to = undefined) {
  */
 function saveAsImage() {
     let base64 = lineChart.toBase64Image();
-    $("<a />", {
+    $("<a/>", {
         "download": "formula1.png",
         "href": base64
     }).appendTo("body").on('click', function () {
@@ -84,8 +84,8 @@ function saveAsImage() {
 }
 
 /**
- * Sets the pointRadius on the datasets to 0 or 3 depending if *show* is true or false
- * @param show {boolean} radius 0 if false; radius 3 if true
+ * Sets the pointRadius on the datasets to 1 or 3 depending if *show* is true or false
+ * @param show {boolean} radius 1 if false; radius 3 if true
  */
 function showPoints(show) {
     if(lineChart !== undefined) {

@@ -48,4 +48,5 @@ switch($_GET["type"]) {
 }
 
 mysqli_close($db);
+header('Content-type:application/json');
 echo json_encode($to_return);

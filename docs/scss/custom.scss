@@ -9,6 +9,10 @@ $input-background-dark: #2b2b2b;
         height: 100vh !important;
         margin: auto !important;
     }
+
+    h2 {
+        font-size: 1.2rem;
+    }
 }
 
 .input-min-width {
@@ -58,6 +62,10 @@ $input-background-dark: #2b2b2b;
 .title.compare {
     display: flex;
     justify-content: space-between;
+}
+
+.title-right {
+    font-size: .6rem;
 }
 
 #toolbar {

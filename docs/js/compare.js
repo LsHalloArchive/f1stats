@@ -1,158 +1,158 @@
 let races = {
-    '2019': {
+    2019: {
         'sgp': {
             id: 14,
             name: 'Singapore',
-            start: 1569154200000,
+            start: '20190922T121000Z',
             length: '1:58:33'
         },
         'rus': {
             id: 15,
             name: 'Russia',
-            start: 1569755400000,
+            start: '20190929T111000Z',
             length: '1:33:38'
         },
         'jpn': {
             id: 16,
             name: 'Japan',
-            start: 1570943400000,
+            start: '20191013T051000Z',
             length: '1:21:46'
         },
         'mex': {
             id: 17,
             name: 'México',
-            start: 1572203400000,
+            start: '20191027T191000Z',
             length: '1:36:48'
         },
         'usa': {
             id: 18,
             name: 'United States',
-            start: 1572808200000,
+            start: '20191103T191000Z',
             length: '1:33:55'
         },
         'bra': {
             id: 19,
             name: 'Brazil',
-            start: 1574010600000,
+            start: '20191117T181000Z',
             length: '1:33:14'
         },
         'are': {
             id: 20,
             name: 'Abu Dhabi',
-            start: 1575205800000,
+            start: '20191201T131000Z',
             length: '1:34:05'
         }
     },
-    '2020': {
+    2020: {
         'aus': {
             id: 0,
             name: 'Australia',
-            start: 1584252600000
+            start: '20200315T051000Z'
         },
         'bhr': {
             id: 1,
             name: 'Bahrain',
-            start: 1584893400000
+            start: '20200322T151000Z'
         },
         'vnm': {
             id: 2,
             name: 'Vietnam',
-            start: 1587373800000
+            start: '20200405T071000Z'
         },
         'chn': {
             id: 3,
             name: 'China',
-            start: 1587283800000
+            start: '20200419T061000Z'
         },
         'nld': {
             id: 4,
             name: 'Netherlands',
-            start: 1588522200000
+            start: '20200503T131000Z'
         },
         'esp': {
             id: 5,
             name: 'Spain',
-            start: 1589123400000
+            start: '20200510T131000Z'
         },
         'mco': {
             id: 6,
             name: 'Monaco',
-            start: 1590333000000
+            start: '20200524T131000Z'
         },
         'aze': {
             id: 7,
             name: 'Azerbaijan',
-            start: 1591539000000
+            start: '20200607T121000Z'
         },
         'can': {
             id: 8,
             name: 'Canada',
-            start: 1592165400000
+            start: '20200614T181000Z'
         },
         'fra': {
             id: 9,
             name: 'France',
-            start: 1593357000000
+            start: '20200628T131000Z'
         },
         'aut': {
             id: 10,
             name: 'Austria',
-            start: 1593961800000
+            start: '20200705T131000Z'
         },
         'gbr': {
             id: 11,
             name: 'Great Britain',
-            start: 1595171400000
+            start: '20200719T141000Z'
         },
         'hun': {
             id: 12,
             name: 'Hungary',
-            start: 1596381000000
+            start: '20200802T131000Z'
         },
         'bel': {
             id: 13,
             name: 'Belgium',
-            start: 1598800200000
+            start: '20200830T131000Z'
         },
         'ita': {
             id: 14,
             name: 'Italy',
-            start: 1599405000000
+            start: '20200906T131000Z'
         },
         'sgp': {
             id: 15,
             name: 'Singapore',
-            start: 1600611000000
+            start: '20200920T121000Z'
         },
         'rus': {
             id: 16,
             name: 'Russia',
-            start: 1601212200000
+            start: '20200927T111000Z'
         },
         'jpn': {
             id: 17,
             name: 'Japan',
-            start: 1602400200000
+            start: '20201010T051000Z'
         },
         'usa': {
             id: 18,
             name: 'United States',
-            start: 1603653000000
+            start: '20201025T191000Z'
         },
         'mex': {
             id: 19,
             name: 'México',
-            start: 1604261400000
+            start: '20201101T191000Z'
         },
         'bra': {
             id: 20,
             name: 'Brazil',
-            start: 1605463800000
+            start: '20201115T171000Z'
         },
         'are': {
             id: 21,
             name: 'Abu Dhabi',
-            start: 1606659000000
+            start: '20201129T131000Z'
         }
     }
 };
@@ -185,10 +185,10 @@ function showTable(selectedRaces) {
                 chartData.push(cachedRaceData[raceName]);
             }
         } else {
-            let from = selectedRaces[i].start;
-            let to = selectedRaces[i].start / 1000 + 7200; //Get 2h from race start
+            let from = moment(selectedRaces[i].start) / 1000;
+            let to = moment(selectedRaces[i].start) / 1000 + 7200; //Get 2h from race start
             requestedRaces.push({name: selectedRaces[i].name, year: selectedRaces[i].year, start: from});
-            fromTimes.push(Math.round(from / 1000 - timeOffset / 2));
+            fromTimes.push(Math.round(from - timeOffset / 2));
             toTimes.push(Math.round(to + timeOffset));
         }
     }
@@ -417,12 +417,11 @@ function fillSelectOptions(year, target) {
     for (let shorthand in races[year]) {
         let race = races[year][shorthand];
         let name = race.name;
-        let start = race.start;
+        let start = moment(race.start);
         let disabled = true;
 
-        let now = new Date().getTime();
         let valIndex = year + '-' + shorthand;
-        if (now > start) {
+        if (moment() > start) {
             completedRaces.push({index: valIndex, start: start});
             disabled = false;
         }
@@ -477,7 +476,7 @@ function getDurationOfRaces() {
     let requestPending = false;
     for(let year in races) {
         for (let short in races[year]) {
-            if (races[year][short].start < new Date().getTime() && races[year][short].length === undefined) {
+            if (races[year][short].start * 1000 < new Date().getTime() && races[year][short].length === undefined) {
                 requestPending = true;
                 let raceNum = races[year][short].id;
                 let requestUrl = "https://ergast.com/api/f1/" + year + "/" + (raceNum + 1) + "/results.json";
@@ -496,7 +495,7 @@ function getDurationOfRaces() {
                         $('#compareBtn').prop('disabled', false);
                         requestPending = false;
                     },
-                    error: function (err) {
+                    error: function () {
                         console.error("Request to ergast api failed. Assuming race took 2h maximum time.");
                         //Should ergast be not available fill with maximum time a race needs
                         races[year][short].length = '2:00:00';
@@ -552,6 +551,16 @@ function handleGetParameters() {
     return [url.searchParams.get('r0'), url.searchParams.get('r1')];
 }
 
+function listRaceStartTimes() {
+    for(let year in races) {
+        console.log('---------- ' + year + ' ----------');
+        for(let raceIndex in races[year]) {
+            let race = races[year][raceIndex];
+            console.log(race.name + ': ' + moment(race.start).format('llll'));
+        }
+    }
+}
+
 class RaceData {
     constructor(name, year, data, start) {
         if(data[0].length === 2) {
@@ -575,7 +584,7 @@ class RaceData {
         this.f1_5 = [];
         this.f1feeder = [];
         for(let i = 0; i < data.length; i++) {
-            let date = (new Date(parseInt(data[i][0]) * 1000) - start) / 1000 / 60;
+            let date = (new Date(parseInt(data[i][0])) - start) / 60;
             this.f1.push({x: date, y: parseInt(data[i][1])});
             this.f1_5.push({x: date, y: parseInt(data[i][2])});
             this.f1feeder.push({x: date, y: parseInt(data[i][3])});

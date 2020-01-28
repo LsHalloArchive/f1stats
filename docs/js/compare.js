@@ -543,7 +543,7 @@ $(function() {
     $('#toggle-toolbar').on('click', function() {
         $('#toolbar').toggleClass('active');
         $('#content').toggleClass('active');
-    })
+    });
 });
 
 function handleGetParameters() {

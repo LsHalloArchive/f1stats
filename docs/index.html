@@ -82,14 +82,19 @@
                             <img id="sun" class="darkModeIcon sun active" alt="Sun Icon" src="img/sun.svg" style="max-width: 30px; max-height: 30px;">
                         </button>
 
-                        <div class="mr-0 ml-auto input-group">
-                            <div class="input-group-prepend">
-                                <label class="input-group-text">Export</label>
+                        <div class="mr-0 ml-auto">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <label class="input-group-text">Export</label>
+                                </div>
+                                <div class="input-group-append">
+                                    <input type="button" class="btn btn-outline-info" value="JSON" id="export-json">
+                                    <input type="button" class="btn btn-outline-info" value="Excel" id="export-xls">
+                                    <input type="button" class="btn btn-outline-info" value="Image" id="export-img">
+                                </div>
                             </div>
-                            <div class="input-group-append">
-                                <input type="button" class="btn btn-outline-info" value="JSON" id="export-json">
-                                <input type="button" class="btn btn-outline-info" value="Excel" id="export-xls">
-                                <input type="button" class="btn btn-outline-info" value="Image" id="export-img">
+                            <div class="title-right">
+                                Timezone: Unknown
                             </div>
                         </div>
                     </div>

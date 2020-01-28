@@ -156,6 +156,9 @@ $(function () {
     //Add smooth transition to color effect after page has loaded to avoid distracting color fade
     body.css('transition', 'background-color .4s');
     $('.datepicker, .input-group-text, .form-control, .custom-control-label, h2').css('transition', 'background-color .4s, border-color .4s');
+
+    let tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    $('.title-right').text('Timezone: ' + tz);
 });
 
 //Extend jQuery with custom function

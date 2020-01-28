@@ -55,6 +55,11 @@ $input-background-dark: #2b2b2b;
     min-height: 0;
 }
 
+.title.compare {
+    display: flex;
+    justify-content: space-between;
+}
+
 #toolbar {
     display: flex;
     flex-direction: column;

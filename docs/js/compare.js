@@ -61,8 +61,8 @@ let races = {
         },
         'chn': {
             id: 3,
-            name: 'China',
-            start: '20200419T061000Z'
+            name: 'China (Postponed)',
+            start: '20201231T061000Z'
         },
         'nld': {
             id: 4,
@@ -425,15 +425,11 @@ function fillSelectOptions(year, target) {
             completedRaces.push({index: valIndex, start: start});
             disabled = false;
         }
-        let title = '';
-        if(disabled) {
-            title = 'Race not started'
-        }
         $('<option>', {
             disabled: disabled,
             value: valIndex,
             text: name,
-            title: title
+            title: disabled?'Race not started':''
         }).appendTo(target);
     }
 

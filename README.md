@@ -10,5 +10,3 @@ This project logs the active users once every minute using the reddit api at [ht
 Enjoy!
 
 If you have any suggestions create an issue or write me on reddit. I'm [u/lshallo](https://www.reddit.com/user/lshallo)
-
-*The current development preview is available at: [https://2020-preview.f1stats.tk/](https://2020-preview.f1stats.tk/)*

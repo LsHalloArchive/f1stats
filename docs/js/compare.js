@@ -47,52 +47,52 @@ let races = {
         'aus': {
             id: 0,
             name: 'Australia',
-            start: '20200315T051000Z'
+            start: '20201231T061000Z'
         },
         'bhr': {
             id: 1,
             name: 'Bahrain',
-            start: '20200322T151000Z'
+            start: '20201231T061000Z'
         },
         'vnm': {
             id: 2,
             name: 'Vietnam',
-            start: '20200405T071000Z'
+            start: '20201231T061000Z'
         },
         'chn': {
             id: 3,
-            name: 'China (Postponed)',
+            name: 'China',
             start: '20201231T061000Z'
         },
         'nld': {
             id: 4,
             name: 'Netherlands',
-            start: '20200503T131000Z'
+            start: '20201231T061000Z'
         },
         'esp': {
             id: 5,
             name: 'Spain',
-            start: '20200510T131000Z'
+            start: '20201231T061000Z'
         },
         'mco': {
             id: 6,
             name: 'Monaco',
-            start: '20200524T131000Z'
+            start: '20201231T061000Z'
         },
         'aze': {
             id: 7,
             name: 'Azerbaijan',
-            start: '20200607T121000Z'
+            start: '20201231T061000Z'
         },
         'can': {
             id: 8,
             name: 'Canada',
-            start: '20200614T181000Z'
+            start: '20201231T061000Z'
         },
         'fra': {
             id: 9,
             name: 'France',
-            start: '20200628T131000Z'
+            start: '20201231T061000Z'
         },
         'aut': {
             id: 10,

@@ -44,115 +44,45 @@ let races = {
         }
     },
     2020: {
-        'aus': {
+        'aut': {
             id: 0,
-            name: 'Australia',
-            start: '20201231T061000Z'
+            name: 'Austria',
+            start: '20200705T1310Z'
         },
-        'bhr': {
+        'sty': {
             id: 1,
-            name: 'Bahrain',
-            start: '20201231T061000Z'
+            name: 'Styria (Austria)',
+            start: '20200712T1310Z'
         },
-        'vnm': {
+        'hun': {
             id: 2,
-            name: 'Vietnam',
-            start: '20201231T061000Z'
+            name: 'Hungary',
+            start: '20200719T1310Z'
         },
-        'chn': {
+        'gbr': {
             id: 3,
-            name: 'China',
-            start: '20201231T061000Z'
+            name: 'Britain',
+            start: '20200802T1310Z'
         },
-        'nld': {
+        'ani': {
             id: 4,
-            name: 'Netherlands',
-            start: '20201231T061000Z'
+            name: '70th Anniversary (Britain)',
+            start: '20200809T1410Z'
         },
         'esp': {
             id: 5,
             name: 'Spain',
-            start: '20201231T061000Z'
-        },
-        'mco': {
-            id: 6,
-            name: 'Monaco',
-            start: '20201231T061000Z'
-        },
-        'aze': {
-            id: 7,
-            name: 'Azerbaijan',
-            start: '20201231T061000Z'
-        },
-        'can': {
-            id: 8,
-            name: 'Canada',
-            start: '20201231T061000Z'
-        },
-        'fra': {
-            id: 9,
-            name: 'France',
-            start: '20201231T061000Z'
-        },
-        'aut': {
-            id: 10,
-            name: 'Austria',
-            start: '20200705T131000Z'
-        },
-        'gbr': {
-            id: 11,
-            name: 'Great Britain',
-            start: '20200719T141000Z'
-        },
-        'hun': {
-            id: 12,
-            name: 'Hungary',
-            start: '20200802T131000Z'
+            start: '20200816T1310Z'
         },
         'bel': {
-            id: 13,
+            id: 6,
             name: 'Belgium',
-            start: '20200830T131000Z'
+            start: '20200830T1310Z'
         },
         'ita': {
-            id: 14,
+            id: 7,
             name: 'Italy',
-            start: '20200906T131000Z'
-        },
-        'sgp': {
-            id: 15,
-            name: 'Singapore',
-            start: '20200920T121000Z'
-        },
-        'rus': {
-            id: 16,
-            name: 'Russia',
-            start: '20200927T111000Z'
-        },
-        'jpn': {
-            id: 17,
-            name: 'Japan',
-            start: '20201010T051000Z'
-        },
-        'usa': {
-            id: 18,
-            name: 'United States',
-            start: '20201025T191000Z'
-        },
-        'mex': {
-            id: 19,
-            name: 'México',
-            start: '20201101T191000Z'
-        },
-        'bra': {
-            id: 20,
-            name: 'Brazil',
-            start: '20201115T171000Z'
-        },
-        'are': {
-            id: 21,
-            name: 'Abu Dhabi',
-            start: '20201129T131000Z'
+            start: '20200906T1310Z'
         }
     }
 };

@@ -83,6 +83,11 @@ let races = {
             id: 7,
             name: 'Italy',
             start: '20200906T1310Z'
+        },
+        'xxx': {
+            id: 22,
+            name: 'Update following...',
+            start: '20201231T2330Z'
         }
     }
 };

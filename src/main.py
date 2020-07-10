@@ -25,7 +25,10 @@ def send_to_mysql(host, username, password, database, users):
 if __name__ == "__main__":
     for file in os.listdir():
         print(file)
-    os.chdir("../config")
+    if 'config' in os.listdir():
+        os.chdir('config')
+    else:
+        os.chdir("../config")
     for file in os.listdir():
         print(file)
     config = configparser.ConfigParser()

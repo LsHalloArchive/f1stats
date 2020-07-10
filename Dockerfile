@@ -1,6 +1,6 @@
 FROM python:3.8-alpine
 
-RUN apk add --no-cache mariadb-connector-c-dev py3-mysqlclient; \
+RUN apk add --no-cache mariadb-connector-c-dev py3-mysqlclient libffi-dev; \
     apk add --no-cache --virtual .build-deps \
         build-base \
         mariadb-dev; \

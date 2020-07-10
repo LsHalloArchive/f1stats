@@ -1,4 +1,3 @@
-import grequests
 import requests
 import os
 import time
@@ -97,7 +96,7 @@ if __name__ == "__main__":
                                                                                                run_time))
 
         try:
-            grequests.post(config['hc']['hc-url'], timeout=10)
+            requests.post(config['hc']['hc-url'], timeout=10)
         except Exception as e:
             print(repr(e))
 

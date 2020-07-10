@@ -167,15 +167,17 @@ input.datepicker {
   background-repeat: no-repeat;
 }
 
-.loading.center {
-  position: relative;
+.loading.center, .main-loading.center {
+  position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
 
-.loading.no-bg {
-  background: none;
+.main-loading {
+  width: 0;
+  height: 0;
+  opacity: 0;
 }
 
 /* Dark mode */
@@ -222,7 +224,7 @@ body.dark .custom-control-label::before {
 body.dark .modal-content {
   background-color: #222;
 }
-body.dark .loading {
+body.dark .loading, body.dark .main-loading {
   filter: invert(0.85);
 }
 body.dark .popover {

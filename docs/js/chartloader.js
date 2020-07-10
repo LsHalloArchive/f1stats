@@ -254,7 +254,7 @@ function showTable(from, to) {
         setDarkMode(darkModeEnabled());
         filterButton.prop('disabled', false);
         filterButtonMobile.prop('disabled', false);
-        loadingIcon.animateWidth(0, 0);
+        loadingIcon.animateWidth(0, 0, 0);
     }
 }
 
@@ -387,7 +387,7 @@ $(function() {
     function handleDateInput(from, to) {
         filterButtonMobile.prop('disabled', true);
         filterButton.prop('disabled', true);
-        loadingIcon.animateWidth(38, 1);
+        loadingIcon.animateWidth(38, 38, 1);
 
         try {
                             //14 days in ms
@@ -404,7 +404,7 @@ $(function() {
             alert(e.toString());
             filterButtonMobile.prop('disabled', false);
             filterButton.prop('disabled', false);
-            loadingIcon.animateWidth(0, 0);
+            loadingIcon.animateWidth(0, 0, 0);
             console.warn(e);
         }
     }

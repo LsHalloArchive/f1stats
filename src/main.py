@@ -23,12 +23,12 @@ def send_to_mysql(host, username, password, database, users):
 
 
 if __name__ == "__main__":
-    for file in os.listdir():
-        print(file)
-    if 'config' in os.listdir():
-        os.chdir('config')
-    else:
-        os.chdir("../config")
+    paths = ['config', '../config', '../../config', '/app/config']
+    for p in paths:
+        if os.path.isdir(p):
+            os.chdir(p)
+
+    print(os.path.abspath('.'))
     for file in os.listdir():
         print(file)
     config = configparser.ConfigParser()

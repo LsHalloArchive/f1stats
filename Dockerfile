@@ -1,6 +1,10 @@
 FROM python:3.8-alpine
 
-RUN apk add --no-cache py3-mysqlclient py3-mysqldb py3-pymysql
+RUN apk add --no-cache mariadb-connector-c-dev py3-mysqlclient; \
+    apk add --no-cache --virtual .build-deps \
+        build-base \
+        mariadb-dev; \
+    pip install mysqlclient
 
 WORKDIR /app
 COPY . /app
@@ -15,5 +19,6 @@ COPY . /app
 	#&& apk del .build-deps
 
 RUN pip3 install -r requirements.txt
+RUN apk del .build-deps
 
 CMD cd src/ && python3 -u main.py

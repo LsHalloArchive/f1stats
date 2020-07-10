@@ -179,7 +179,15 @@ input.datepicker {
     opacity: 0;
     height: 0;
     background-image: url('../img/rolling.svg');
+    background-size: 100% 100%;
     background-repeat: no-repeat;
+}
+
+.loading.center {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 /* Dark mode */

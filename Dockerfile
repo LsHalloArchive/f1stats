@@ -1,8 +1,8 @@
 FROM python:3.8-alpine
 
-COPY src/* /app
-
 WORKDIR /app
+COPY src /app
+
 
 RUN apk add --update --no-cache mariadb-connector-c-dev \
 	&& apk add --no-cache --virtual .build-deps \

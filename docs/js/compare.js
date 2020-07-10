@@ -47,7 +47,8 @@ let races = {
         'aus': {
             id: 0,
             name: 'Australia',
-            start: '20201231T061000Z'
+            start: '20201231T061000Z',
+            length: '1:30:55'
         },
         'bhr': {
             id: 1,

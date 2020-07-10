@@ -1,7 +1,7 @@
 FROM python:3.8-alpine
 
 WORKDIR /app
-COPY src /app
+COPY . /app
 
 
 RUN apk add --update --no-cache mariadb-connector-c-dev \
@@ -12,4 +12,4 @@ RUN apk add --update --no-cache mariadb-connector-c-dev \
 	&& pip install -r requirements.txt \
 	&& apk del .build-deps
 
-CMD python -u main.py
+CMD cd src/ && python -u main.py

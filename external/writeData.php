@@ -1,5 +1,4 @@
 <?php
-error_reporting(E_ALL);
 $credentials = parse_ini_file("credentials.ini");
 
 if(isset($_POST["token"]) && isset($_POST["uid"])) {
@@ -15,7 +14,14 @@ if(isset($_POST["token"]) && isset($_POST["uid"])) {
         $f1feeder = mysqli_real_escape_string($db, $_POST["f1feeder"]);
 
         $result = mysqli_query($db, "INSERT INTO f1stats (`time`, `f1`, `f1_5`, `f1feeder`) VALUES ({$time}, {$f1}, {$f1_5}, {$f1feeder})");
+        if($result === false) {
+            http_response_code(502);
+        }
         mysqli_close($db);
+        exit();
+    } else {
+        http_response_code(401);
     }
 }
+http_response_code(401);
 

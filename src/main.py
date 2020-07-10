@@ -59,24 +59,30 @@ if __name__ == "__main__":
 
         # Insert into remote backup backup backup db
         try:
-            requests.post(config['mysql.000']['url'],
-                          data={
-                              'time': time.time(),
-                              'f1': users[subreddit_names[0]],
-                              'f1_5': users[subreddit_names[1]],
-                              'f1feeder': users[subreddit_names[2]],
-                              'token': config['mysql.000']['token'],
-                              'uid': config['mysql.000']['uid']
-                          },
-                          timeout=5)
-            webhost = True
+            resp = requests.post(config['mysql.000']['url'],
+                                 data={
+                                     'time': time.time(),
+                                     'f1': users[subreddit_names[0]],
+                                     'f1_5': users[subreddit_names[1]],
+                                     'f1feeder': users[subreddit_names[2]],
+                                     'token': config['mysql.000']['token'],
+                                     'uid': config['mysql.000']['uid']
+                                 },
+                                 timeout=5)
+            if resp.status_code == 200:
+                webhost = True
         except Exception as exception:
             print(repr(exception))
 
         time_post = time.time()
         run_time = time_post - time_pre
 
-        print("F1: {} F1.5: {} F1Feeder: {} | lima: {}; ac: {}; 000: {}; time: {}s".format(users[subreddit_names[0]], users[subreddit_names[1]], users[subreddit_names[2]], lima, ac, webhost, run_time))
+        if webhost is False or ac is False or lima is False:
+            print("F1: {} F1.5: {} F1Feeder: {} | lima: {}; ac: {}; 000: {}; time: {}s".format(users[subreddit_names[0]],
+                                                                                               users[subreddit_names[1]],
+                                                                                               users[subreddit_names[2]],
+                                                                                               lima, ac, webhost,
+                                                                                               run_time))
 
         try:
             requests.post(config['hc']['hc-url'], timeout=10)

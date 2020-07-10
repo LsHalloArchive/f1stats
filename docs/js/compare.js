@@ -93,7 +93,7 @@ let races = {
     }
 };
 
-let mainDataUrls = ['https://f1stats.4lima.de/getData.php', 'https://f1status.000webhostapp.com/getData.php'];
+let mainDataUrls = ['https://f1stats.4lima.de/getData.php', 'https://enforced-navigators.000webhostapp.com/getData.php'];
 let dataUrl = mainDataUrls[Math.floor(Math.random() * mainDataUrls.length)];
 
 let cachedRaceData = {};

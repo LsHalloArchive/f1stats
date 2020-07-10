@@ -1,5 +1,7 @@
 FROM python:3.8-alpine
 
+RUN apk add py3-mysqlclient
+
 WORKDIR /app
 COPY . /app
 
@@ -11,6 +13,7 @@ COPY . /app
 	#	musl-dev \
 	#&& pip install -r requirements.txt \
 	#&& apk del .build-deps
+
 RUN pip3 install -r requirements.txt
 
 CMD cd src/ && python3 -u main.py

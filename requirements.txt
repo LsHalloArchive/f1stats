@@ -1,14 +1,4 @@
-certifi==2020.06.20
-chardet==3.0.4
-idna==2.10
 mysqlclient==2.0.1
 praw==7.1.0
-prawcore==1.4.0
-protobuf==3.12.2
 requests==2.24.0
-six==1.15.0
-tinydb==4.1.1
-update-checker==0.17
-urllib3==1.25.9
-websocket-client==0.56.0
 grequests==0.6.0

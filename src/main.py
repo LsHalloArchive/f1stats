@@ -24,6 +24,8 @@ def send_to_mysql(host, username, password, database, users):
 
 if __name__ == "__main__":
     os.chdir("../config")
+    for file in os.listdir():
+        print(file)
     config = configparser.ConfigParser()
     config.read(["mysql.ini", "../mysql.ini", "../config/mysql.ini"])
     pp = pprint.PrettyPrinter(indent=4)

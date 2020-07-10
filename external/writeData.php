@@ -6,7 +6,8 @@ if(isset($_POST["token"]) && isset($_POST["uid"])) {
         $db = mysqli_connect($credentials['host'], $credentials['user'], $credentials['password'], $credentials['database']);
         if (mysqli_connect_errno()) {
             printf("Connect failed: %s\n", mysqli_connect_error());
-            exit();
+            http_response_code(502);
+            exit("Internal server error");
         }
         $time = mysqli_real_escape_string($db, $_POST["time"]);
         $f1 = mysqli_real_escape_string($db, $_POST["f1"]);
@@ -16,12 +17,15 @@ if(isset($_POST["token"]) && isset($_POST["uid"])) {
         $result = mysqli_query($db, "INSERT INTO f1stats (`time`, `f1`, `f1_5`, `f1feeder`) VALUES ({$time}, {$f1}, {$f1_5}, {$f1feeder})");
         if($result === false) {
             http_response_code(502);
+            exit("Internal server error");
         }
         mysqli_close($db);
-        exit();
+        exit("Ok");
     } else {
         http_response_code(401);
+        exit("Unauthorized");
     }
 }
 http_response_code(401);
+exit("Unauthorized");
 

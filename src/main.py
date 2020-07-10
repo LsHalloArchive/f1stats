@@ -1,9 +1,13 @@
+import grequests
+import requests
+import os
 import time
 import praw as praw
 import pprint
 import configparser
-import requests
 import MySQLdb
+from datetime import datetime
+
 
 subreddit_names = ["formula1", "formula1point5", "f1feederseries"]
 
@@ -19,8 +23,9 @@ def send_to_mysql(host, username, password, database, users):
 
 
 if __name__ == "__main__":
+    os.chdir("../config")
     config = configparser.ConfigParser()
-    config.read("mysql.ini")
+    config.read(["mysql.ini", "../mysql.ini", "../config/mysql.ini"])
     pp = pprint.PrettyPrinter(indent=4)
     reddit = praw.Reddit('f1statbot', user_agent='windows:f1statbot:v0.0.1 (by /u/lshallo)')
 
@@ -68,7 +73,7 @@ if __name__ == "__main__":
                                      'token': config['mysql.000']['token'],
                                      'uid': config['mysql.000']['uid']
                                  },
-                                 timeout=5)
+                                 timeout=10)
             if resp.status_code == 200:
                 webhost = True
         except Exception as exception:
@@ -77,7 +82,7 @@ if __name__ == "__main__":
         time_post = time.time()
         run_time = time_post - time_pre
 
-        if webhost is False or ac is False or lima is False:
+        if (webhost is False or ac is False or lima is False) or datetime.now().minute % 15 == 0:
             print("F1: {} F1.5: {} F1Feeder: {} | lima: {}; ac: {}; 000: {}; time: {}s".format(users[subreddit_names[0]],
                                                                                                users[subreddit_names[1]],
                                                                                                users[subreddit_names[2]],
@@ -85,7 +90,7 @@ if __name__ == "__main__":
                                                                                                run_time))
 
         try:
-            requests.post(config['hc']['hc-url'], timeout=10)
+            grequests.post(config['hc']['hc-url'], timeout=10)
         except Exception as e:
             print(repr(e))
 

@@ -11,3 +11,4 @@ tinydb==4.1.1
 update-checker==0.17
 urllib3==1.25.9
 websocket-client==0.56.0
+grequests==0.6.0

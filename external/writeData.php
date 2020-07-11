@@ -3,6 +3,9 @@ $credentials = parse_ini_file("credentials.ini");
 
 if(isset($_POST["token"]) && isset($_POST["uid"])) {
     if($_POST["token"] === $credentials["token"] && $_POST["uid"] === $credentials["uid"]) {
+        if(isset($POST['test'])) {
+            exit('Ok')
+        }
         $db = mysqli_connect($credentials['host'], $credentials['user'], $credentials['password'], $credentials['database']);
         if (mysqli_connect_errno()) {
             printf("Connect failed: %s\n", mysqli_connect_error());

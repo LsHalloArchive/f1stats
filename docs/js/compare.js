@@ -408,7 +408,8 @@ function getDurationOfRaces() {
     let requestPending = false;
     for(let year in races) {
         for (let short in races[year]) {
-            if (races[year][short].start * 1000 < new Date().getTime() && races[year][short].length === undefined) {
+            if (moment(races[year][short].start) < moment() && races[year][short].length === undefined) {
+                console.log("Getting race duration from ergast api for " + races[year][short].name);
                 requestPending = true;
                 let raceNum = races[year][short].id;
                 let requestUrl = "https://ergast.com/api/f1/" + year + "/" + (raceNum + 1) + "/results.json";

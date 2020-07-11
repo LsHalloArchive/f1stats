@@ -405,12 +405,14 @@ function parseTime(time) {
 }
 
 function getDurationOfRaces() {
+    let loadingIcon = $('.loading');
     let requestPending = false;
     for(let year in races) {
         for (let short in races[year]) {
             if (moment(races[year][short].start) < moment() && races[year][short].length === undefined) {
                 console.log("Getting race duration from ergast api for " + races[year][short].name);
                 requestPending = true;
+                loadingIcon.animateWidth(38, 38, 1);
                 let raceNum = races[year][short].id;
                 let requestUrl = "https://ergast.com/api/f1/" + year + "/" + (raceNum + 1) + "/results.json";
                 $.get({
@@ -426,6 +428,7 @@ function getDurationOfRaces() {
                             console.error(e);
                         }
                         $('#compareBtn').prop('disabled', false);
+                        loadingIcon.animateWidth(0,0,0);
                         requestPending = false;
                     },
                     error: function () {
@@ -434,8 +437,10 @@ function getDurationOfRaces() {
                         races[year][short].length = '2:00:00';
                         this.duration = 120;
                         $('#compareBtn').prop('disabled', false);
+                        loadingIcon.animateWidth(0,0,0);
                         requestPending = false;
-                    }
+                    },
+                    timeout: 8000
                 });
             }
         }

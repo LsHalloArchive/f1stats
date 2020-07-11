@@ -60,6 +60,7 @@ if __name__ == "__main__":
                                   users, users_total)
                     success[section] = True
                 except Exception as exception:
+                    success[section] = False
                     print(repr(exception))
 
             if section.startswith('http'):
@@ -80,6 +81,7 @@ if __name__ == "__main__":
                     if resp.status_code == 200 and 'ok' in resp.text.lower():
                         success[section] = True
                 except Exception as exception:
+                    success[section] = False
                     print(repr(exception))
 
         time_post = time.time()

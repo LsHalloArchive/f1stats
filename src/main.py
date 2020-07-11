@@ -11,11 +11,11 @@ from datetime import datetime
 subreddit_names = ["formula1", "formula1point5", "f1feederseries"]
 
 
-def send_to_mysql(host, username, password, database, act_time, users, users_total):
+def send_to_mysql(host, username, password, database, users, users_total):
     mysql_db = MySQLdb.connect(host=host, user=username, passwd=password, db=database, connect_timeout=5)
     cursor = mysql_db.cursor()
-    sql = 'INSERT INTO f1stats (time, f1, f1_5, f1feeder, f1_subs, f1_5_subs, f1ffeder_subs) VALUES (%s, %s, %s, %s)'
-    val = (act_time, users[subreddit_names[0]], users[subreddit_names[1]], users[subreddit_names[2]], users_total[subreddit_names[0]], users_total[subreddit_names[1]], users_total[subreddit_names[2]])
+    sql = 'INSERT INTO f1stats (time, f1, f1_5, f1feeder, f1_subs, f1_5_subs, f1feeder_subs) VALUES (%s, %s, %s, %s, %s, %s, %s)'
+    val = (time.time(), users[subreddit_names[0]], users[subreddit_names[1]], users[subreddit_names[2]], users_total[subreddit_names[0]], users_total[subreddit_names[1]], users_total[subreddit_names[2]])
     cursor.execute(sql, val)
     mysql_db.commit()
     mysql_db.close()
@@ -56,7 +56,7 @@ if __name__ == "__main__":
                           config['mysql.lima']['user'],
                           config['mysql.lima']['password'],
                           config['mysql.lima']['database'],
-                          act_time, users, users_total)
+                          users, users_total)
             lima = True
         except Exception as exception:
             print(repr(exception))
@@ -67,7 +67,7 @@ if __name__ == "__main__":
                           config['mysql.ac']['user'],
                           config['mysql.ac']['password'],
                           config['mysql.ac']['database'],
-                          act_time, users, users_total)
+                          users, users_total)
             ac = True
         except Exception as exception:
             print(repr(exception))

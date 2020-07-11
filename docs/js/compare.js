@@ -344,7 +344,7 @@ function fillSelectOptionYears() {
 
     //Select latest year only if more than two races available
     let year = new Date().getFullYear();
-    fillSelectOptions(year, compareSource);
+    fillSelectOptions(year, compareSource); //fill options with current year to determine length of enabled ones
     if(compareSource.find('option:not(:disabled)').length === 1) {
         year -= 1;
     }

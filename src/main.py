@@ -31,7 +31,7 @@ def create_database(host, username, password, db_name):
 
 def create_table(host, username, password, database):
     table_name = 'f1stats'
-    logging.info("Table '{}' does not seem to exist. Trying to create '{}'".format(table_name, table_name))
+    logging.info("Table '{}' does not seem to exist. Trying to create table '{}'".format(table_name, table_name))
 
     sql = '''
     CREATE TABLE `f1stats` (
@@ -178,7 +178,8 @@ if __name__ == "__main__":
             logging.debug("{} | {} | time: {}s".format(users, success, run_time))
 
         try:
-            requests.post(config['hc']['hc-url'], timeout=10)
+            if 'hc' in config.sections():
+                requests.post(config['hc']['hc-url'], timeout=10)
         except Exception as e:
             print(repr(e))
 

@@ -35,6 +35,7 @@ if __name__ == "__main__":
     pp = pprint.PrettyPrinter(indent=4)
     reddit = praw.Reddit('f1statbot', user_agent='windows:f1statbot:v0.0.1 (by /u/lshallo)')
 
+    rf1_subs = 0
     while True:
         time_pre = time.time()
         users = {}
@@ -44,82 +45,52 @@ if __name__ == "__main__":
             users[name] = sub.accounts_active
             users_total[name] = sub.subscribers
 
-        lima = False
-        ac = False
-        webhost = False
-        infinity = False
+        rf1_subs = users_total[subreddit_names[0]]
+
+        success = {}
         act_time = time.time()
 
-        # Insert into remote db
-        try:
-            send_to_mysql(config['mysql.lima']['host'],
-                          config['mysql.lima']['user'],
-                          config['mysql.lima']['password'],
-                          config['mysql.lima']['database'],
-                          users, users_total)
-            lima = True
-        except Exception as exception:
-            print(repr(exception))
+        for section in config.sections():
+            if section.startswith('mysql'):
+                try:
+                    send_to_mysql(config[section]['host'],
+                                  config[section]['user'],
+                                  config[section]['password'],
+                                  config[section]['database'],
+                                  users, users_total)
+                    success[section] = True
+                except Exception as exception:
+                    print(repr(exception))
 
-        # Insert into remote backup db
-        try:
-            send_to_mysql(config['mysql.ac']['host'],
-                          config['mysql.ac']['user'],
-                          config['mysql.ac']['password'],
-                          config['mysql.ac']['database'],
-                          users, users_total)
-            ac = True
-        except Exception as exception:
-            print(repr(exception))
-
-        # Insert into remote backup backup backup db
-        try:
-            resp = requests.post(config['mysql.000']['url'],
-                                 data={
-                                     'time': act_time,
-                                     'f1': users[subreddit_names[0]],
-                                     'f1_5': users[subreddit_names[1]],
-                                     'f1feeder': users[subreddit_names[2]],
-                                     'f1_subs': users_total[subreddit_names[0]],
-                                     'f1_5_subs': users_total[subreddit_names[1]],
-                                     'f1feeder_subs': users_total[subreddit_names[2]],
-                                     'token': config['mysql.000']['token'],
-                                     'uid': config['mysql.000']['uid']
-                                 },
-                                 timeout=5)
-            if resp.status_code == 200:
-                webhost = True
-        except Exception as exception:
-            print(repr(exception))
-
-        try:
-            resp = requests.post(config['mysql.infinity']['url'],
-                                 data={
-                                     'time': act_time,
-                                     'f1': users[subreddit_names[0]],
-                                     'f1_5': users[subreddit_names[1]],
-                                     'f1feeder': users[subreddit_names[2]],
-                                     'f1_subs': users_total[subreddit_names[0]],
-                                     'f1_5_subs': users_total[subreddit_names[1]],
-                                     'f1feeder_subs': users_total[subreddit_names[2]],
-                                     'token': config['mysql.infinity']['token'],
-                                     'uid': config['mysql.infinity']['uid']
-                                 },
-                                 timeout=5)
-            if resp.status_code == 200:
-                infinity = True
-        except Exception as exception:
-            print(repr(exception))
+            if section.startswith('http'):
+                try:
+                    resp = requests.post(config[section]['url'],
+                                         data={
+                                             'time': act_time,
+                                             'f1': users[subreddit_names[0]],
+                                             'f1_5': users[subreddit_names[1]],
+                                             'f1feeder': users[subreddit_names[2]],
+                                             'f1_subs': users_total[subreddit_names[0]],
+                                             'f1_5_subs': users_total[subreddit_names[1]],
+                                             'f1feeder_subs': users_total[subreddit_names[2]],
+                                             'token': config[section]['token'],
+                                             'uid': config[section]['uid']
+                                         },
+                                         timeout=10)
+                    if resp.status_code == 200 and 'ok' in resp.text.lower():
+                        success[section] = True
+                except Exception as exception:
+                    print(repr(exception))
 
         time_post = time.time()
         run_time = time_post - time_pre
 
-        if (webhost is False or ac is False or lima is False or infinity is False) or datetime.now().minute % 15 == 0:
-            print("F1: {} F1.5: {} F1Feeder: {} | lima: {}; ac: {}; 000: {}; infinity: {}; time: {}s".format(users[subreddit_names[0]],
-                                                                                                             users[subreddit_names[1]],
-                                                                                                             users[subreddit_names[2]],
-                                                                                                             lima, ac, webhost, infinity,
-                                                                                                             run_time))
+        if not all(v is True for v in success.values()) or datetime.now().minute % 15 == 0:
+            print("F1: {} F1.5: {} F1Feeder: {} | {}; time: {}s".format(users[subreddit_names[0]],
+                                                                        users[subreddit_names[1]],
+                                                                        users[subreddit_names[2]],
+                                                                        success,
+                                                                        run_time))
 
         try:
             requests.post(config['hc']['hc-url'], timeout=10)
@@ -127,7 +98,7 @@ if __name__ == "__main__":
             print(repr(e))
 
         run_time = run_time if run_time < 60 else 60
-        if int(users[subreddit_names[0]]) > 10000:
+        if int(users[subreddit_names[0]]) > rf1_subs * 0.02:
             time.sleep(60 - run_time)
         else:
             time.sleep(240 - run_time)

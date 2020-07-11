@@ -6,6 +6,8 @@ import pprint
 import configparser
 import MySQLdb
 from datetime import datetime
+import logging
+import sys
 
 
 subreddit_names = ["formula1", "formula1point5", "f1feederseries"]
@@ -30,6 +32,16 @@ if __name__ == "__main__":
     print(os.path.abspath('.'))
     for file in os.listdir():
         print(file)
+
+    if os.getenv('debug', None) is not None:
+        level = logging.DEBUG
+        frmt = "[%(asctime)s] [%(levelname)s]: %(message)s [%(funcName)s]"
+    else:
+        level = logging.INFO
+        frmt = "[%(asctime)s] [%(levelname)s]: %(message)s"
+    logging.basicConfig(stream=sys.stdout, level=level, format=frmt, datefmt="%H:%M:%S")
+    logging.debug("DEBUG MODE ENABLED!")
+
     config = configparser.ConfigParser()
     config.read(["mysql.ini", "../mysql.ini", "../config/mysql.ini"])
     pp = pprint.PrettyPrinter(indent=4)
@@ -88,11 +100,9 @@ if __name__ == "__main__":
         run_time = time_post - time_pre
 
         if not all(v is True for v in success.values()) or datetime.now().minute % 15 == 0:
-            print("F1: {} F1.5: {} F1Feeder: {} | {}; time: {}s".format(users[subreddit_names[0]],
-                                                                        users[subreddit_names[1]],
-                                                                        users[subreddit_names[2]],
-                                                                        success,
-                                                                        run_time))
+            logging.info("{} | {} | time: {}s".format(users, success, run_time))
+        else:
+            logging.debug("{} | {} | time: {}s".format(users, success, run_time))
 
         try:
             requests.post(config['hc']['hc-url'], timeout=10)

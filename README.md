@@ -61,3 +61,5 @@ password=redditpassword123
 username=redditusernamewow
 user_agent=your_reddit_guideline_appropriate_user_agent
 ```
+
+Additionally you will need to adjust the data url(s) in chartloader.js and compare.js to your own domain

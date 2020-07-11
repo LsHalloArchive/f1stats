@@ -323,27 +323,36 @@ function getSelectedRaces() {
 }
 
 function fillSelectOptionYears() {
-    let compareSource = $('#compareSourceYear');
-    let compareTarget = $('#compareTargetYear');
+    let compareSourceYear = $('#compareSourceYear');
+    let compareTargetYear = $('#compareTargetYear');
+    let compareSource = $('#compareSource');
+    let compareTarget = $('#compareTarget');
 
-    compareSource.on('change.year', function() {
-        fillSelectOptions($(this).val(), $('#compareSource'));
+    compareSourceYear.on('change.year', function() {
+        fillSelectOptions($(this).val(), compareSource);
     });
-    compareTarget.on('change.year', function() {
-        fillSelectOptions($(this).val(), $('#compareTarget'));
+    compareTargetYear.on('change.year', function() {
+        fillSelectOptions($(this).val(), compareTarget);
     });
 
     for(let year in races) {
         $('<option>', {
             value: year,
             text: year
-        }).appendTo([compareSource, compareTarget]);
+        }).appendTo([compareSourceYear, compareTargetYear]);
     }
-    compareSource.val(new Date().getFullYear());
-    compareTarget.val(new Date().getFullYear());
 
-    fillSelectOptions(new Date().getFullYear(), $('#compareSource'));
-    fillSelectOptions(new Date().getFullYear(), $('#compareTarget'));
+    //Select latest year only if more than two races available
+    let year = new Date().getFullYear();
+    fillSelectOptions(year, compareSource);
+    if(compareSource.find('option:not(:disabled)').length === 1) {
+        year -= 1;
+    }
+    compareSourceYear.val(year);
+    fillSelectOptions(year, compareSource);
+
+    compareTargetYear.val(new Date().getFullYear());
+    fillSelectOptions(new Date().getFullYear(), compareTarget);
 }
 
 function fillSelectOptions(year, target) {

@@ -103,4 +103,4 @@ if __name__ == "__main__":
         if int(users[subreddit_names[0]]) > rf1_subs * 0.02:
             time.sleep(60 - run_time)
         else:
-            time.sleep(240 - run_time)
+            time.sleep(300 - run_time)

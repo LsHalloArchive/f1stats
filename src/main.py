@@ -11,11 +11,11 @@ from datetime import datetime
 subreddit_names = ["formula1", "formula1point5", "f1feederseries"]
 
 
-def send_to_mysql(host, username, password, database, users):
+def send_to_mysql(host, username, password, database, act_time, users, users_total):
     mysql_db = MySQLdb.connect(host=host, user=username, passwd=password, db=database, connect_timeout=5)
     cursor = mysql_db.cursor()
-    sql = 'INSERT INTO f1stats (time, f1, f1_5, f1feeder) VALUES (%s, %s, %s, %s)'
-    val = (time.time(), users[subreddit_names[0]], users[subreddit_names[1]], users[subreddit_names[2]])
+    sql = 'INSERT INTO f1stats (time, f1, f1_5, f1feeder, f1_subs, f1_5_subs, f1ffeder_subs) VALUES (%s, %s, %s, %s)'
+    val = (act_time, users[subreddit_names[0]], users[subreddit_names[1]], users[subreddit_names[2]], users_total[subreddit_names[0]], users_total[subreddit_names[1]], users_total[subreddit_names[2]])
     cursor.execute(sql, val)
     mysql_db.commit()
     mysql_db.close()
@@ -38,13 +38,17 @@ if __name__ == "__main__":
     while True:
         time_pre = time.time()
         users = {}
+        users_total = {}
         for name in subreddit_names:
             sub = reddit.subreddit(name)
             users[name] = sub.accounts_active
+            users_total[name] = sub.subscribers
 
         lima = False
         ac = False
         webhost = False
+        infinity = False
+        act_time = time.time()
 
         # Insert into remote db
         try:
@@ -52,7 +56,7 @@ if __name__ == "__main__":
                           config['mysql.lima']['user'],
                           config['mysql.lima']['password'],
                           config['mysql.lima']['database'],
-                          users)
+                          act_time, users, users_total)
             lima = True
         except Exception as exception:
             print(repr(exception))
@@ -63,7 +67,7 @@ if __name__ == "__main__":
                           config['mysql.ac']['user'],
                           config['mysql.ac']['password'],
                           config['mysql.ac']['database'],
-                          users)
+                          act_time, users, users_total)
             ac = True
         except Exception as exception:
             print(repr(exception))
@@ -72,28 +76,50 @@ if __name__ == "__main__":
         try:
             resp = requests.post(config['mysql.000']['url'],
                                  data={
-                                     'time': time.time(),
+                                     'time': act_time,
                                      'f1': users[subreddit_names[0]],
                                      'f1_5': users[subreddit_names[1]],
                                      'f1feeder': users[subreddit_names[2]],
+                                     'f1_subs': users_total[subreddit_names[0]],
+                                     'f1_5_subs': users_total[subreddit_names[1]],
+                                     'f1feeder_subs': users_total[subreddit_names[2]],
                                      'token': config['mysql.000']['token'],
                                      'uid': config['mysql.000']['uid']
                                  },
-                                 timeout=10)
+                                 timeout=5)
             if resp.status_code == 200:
                 webhost = True
+        except Exception as exception:
+            print(repr(exception))
+
+        try:
+            resp = requests.post(config['mysql.infinity']['url'],
+                                 data={
+                                     'time': act_time,
+                                     'f1': users[subreddit_names[0]],
+                                     'f1_5': users[subreddit_names[1]],
+                                     'f1feeder': users[subreddit_names[2]],
+                                     'f1_subs': users_total[subreddit_names[0]],
+                                     'f1_5_subs': users_total[subreddit_names[1]],
+                                     'f1feeder_subs': users_total[subreddit_names[2]],
+                                     'token': config['mysql.infinity']['token'],
+                                     'uid': config['mysql.infinity']['uid']
+                                 },
+                                 timeout=5)
+            if resp.status_code == 200:
+                infinity = True
         except Exception as exception:
             print(repr(exception))
 
         time_post = time.time()
         run_time = time_post - time_pre
 
-        if (webhost is False or ac is False or lima is False) or datetime.now().minute % 15 == 0:
-            print("F1: {} F1.5: {} F1Feeder: {} | lima: {}; ac: {}; 000: {}; time: {}s".format(users[subreddit_names[0]],
-                                                                                               users[subreddit_names[1]],
-                                                                                               users[subreddit_names[2]],
-                                                                                               lima, ac, webhost,
-                                                                                               run_time))
+        if (webhost is False or ac is False or lima is False or infinity is False) or datetime.now().minute % 15 == 0:
+            print("F1: {} F1.5: {} F1Feeder: {} | lima: {}; ac: {}; 000: {}; infinity: {}; time: {}s".format(users[subreddit_names[0]],
+                                                                                                             users[subreddit_names[1]],
+                                                                                                             users[subreddit_names[2]],
+                                                                                                             lima, ac, webhost, infinity,
+                                                                                                             run_time))
 
         try:
             requests.post(config['hc']['hc-url'], timeout=10)

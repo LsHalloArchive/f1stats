@@ -14,7 +14,11 @@ if(isset($_POST["token"]) && isset($_POST["uid"])) {
         $f1_5 = mysqli_real_escape_string($db, $_POST["f1_5"]);
         $f1feeder = mysqli_real_escape_string($db, $_POST["f1feeder"]);
 
-        $result = mysqli_query($db, "INSERT INTO f1stats (`time`, `f1`, `f1_5`, `f1feeder`) VALUES ({$time}, {$f1}, {$f1_5}, {$f1feeder})");
+        $f1_subs = mysqli_real_escape_string($db, $_POST["f1_subs"]);
+        $f1_5_subs = mysqli_real_escape_string($db, $_POST["f1_5_subs"]);
+        $f1feeder_subs = mysqli_real_escape_string($db, $_POST["f1feeder_subs"]);
+
+        $result = mysqli_query($db, "INSERT INTO f1stats (`time`, `f1`, `f1_5`, `f1feeder`, `f1_subs`, `f1_5_subs`, `f1feeder_subs`) VALUES ({$time}, {$f1}, {$f1_5}, {$f1feeder}, {$f1_subs}, {$f1_5_subs}, {$f1feeder_subs})");
         if($result === false) {
             http_response_code(502);
             exit("Internal server error");

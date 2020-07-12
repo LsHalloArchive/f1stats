@@ -515,7 +515,6 @@ function listRaceStartTimes() {
 
 class RaceData {
     constructor(name, year, data, start) {
-        console.log(start);
         if(data[0].length === 2) {
             data.splice(0, 1);
         }

@@ -145,7 +145,7 @@ if __name__ == "__main__":
                     success[section] = True
                 except Exception as exception:
                     success[section] = False
-                    print(repr(exception))
+                    logging.error(repr(exception))
 
             if section.startswith('http'):
                 try:
@@ -166,7 +166,7 @@ if __name__ == "__main__":
                         success[section] = True
                 except Exception as exception:
                     success[section] = False
-                    print(repr(exception))
+                    logging.error(repr(exception))
 
         time_post = time.time()
         run_time = time_post - time_pre
@@ -181,7 +181,7 @@ if __name__ == "__main__":
             if 'hc' in config.sections():
                 requests.post(config['hc']['hc-url'], timeout=10)
         except Exception as e:
-            print(repr(e))
+            logging.error(repr(e))
 
         run_time = run_time if run_time < 60 else 60
         if int(users[subreddit_names[0]]) > rf1_subs * 0.02:

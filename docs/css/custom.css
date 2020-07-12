@@ -246,15 +246,22 @@ body.dark .popover-body {
   color: #eee;
 }
 body.dark .toast {
-  box-shadow: 0 0.25rem 0.75rem rgba(255, 255, 255, 0.1);
+  box-shadow: 0 0 0.55rem rgba(200, 200, 200, 0.1);
+  background-color: #2b2b2b !important;
 }
 body.dark .toast-header {
   background-color: #222 !important;
   color: #eee !important;
 }
+body.dark .toast-header.bg-info {
+  background-color: #17a2b8 !important;
+}
+body.dark .toast-header.bg-danger {
+  background-color: #dc3545 !important;
+}
 body.dark .toast-body {
-  background-color: #2b2b2b;
-  color: #eee;
+  background-color: #2b2b2b !important;
+  color: #eee !important;
 }
 body.dark .share {
   filter: invert(0.9);

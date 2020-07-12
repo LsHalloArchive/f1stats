@@ -305,7 +305,7 @@ function generateFavicon(data) {
     canvas.width = 128;
     canvas.height = 128;
     let ctx = canvas.getContext('2d');
-    let skipAmount = Math.floor(data.length / canvas.width);
+    let skipAmount = Math.ceil(data.length / canvas.width);
     let maximum = findMaximum(data);
 
     ctx.fillStyle = '#cb0000';
@@ -401,7 +401,15 @@ $(function() {
                 throw new RangeError("FROM date greater or equal to TO date.");
             }
         } catch (e) {
-            alert(e.toString());
+            $.toast({
+                        position: 'top-left',
+                        title: 'Error',
+                        subtitle: '',
+                        content: e.toString(),
+                        type: 'error',
+                        autohide: true,
+                        delay: 7500,
+                    });
             filterButtonMobile.prop('disabled', false);
             filterButton.prop('disabled', false);
             loadingIcon.animateWidth(0, 0, 0);

@@ -53,7 +53,8 @@ let races = {
         'sty': {
             id: 1,
             name: 'Styria (Austria)',
-            start: '20200712T1310Z'
+            start: '20200712T1310Z',
+            length: '1:22:50'
         },
         'hun': {
             id: 2,
@@ -173,7 +174,7 @@ function showTable(selectedRaces) {
                     ticks: {
                         min: -timeOffset / 60 / 2,
                         max: timeOffset / 60 + parseTime(undefined) / 60,
-                        stepSize: 15
+                        stepSize: 10
                     }
                 }]
             },
@@ -510,6 +511,7 @@ function listRaceStartTimes() {
 
 class RaceData {
     constructor(name, year, data, start) {
+        console.log(start);
         if(data[0].length === 2) {
             data.splice(0, 1);
         }
@@ -531,7 +533,7 @@ class RaceData {
         this.f1_5 = [];
         this.f1feeder = [];
         for(let i = 0; i < data.length; i++) {
-            let date = (new Date(parseInt(data[i][0])) - start) / 60;
+            let date = (parseInt(data[i][0]) - start) / 60;
             this.f1.push({x: date, y: parseInt(data[i][1])});
             this.f1_5.push({x: date, y: parseInt(data[i][2])});
             this.f1feeder.push({x: date, y: parseInt(data[i][3])});

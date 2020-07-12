@@ -389,7 +389,11 @@ function fillSelectOptions(year, target) {
         return 0;
     });
     if(completedRaces.length > 0) {
-        target.val(completedRaces[completedRaces.length - 1].index);
+        if(target[0].id === 'compareSource') {
+            target.val(completedRaces[completedRaces.length - 2].index);
+        } else {
+            target.val(completedRaces[completedRaces.length - 1].index);
+        }
     }
 }
 

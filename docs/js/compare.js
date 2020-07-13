@@ -69,7 +69,7 @@ let races = {
         'ani': {
             id: 4,
             name: '70th Anniversary (Britain)',
-            start: '20200809T1410Z'
+            start: '20200809T1310Z'
         },
         'esp': {
             id: 5,
@@ -89,7 +89,7 @@ let races = {
         'xxx': {
             id: 22,
             name: 'Update following...',
-            start: '20201231T2330Z'
+            start: '20221231T2330Z'
         }
     }
 };

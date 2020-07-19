@@ -191,9 +191,17 @@ input.datepicker {
 }
 
 .main-loading {
-    width: 0;
-    height: 0;
-    opacity: 0;
+    width: 12em;
+    height: 6em;
+    opacity: 1;
+
+    svg {
+        margin-left: 3em;
+    }
+
+    .loading-info {
+        color: #000;
+    }
 }
 
 /* Dark mode */
@@ -204,6 +212,10 @@ input.datepicker {
 
 /* Dark mode */
 body.dark {
+    .loading-info {
+        color: #ccc
+    }
+
     .custom-select, .datepicker {
         background-color: $input-background-dark !important;
         color: $color-dark !important;
@@ -238,7 +250,7 @@ body.dark {
         background-color: $background-dark;
     }
 
-    .loading, .main-loading {
+    .loading, .main-loading svg {
         filter: invert(.85);
     }
 

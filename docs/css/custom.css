@@ -175,9 +175,15 @@ input.datepicker {
 }
 
 .main-loading {
-  width: 0;
-  height: 0;
-  opacity: 0;
+  width: 12em;
+  height: 6em;
+  opacity: 1;
+}
+.main-loading svg {
+  margin-left: 3em;
+}
+.main-loading .loading-info {
+  color: #000;
 }
 
 /* Dark mode */
@@ -196,6 +202,9 @@ body.dark {
         /*rtl:begin:ignore*/
   /*
         /*rtl:end:ignore*/
+}
+body.dark .loading-info {
+  color: #ccc;
 }
 body.dark .custom-select, body.dark .datepicker {
   background-color: #2b2b2b !important;
@@ -224,7 +233,7 @@ body.dark .custom-control-label::before {
 body.dark .modal-content {
   background-color: #222;
 }
-body.dark .loading, body.dark .main-loading {
+body.dark .loading, body.dark .main-loading svg {
   filter: invert(0.85);
 }
 body.dark .popover {

@@ -255,6 +255,7 @@ function showTable(from, to) {
         filterButton.prop('disabled', false);
         filterButtonMobile.prop('disabled', false);
         loadingIcon.animateWidth(0, 0, 0);
+        $('.main-loading').remove();
     }
 }
 

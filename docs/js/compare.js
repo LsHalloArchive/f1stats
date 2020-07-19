@@ -86,6 +86,16 @@ let races = {
             name: 'Italy',
             start: '20200906T1310Z'
         },
+        'mug': {
+            id: 8,
+            name: 'Mugello (Italy)',
+            start: '20200913T1310Z'
+        },
+        'rus': {
+            id: 9,
+            name: 'Russia',
+            start: '20200927T1110Z'
+        },
         'xxx': {
             id: 22,
             name: 'Update following...',

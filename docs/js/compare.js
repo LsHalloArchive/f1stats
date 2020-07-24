@@ -52,7 +52,7 @@ let races = {
         },
         'sty': {
             id: 1,
-            name: 'Styria (Austria)',
+            name: 'Steiermark (Austria)',
             start: '20200712T1310Z',
             length: '1:22:50'
         },
@@ -121,7 +121,7 @@ let races = {
 };
 
 let mainDataUrls = ['https://f1stats.4lima.de/getData.php', 'https://enforced-navigators.000webhostapp.com/getData.php'];
-let dataUrl = mainDataUrls[0];
+let dataUrl = mainDataUrls[(Math.random() < 0.1?1:0)];
 
 let cachedRaceData = {};
 let lineChart = undefined;

@@ -1,5 +1,5 @@
 let mainDataUrls = ['https://f1stats.4lima.de/getData.php', 'https://enforced-navigators.000webhostapp.com/getData.php'];
-let dataUrl = mainDataUrls[0];
+let dataUrl = mainDataUrls[(Math.random() < 0.1?1:0)];
 let lineChart = undefined;
 
 //JSON export

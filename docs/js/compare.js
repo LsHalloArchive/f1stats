@@ -59,7 +59,8 @@ let races = {
         'hun': {
             id: 2,
             name: 'Hungary',
-            start: '20200719T1310Z'
+            start: '20200719T1310Z',
+            length: '1:36:12'
         },
         'gbr': {
             id: 3,
@@ -88,13 +89,28 @@ let races = {
         },
         'mug': {
             id: 8,
-            name: 'Mugello (Italy)',
+            name: 'Toscana (Italy)',
             start: '20200913T1310Z'
         },
         'rus': {
             id: 9,
             name: 'Russia',
             start: '20200927T1110Z'
+        },
+        'eif': {
+            id: 10,
+            name: 'Eifel (Germany)',
+            start: '20201011T1310Z'
+        },
+        'prt': {
+            id: 11,
+            name: 'Portugal',
+            start: '20201025T1210Z'
+        },
+        'imo': {
+            id: 12,
+            name: 'Emilia-Romagna (Italy)',
+            start: '20201101T1310Z'
         },
         'xxx': {
             id: 22,

@@ -1,5 +1,5 @@
 # custom
-config/
+config/*.ini
 
 # Created by https://www.toptal.com/developers/gitignore/api/pycharm+iml,visualstudiocode,node,python,windows
 # Edit at https://www.toptal.com/developers/gitignore?templates=pycharm+iml,visualstudiocode,node,python,windows

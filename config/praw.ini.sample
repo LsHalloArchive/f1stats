@@ -1,0 +1,10 @@
+# reddit client configuration
+# look at the praw documentation for more info
+# section must be named f1stats
+
+[f1stats]
+client_id=some_id
+client_secret=top_secret
+password=reddit_pw
+username=reddit_username
+user_agent=reddit_conform_user_agent

@@ -1,0 +1,23 @@
+[hc]
+# sends a post request on every iteration of the program to notify the service (such as healthchecks) that your program is working
+# must include the protocol (http, https)
+hc-url=http://your-hc-url.tld/hcid
+
+# you can have as many mysql.xxx and http.xxx as you like just make sure the part after the dot is unique
+
+# sample mysql config
+# the program will try to create the database and required tables if not existent. might fail though
+[mysql.name]
+host=your-db-host
+user=db_user123
+password=db_user123_password
+database=db_f1stats_database
+
+# sample http config if you don't have direct access to the mysql (maria) db
+# works by uploading writeData.php to your webspace and configuring the url and tokens below
+# token must also be inside the credentials.ini in your webspace see credentials.ini.sample
+# url must include protocol (http, https)
+[http.yourhost]
+url=https://your-super-duper-domain.tld/f1stats/writeData.php
+token=some-random-string-just-make-it-long-enough
+uid=another-random-string-to-increase-security

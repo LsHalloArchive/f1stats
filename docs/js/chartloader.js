@@ -112,6 +112,11 @@ function showTable(from, to) {
                     distribution: 'linear'
                 }]
             },
+            elements: {
+            line: {
+                    tension: 0 // disables bezier curves
+                }
+            },
             tooltips: {
                 callbacks: {
                     title: function(tooltipItem) {

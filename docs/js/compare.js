@@ -204,6 +204,11 @@ function showTable(selectedRaces) {
                     }
                 }]
             },
+            elements: {
+                line: {
+                    tension: 0 // disables bezier curves
+                }
+            },
             tooltips: {
                 callbacks: {
                     title: function(tooltipItem) {
@@ -217,7 +222,8 @@ function showTable(selectedRaces) {
                         return data.datasets[tooltipItem.datasetIndex].label + ': ' + tooltipItem.yLabel + ' users';
                     },
                 },
-                mode: 'label'
+                mode: 'nearest',
+                intersect: true
             },
             maintainAspectRatio: false,
             responsive: true,

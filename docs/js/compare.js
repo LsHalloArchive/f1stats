@@ -65,12 +65,14 @@ let races = {
         'gbr': {
             id: 3,
             name: 'Britain',
-            start: '20200802T1310Z'
+            start: '20200802T1310Z',
+            length: '1:28:01'
         },
         'ani': {
             id: 4,
             name: '70th Anniversary (Britain)',
-            start: '20200809T1310Z'
+            start: '20200809T1310Z',
+            length: '1:19:41'
         },
         'esp': {
             id: 5,

@@ -77,7 +77,8 @@ let races = {
         'esp': {
             id: 5,
             name: 'Spain',
-            start: '20200816T1310Z'
+            start: '20200816T1310Z',
+            length: '1:31:45'
         },
         'bel': {
             id: 6,

@@ -115,10 +115,25 @@ let races = {
             name: 'Emilia-Romagna (Italy)',
             start: '20201101T1310Z'
         },
-        'xxx': {
-            id: 22,
-            name: 'Update following...',
-            start: '20221231T2330Z'
+        'tur': {
+            id: 13,
+            name: 'Turkey',
+            start: '20201115T1310Z'
+        },
+        'bhr': {
+            id: 14,
+            name: 'Bahrain',
+            start: '20201129T1310Z'
+        },
+        'skh': {
+            id: 15,
+            name: 'Sakhir (Bahrain)',
+            start: '20201206T1310Z'
+        },
+        'are': {
+            id: 16,
+            name: 'Abu Dhabi',
+            start: '20201213T1310Z'
         }
     }
 };

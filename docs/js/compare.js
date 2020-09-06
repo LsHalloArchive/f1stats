@@ -83,12 +83,14 @@ let races = {
         'bel': {
             id: 6,
             name: 'Belgium',
-            start: '20200830T1310Z'
+            start: '20200830T1310Z',
+            length: '1:24:08'
         },
         'ita': {
             id: 7,
             name: 'Italy',
-            start: '20200906T1310Z'
+            start: '20200906T1310Z',
+            length: '1:47:06'
         },
         'mug': {
             id: 8,

@@ -96,7 +96,7 @@ let races = {
             id: 8,
             name: 'Toscana (Italy)',
             start: '20200913T1310Z',
-            length: '2:21:36'
+            length: '2:19:35'
         },
         'rus': {
             id: 9,

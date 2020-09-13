@@ -95,7 +95,8 @@ let races = {
         'mug': {
             id: 8,
             name: 'Toscana (Italy)',
-            start: '20200913T1310Z'
+            start: '20200913T1310Z',
+            length: '2:21:36'
         },
         'rus': {
             id: 9,
